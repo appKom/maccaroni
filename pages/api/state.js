@@ -16,7 +16,11 @@ export default async function handler(_, res) {
   console.log(url);
 
   try {
-    await mongoose.connect(url);
+    await mongoose.connect(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      bufferCommands: false,
+    });
   } catch (e) {
     console.log(e.message);
   }
