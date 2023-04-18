@@ -15,7 +15,7 @@ export default async function handler(_, res) {
   mongoose.connect(url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    bufferCommands: true,
+    bufferCommands: false,
   });
 
   // Get all the state we need for the page
