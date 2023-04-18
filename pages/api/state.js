@@ -14,11 +14,12 @@ export const url = process.env.DATABASE_URI;
 export default async function handler(_, res) {
   console.log("URI:");
   console.log(url);
-  mongoose.connect(url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    bufferCommands: false,
-  });
+
+  try {
+    await mongoose.connect(url);
+  } catch (e) {
+    console.log(e.message);
+  }
 
   // Get all the state we need for the page
 
