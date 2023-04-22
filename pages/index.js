@@ -67,6 +67,12 @@ export default function Index() {
         <div className={"m-10"}>
           <p className={"m-10"}> </p>
         </div>
+        <div className="grid grid-cols-2 gap-2 w-screen mt-[8vw] mb-[8vw] sm:px-[10rem] px-[3rem]">
+          <img src="./sopra.png" className="col-span-1 object-contain shadow rounded border-none"></img>
+          <img src="./bekk.webp" className="col-span-1 object-contain shadow rounded border-none"></img>
+          <img src="./tieto.png" className="col-span-1 object-contain shadow rounded border-none"></img>
+          <img src="./visma.png" className="col-span-1 object-contain shadow rounded border-none"></img>
+        </div>
       </div>
     </>
   );

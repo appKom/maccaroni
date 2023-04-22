@@ -29,9 +29,8 @@ const AuctionItems = (props) => {
         ...formData,
         error: {
           ...formData.error,
-          amount: `Budet ditt kan ikke være mindre enn ${
-            activeItem.price * 1.05
-          },- kr!`,
+          amount: `Budet ditt kan ikke være mindre enn ${activeItem.price * 1.05
+            },- kr!`,
         },
       });
       return false;
@@ -102,7 +101,7 @@ const AuctionItems = (props) => {
       </div>
       <div className="text-2xl text-center">
         Nye bud må øke nåværende bud med 5% for å være gyldige. Ingen bud før
-        26.03.2022 klokken 17:00 regnes som gjeldende.
+        22.04.2023 klokken 18:00 regnes som gjeldende.
       </div>
       <div className="flex flex-row flex-wrap justify-evenly pt-10 mx-10">
         {Object.keys(props.items).map((key) => (
