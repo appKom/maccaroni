@@ -26,7 +26,7 @@ export default function Index() {
 
   return (
     <>
-      <div className={"flex h-screen flex-wrap justify-center"}>
+      <div className={"flex flex-col"}>
         <div className={"w-screen"}>
           <ProgressBar
             stretchGoals={data.stretchGoals}
@@ -50,12 +50,7 @@ export default function Index() {
           </div>
         </div>
 
-        <div className={"w-screen"}>
-          <SilentAuctionSlider items={data.auctions} />
-        </div>
-        <div className={"m-10"}>
-          <p className={"m-10"}> </p>
-        </div>
+        <SilentAuctionSlider items={data.auctions} />
       </div>
     </>
   );
