@@ -8,7 +8,7 @@ const PagesButtons = () => {
           Gå til stilleauksjon
         </button>
       </Link>
-      <Link href="/rulesheet" className="font-bold">
+      <Link href="/regelark" className="font-bold">
         <button className="mb-2 mt-2 bg-yellow hover:bg-regalblue hover:text-beige text-gray-800 font-semibold py-2 px-10  rounded shadow text-lg sm:text-2xl">
           Gå til regelark
         </button>

@@ -1,6 +1,5 @@
 import StretchGoals from "../components/StretchGoals";
 import SilentAuctionSlider from "../components/SilentAuctionSlider";
-import PagesButtons from "../components/PagesButtons";
 import Vipps from "../components/Vipps";
 import ProgressBar from "../components/ProgressBar";
 
@@ -28,14 +27,6 @@ export default function Index() {
   return (
     <>
       <div className={"flex h-screen flex-wrap justify-center"}>
-        <div
-          className={
-            " w-screen sm:w-3/4 p-5 flex text-5xl bg-emerald-400 flex-wrap"
-          }
-        >
-          Veldedighetsfest 2023 <PagesButtons />
-          <hr />
-        </div>
         <div className={"w-screen"}>
           <ProgressBar
             stretchGoals={data.stretchGoals}
@@ -64,24 +55,6 @@ export default function Index() {
         </div>
         <div className={"m-10"}>
           <p className={"m-10"}> </p>
-        </div>
-        <div className="grid grid-cols-2 gap-2 w-screen mt-[8vw] mb-[8vw] sm:px-[10rem] px-[3rem]">
-          <img
-            src="./sopra.png"
-            className="col-span-1 object-contain shadow rounded border-none"
-          ></img>
-          <img
-            src="./bekk.webp"
-            className="col-span-1 object-contain shadow rounded border-none"
-          ></img>
-          <img
-            src="./tieto.png"
-            className="col-span-1 object-contain shadow rounded border-none"
-          ></img>
-          <img
-            src="./visma.png"
-            className="col-span-1 object-contain shadow rounded border-none"
-          ></img>
         </div>
       </div>
     </>

@@ -1,5 +1,5 @@
 import React from "react";
-import animations from "../styles/animations.module.css";
+import animations from "./animations.module.css";
 import QRCode from "../components/QRCode";
 
 interface VippProps {
