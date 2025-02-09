@@ -39,7 +39,7 @@ export default function Navbar() {
           >
             <Link
               href="/"
-              className="flex items-center justify-center gap-4 hover:opacity-70 transition-opacity"
+              className="flex flex-row items-start justify-center gap-4 hover:opacity-80 transition-opacity"
             >
               <Image
                 src="/Online_hvit.svg"
