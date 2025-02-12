@@ -1,5 +1,6 @@
 import Link from "next/link";
 import AuctionItems from "@/components/AuctionItems";
+import SubmitBid from "@/components/SubmitBid";
 
 const NavBar = () => (
   <div className="w-full p-10">
@@ -45,6 +46,7 @@ export default function AuctionItemsPage() {
     <div>
       <NavBar />
       <AuctionItems items={data.auctions} />
+      <SubmitBid />
     </div>
   );
 }
