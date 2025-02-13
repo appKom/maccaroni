@@ -104,7 +104,7 @@ export default function Navbar() {
             {session ? (
               <button
                 onClick={handleLogout}
-                className="hover:text-onlineOrange transition-colors text-xl"
+                className="hover:text-onlineOrange transition-colors text-xl group"
               >
                 <span className="flex flex-row gap-2 items-center">
                   <p>Logg ut</p>
