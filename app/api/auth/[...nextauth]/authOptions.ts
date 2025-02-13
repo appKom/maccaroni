@@ -1,11 +1,16 @@
 import { NextAuthOptions } from "next-auth";
-import Google from "next-auth/providers/google";
+import Auth0 from "next-auth/providers/auth0";
+
+const production = process.env.NODE_ENV === "production";
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    Google({
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    Auth0({
+      clientId: process.env.AUTH0_CLIENT_ID as string,
+      clientSecret: production
+        ? (process.env.AUTH0_CLIENT_SECRET as string)
+        : "",
+      issuer: process.env.AUTH0_ISSUER_BASE_URL,
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,

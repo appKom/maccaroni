@@ -30,14 +30,14 @@ const AdminPage = () => {
   ];
 
   return (
-    <div className="flex flex-col items-center py-8 ">
+    <div className="flex flex-col items-center py-8 min-h-screen ">
       <main className="mx-auto container px-4 sm:px-6 md:px-8 pt-10 pb-24 lg:pt-16">
         <div className="mb-10">
           <h1 className="text-3xl font-extrabold text-white tracking-tight mb-2">
             Velkommen {session?.user!.name}
           </h1>
           <p className="text-xl text-slate-400">
-            {`Administrasjonspanel for Appkom <3`}
+            {`Administrasjonspanel for Veldedighetsfesten <3`}
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
