@@ -4,14 +4,21 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronRight, Menu, X } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { ChevronRight, LogInIcon, LogOutIcon, Menu, X } from "lucide-react";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
 
   const { data: session } = useSession();
+
+  const handleLogin = () =>
+    signIn("auth0", {
+      callbackUrl: "/",
+    });
+
+  const handleLogout = () => signOut();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -33,7 +40,7 @@ export default function Navbar() {
       ref={navRef}
       className="fixed top-0 left-0 right-0 z-50 text-gray-100 bg-transparent/80 backdrop-blur-sm"
     >
-      <div className="container mx-auto px-4 py-6">
+      <div className="px-4 py-6">
         <div className="flex items-center justify-between">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -94,6 +101,27 @@ export default function Navbar() {
                 <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
               </Link>
             )}
+            {session ? (
+              <button
+                onClick={handleLogout}
+                className="hover:text-onlineOrange transition-colors text-xl"
+              >
+                <span className="flex flex-row gap-2 items-center">
+                  <p>Logg ut</p>
+                  <LogOutIcon className="h-6 w-6 transition-transform group-hover:translate-x-1" />
+                </span>
+              </button>
+            ) : (
+              <button
+                onClick={handleLogin}
+                className="hover:text-onlineOrange transition-colors text-xl group"
+              >
+                <span className="flex flex-row gap-2 items-center">
+                  <p>Logg inn</p>
+                  <LogInIcon className="h-6 w-6 transition-transform group-hover:translate-x-1" />
+                </span>
+              </button>
+            )}
           </motion.nav>
 
           <motion.div className="lg:hidden">
@@ -133,6 +161,31 @@ export default function Navbar() {
                 >
                   Regelark
                 </Link>
+
+                {session?.user.isAdmin && (
+                  <Link
+                    href="/admin"
+                    className="text-xl hover:text-onlineOrange transition-colors"
+                    onClick={toggleMenu}
+                  >
+                    Admin
+                  </Link>
+                )}
+                {session ? (
+                  <button
+                    onClick={handleLogout}
+                    className="text-xl hover:text-onlineOrange transition-colors"
+                  >
+                    Logg ut
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleLogin}
+                    className="text-xl hover:text-onlineOrange transition-colors"
+                  >
+                    Logg inn
+                  </button>
+                )}
               </nav>
             </motion.div>
           )}

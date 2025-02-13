@@ -42,7 +42,5 @@ export default function AdminLayout({
     );
   }
 
-  return (
-    <div className="flex flex-col min-h-screen items-center">{children}</div>
-  );
+  return <div className="flex flex-col ">{children}</div>;
 }

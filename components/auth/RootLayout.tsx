@@ -12,7 +12,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
 
   const handleLogin = () =>
     signIn("auth0", {
-      callbackUrl: "/admin",
+      callbackUrl: "/",
     });
 
   if (status === "loading") {
