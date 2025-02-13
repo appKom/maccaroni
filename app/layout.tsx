@@ -1,8 +1,11 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Metadata } from "next";
 import "./globals.css";
+import { Geist, Geist_Mono } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SessionWrapper from "@/components/auth/SessionWrapper";
+import RootLayout from "@/components/auth/RootLayout";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,7 +22,7 @@ export const metadata: Metadata = {
   description: "Veldedighetsauksjon for Online Linjeforening",
 };
 
-export default function RootLayout({
+export default function WrappedRootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -29,11 +32,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
-        <Navbar />
-
-        <main className="flex-grow mt-28">{children}</main>
-
-        <Footer />
+        <SessionWrapper>
+          <Toaster />
+          <Navbar />
+          <RootLayout>
+            <main className="flex-grow mt-24">{children}</main>
+          </RootLayout>
+          <Footer />
+        </SessionWrapper>
       </body>
     </html>
   );
