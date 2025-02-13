@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SessionWrapper from "@/components/auth/SessionWrapper";
 import RootLayout from "@/components/auth/RootLayout";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +33,7 @@ export default function WrappedRootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
         <SessionWrapper>
+          <Toaster />
           <Navbar />
           <RootLayout>
             <main className="flex-grow">{children}</main>

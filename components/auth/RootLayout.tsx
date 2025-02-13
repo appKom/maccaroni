@@ -1,7 +1,6 @@
 "use client";
 import { ReactNode } from "react";
 import { signIn, useSession } from "next-auth/react";
-import { Toaster } from "react-hot-toast";
 import { Button } from "@/components/Button";
 
 interface RootLayoutProps {
@@ -18,7 +17,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
 
   if (status === "loading") {
     return (
-      <div className="min-h-screen text-white flex items-center justify-center">
+      <div className="flex-grow text-white flex items-center justify-center">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-16 w-16 border-y-2  mb-4"></div>
           <h2 className="text-2xl font-semibold">
@@ -34,7 +33,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
 
   if (!session) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
+      <div className="flex flex-col items-center justify-center flex-grow">
         <div className="flex flex-col items-center justify-center px-6 gap-5">
           <h1 className="text-3xl">Vennligst logg inn</h1>
           <Button
@@ -47,12 +46,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
     );
   }
 
-  return (
-    <>
-      <Toaster />
-      {children}
-    </>
-  );
+  return <>{children}</>;
 };
 
 export default RootLayout;
