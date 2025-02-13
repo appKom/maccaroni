@@ -7,10 +7,8 @@ export const authOptions: NextAuthOptions = {
   providers: [
     Auth0({
       clientId: process.env.AUTH0_CLIENT_ID as string,
-      clientSecret: production
-        ? (process.env.AUTH0_CLIENT_SECRET as string)
-        : "",
-      issuer: process.env.AUTH0_ISSUER_BASE_URL,
+      clientSecret: process.env.AUTH0_CLIENT_SECRET as string,
+      issuer: process.env.AUTH0_ISSUER as string,
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
