@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 const prisma = new PrismaClient();
 
-export async function POST(req) {
+export async function POST(req: { json: () => PromiseLike<{ id: any; amount: any; nameOfBidder: any; }> | { id: any; amount: any; nameOfBidder: any; }; }) {
   const { id, amount, nameOfBidder } = await req.json();
 
   if (!amount || !nameOfBidder) {

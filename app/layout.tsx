@@ -32,7 +32,7 @@ export default function RootLayout({
         <Navbar />
 
         {/* Ensure main content expands to push footer down */}
-        <main className="flex-grow mt-28">{children}</main>
+        <main className="flex-grow mt-28 text-white">{children}</main>
 
         <Footer />
       </body>
