@@ -5,10 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, Menu, X } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
+
+  const { data: session } = useSession();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -39,30 +42,30 @@ export default function Navbar() {
           >
             <Link
               href="/"
-              className="flex flex-row items-center md:items-start justify-center gap-4 hover:opacity-80 transition-opacity"
+              className="flex flex-row items-center lg:items-start justify-center gap-4 hover:opacity-80 transition-opacity"
             >
               <Image
                 src="/Online_hvit.svg"
                 alt="Appkom logo"
                 width={100}
                 height={100}
-                className="hidden md:block"
+                className="hidden lg:block"
               />
               <Image
                 src="/Online_hvit_o.svg"
                 alt="Online logo"
                 width={40}
                 height={40}
-                className="block md:hidden"
+                className="block lg:hidden"
               />
-              <span className="text-md md:text-2xl font-bold">
+              <span className="text-md lg:text-2xl font-bold">
                 Veldedighetsfest {new Date().getFullYear()}
               </span>
             </Link>
           </motion.div>
 
           <motion.nav
-            className="hidden md:flex items-center gap-8"
+            className="hidden lg:flex items-center gap-8"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -81,9 +84,19 @@ export default function Navbar() {
               <p>Regelark</p>
               <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
             </Link>
+
+            {!session?.user.isAdmin && (
+              <Link
+                href="/admin"
+                className="hover:text-onlineOrange flex flex-row gap-2 items-center text-xl transition-colors group"
+              >
+                <p>Admin</p>
+                <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
+              </Link>
+            )}
           </motion.nav>
 
-          <motion.div className="md:hidden">
+          <motion.div className="lg:hidden">
             <motion.button
               onClick={toggleMenu}
               className="p-2 text-gray-100 ml-4 hover:text-onlineOrange transition-colors"
@@ -103,7 +116,7 @@ export default function Navbar() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
-              className="md:hidden mt-4"
+              className="lg:hidden mt-4"
             >
               <nav className="flex flex-col gap-4">
                 <Link
