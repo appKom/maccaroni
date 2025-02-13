@@ -39,7 +39,7 @@ export default function Navbar() {
           >
             <Link
               href="/"
-              className="flex flex-row items-start justify-center gap-4 hover:opacity-80 transition-opacity"
+              className="flex flex-row items-center md:items-start justify-center gap-4 hover:opacity-80 transition-opacity"
             >
               <Image
                 src="/Online_hvit.svg"
@@ -48,7 +48,6 @@ export default function Navbar() {
                 height={100}
                 className="hidden md:block"
               />
-
               <Image
                 src="/Online_hvit_o.svg"
                 alt="Online logo"
@@ -56,8 +55,7 @@ export default function Navbar() {
                 height={40}
                 className="block md:hidden"
               />
-
-              <span className="text-sm md:text-2xl font-bold">
+              <span className="text-md md:text-2xl font-bold">
                 Veldedighetsfest {new Date().getFullYear()}
               </span>
             </Link>
@@ -74,7 +72,6 @@ export default function Navbar() {
               className="hover:text-onlineOrange flex flex-row gap-2 items-center text-xl transition-colors group"
             >
               <p>Stilleauksjon</p>
-
               <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
@@ -82,24 +79,21 @@ export default function Navbar() {
               className="hover:text-onlineOrange flex flex-row gap-2 items-center text-xl transition-colors group"
             >
               <p>Regelark</p>
-
               <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
             </Link>
           </motion.nav>
 
-          <div className="md:hidden">
-            <button
+          <motion.div className="md:hidden">
+            <motion.button
               onClick={toggleMenu}
-              className="p-2 text-gray-100 hover:text-onlineOrange transition-colors"
+              className="p-2 text-gray-100 ml-4 hover:text-onlineOrange transition-colors"
               aria-label="Toggle menu"
+              animate={{ rotate: isOpen ? 90 : 0 }}
+              transition={{ duration: 0.3 }}
             >
-              {isOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </button>
-          </div>
+              {isOpen ? <X className="size-8" /> : <Menu className="size-8" />}
+            </motion.button>
+          </motion.div>
         </div>
 
         <AnimatePresence>
