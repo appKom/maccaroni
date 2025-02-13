@@ -32,10 +32,44 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user, account }) {
       if (account && user) {
         try {
-          token.isAdmin = !!(
-            user.email &&
-            process.env.ADMIN_EMAILS?.split(",").includes(user.email)
-          );
+          if (production) {
+            const apiUrl = "https://old.online.ntnu.no/api/v1/profile/";
+
+            const headers = {
+              Authorization: `Bearer ${account.access_token}`,
+            };
+
+            const response = await fetch(apiUrl, { headers });
+
+            if (!response.ok) {
+              throw new Error("Failed to fetch user profile");
+            }
+
+            const userInfo = await response.json();
+
+            const commiteeUrl = `https://old.online.ntnu.no/api/v1/group/online-groups/?members__user=${userInfo.id}`;
+            const committeeResponse = await fetch(commiteeUrl, { headers });
+            if (!committeeResponse.ok)
+              throw new Error("Failed to fetch committees");
+
+            const committeeData = await committeeResponse.json();
+
+            //eslint-disable-next-line
+            const committees = committeeData.results.map((committee: any) =>
+              committee.name_short.toLowerCase()
+            );
+
+            const adminCommittees = ["appkom", "arrkom"];
+
+            token.isAdmin = adminCommittees.some((committee) =>
+              committees.includes(committee)
+            );
+          } else {
+            token.isAdmin = !!(
+              user.email &&
+              process.env.ADMIN_EMAILS?.split(",").includes(user.email)
+            );
+          }
         } catch (error) {
           console.error("Error fetching orgs in jwt callback:", error);
           token.isAdmin = false;
