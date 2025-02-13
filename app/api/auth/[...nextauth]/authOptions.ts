@@ -14,13 +14,11 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async signIn({ account }): Promise<string | boolean> {
-      if (!account?.access_token) {
-        return false;
-      }
-
       try {
+        if (!account?.access_token) {
+          return false;
+        }
         const isMember = true;
-
         return isMember;
       } catch (error) {
         console.error("Error in signIn callback:", error);
@@ -28,15 +26,13 @@ export const authOptions: NextAuthOptions = {
       }
     },
     async jwt({ token, user, account }) {
-      if (account && user) {
-        try {
+      try {
+        if (account && user) {
           if (production) {
             const apiUrl = "https://old.online.ntnu.no/api/v1/profile/";
-
             const headers = {
               Authorization: `Bearer ${account.access_token}`,
             };
-
             const response = await fetch(apiUrl, { headers });
 
             if (!response.ok) {
@@ -44,21 +40,19 @@ export const authOptions: NextAuthOptions = {
             }
 
             const userInfo = await response.json();
-
             const commiteeUrl = `https://old.online.ntnu.no/api/v1/group/online-groups/?members__user=${userInfo.id}`;
             const committeeResponse = await fetch(commiteeUrl, { headers });
-            if (!committeeResponse.ok)
+
+            if (!committeeResponse.ok) {
               throw new Error("Failed to fetch committees");
+            }
 
             const committeeData = await committeeResponse.json();
-
             //eslint-disable-next-line
             const committees = committeeData.results.map((committee: any) =>
               committee.name_short.toLowerCase()
             );
-
             const adminCommittees = ["appkom", "arrkom"];
-
             token.isAdmin = adminCommittees.some((committee) =>
               committees.includes(committee)
             );
@@ -68,19 +62,25 @@ export const authOptions: NextAuthOptions = {
               process.env.ADMIN_EMAILS?.split(",").includes(user.email)
             );
           }
-        } catch (error) {
-          console.error("Error fetching orgs in jwt callback:", error);
-          token.isAdmin = false;
         }
+        return token;
+      } catch (error) {
+        console.error("Error in jwt callback:", error);
+        token.isAdmin = false;
+        return token;
       }
-      return token;
     },
     async session({ session, token }) {
-      if (session.user) {
-        (session.user as { isAdmin?: boolean }).isAdmin =
-          token.isAdmin as boolean;
+      try {
+        if (session.user) {
+          (session.user as { isAdmin?: boolean }).isAdmin =
+            token.isAdmin as boolean;
+        }
+        return session;
+      } catch (error) {
+        console.error("Error in session callback:", error);
+        return session;
       }
-      return session;
     },
   },
   pages: {
