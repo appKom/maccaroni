@@ -85,7 +85,7 @@ export default function Navbar() {
               <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
             </Link>
 
-            {!session?.user.isAdmin && (
+            {session?.user.isAdmin && (
               <Link
                 href="/admin"
                 className="hover:text-onlineOrange flex flex-row gap-2 items-center text-xl transition-colors group"
