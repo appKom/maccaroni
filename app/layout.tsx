@@ -32,11 +32,11 @@ export default function WrappedRootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
         <SessionWrapper>
+          <Navbar />
           <RootLayout>
-            <Navbar />
-            <main className="flex-grow mt-28">{children}</main>
-            <Footer />
+            <main className="flex-grow">{children}</main>
           </RootLayout>
+          <Footer />
         </SessionWrapper>
       </body>
     </html>
