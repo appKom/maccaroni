@@ -146,44 +146,59 @@ export default function Navbar() {
               transition={{ duration: 0.2 }}
               className="lg:hidden mt-4"
             >
-              <nav className="flex flex-col gap-4">
+              <nav className="flex flex-col items-start gap-4">
                 <Link
                   href="/auksjon"
-                  className="text-xl hover:text-onlineOrange transition-colors"
+                  className="text-xl hover:text-onlineOrange w-full transition-colors group"
                   onClick={toggleMenu}
                 >
-                  Stilleauksjon
+                  <span className="flex border-t border-gray-800 pt-2 flex-row justify-between items-center w-full">
+                    Stilleauksjon
+                    <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
+                  </span>
                 </Link>
                 <Link
                   href="/regelark"
-                  className="text-xl hover:text-onlineOrange transition-colors"
+                  className="text-xl hover:text-onlineOrange w-full transition-colors group"
                   onClick={toggleMenu}
                 >
-                  Regelark
+                  <span className="flex border-t  border-gray-800 pt-2 flex-row justify-between items-center w-full">
+                    Regelark
+                    <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
+                  </span>
                 </Link>
 
                 {session?.user.isAdmin && (
                   <Link
                     href="/admin"
-                    className="text-xl hover:text-onlineOrange transition-colors"
+                    className="text-xl hover:text-onlineOrange w-full transition-colors group"
                     onClick={toggleMenu}
                   >
-                    Admin
+                    <span className="flex border-t border-gray-800 pt-2 flex-row justify-between items-center w-full">
+                      Admin
+                      <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
+                    </span>
                   </Link>
                 )}
                 {session ? (
                   <button
                     onClick={handleLogout}
-                    className="text-xl hover:text-onlineOrange transition-colors"
+                    className="text-xl hover:text-onlineOrange  w-full transition-colors group"
                   >
-                    Logg ut
+                    <span className="flex border-t border-gray-800 pt-2 flex-row justify-between items-center w-full">
+                      Logg ut
+                      <LogOutIcon className="h-6 w-6 transition-transform group-hover:translate-x-1" />
+                    </span>
                   </button>
                 ) : (
                   <button
                     onClick={handleLogin}
-                    className="text-xl hover:text-onlineOrange transition-colors"
+                    className="text-xl hover:text-onlineOrange transition-colors group w-full"
                   >
-                    Logg inn
+                    <span className="flex border-t border-gray-800 pt-2 flex-row justify-between items-center w-full">
+                      Logg inn
+                      <LogInIcon className="h-6 w-6 transition-transform group-hover:translate-x-1" />
+                    </span>
                   </button>
                 )}
               </nav>
