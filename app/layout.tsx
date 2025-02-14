@@ -31,7 +31,7 @@ export default function WrappedRootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-gray-950  antialiased flex flex-col min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} bg-gray-950 text-white  antialiased flex flex-col min-h-screen`}
       >
         <SessionWrapper>
           <Toaster />
