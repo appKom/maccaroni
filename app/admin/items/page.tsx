@@ -173,7 +173,7 @@ const AdminAuctionPage = () => {
 
   return (
     <div className="container mx-auto p-4 w-full items-start">
-      <h1 className="text-2xl font-bold mb-4">Administrer auksjonsvarer</h1>
+      <h1 className="text-3xl font-bold mb-4">Administrer auksjonsvarer</h1>
       <form onSubmit={handleSubmit} className="space-y-4 mb-8">
         <TextInput
           id="name"

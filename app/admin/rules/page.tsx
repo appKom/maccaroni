@@ -76,9 +76,7 @@ export default function AdminRulePage() {
   return (
     <div className="mx-auto container px-4">
       <main className="flex flex-col">
-        <h1 className="text-4xl font-semibold">
-          Legg inn eller rediger regler
-        </h1>
+        <h1 className="text-3xl font-semibold">Rediger reglelarket</h1>
 
         <div className="flex flex-col gap-4 mt-8 mb-16">
           <QuillEditor
