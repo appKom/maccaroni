@@ -29,3 +29,8 @@ model Auction {
   startPrice      Int
   bids            Bid[]
 }
+
+model RuleSheet {
+  id          String @id @default(cuid())
+  description String
+}
