@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import Table from "@/components/form/Table";
 import TextInput from "@/components/form/TextInput";
 import NumberInput from "@/components/form/NumberInput";
+import TextAreaInput from "@/components/form/TextAreaInput";
 
 interface AuctionType {
   id: string;
@@ -184,11 +185,11 @@ const AdminAuctionPage = () => {
           required
         />
 
-        <TextInput
+        <TextAreaInput
           id="description"
           label="Beskrivelse"
           value={description}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
             setDescription(e.target.value)
           }
           required
