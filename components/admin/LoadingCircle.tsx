@@ -1,6 +1,6 @@
 const LoadingCircle = () => {
   return (
-    <div className="flex-grow text-white flex items-center justify-center">
+    <div className="min-h-screen text-white bg-inherit flex items-center justify-center">
       <div className="text-center">
         <div className="inline-block animate-spin rounded-full h-16 w-16 border-y-2  mb-4"></div>
         <h2 className="text-2xl font-semibold">

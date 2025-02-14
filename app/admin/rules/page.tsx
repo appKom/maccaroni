@@ -69,7 +69,7 @@ export default function AdminRulePage() {
     fetchRuleSheet();
   }, []);
 
-  if (loading) {
+  if (loading || !ruleSheet) {
     return <LoadingCircle />;
   }
 
