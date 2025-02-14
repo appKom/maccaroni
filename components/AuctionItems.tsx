@@ -141,7 +141,7 @@ const AuctionItems: React.FC<Props> = ({ items }) => {
         Nye bud må øke nåværende bud med 5% for å være gyldige. Ingen bud før
         22.04.2023 klokken 18:00 regnes som gjeldende.
       </div>
-      <div className="flex flex-row flex-wrap justify-evenly pt-10 mx-10">
+      <div className="flex flex-row flex-wrap justify-evenly pt-10 mx-20">
         {Object.keys(items).map((key) => {
           const itemKey = Number(key);
           const item = items[itemKey];
@@ -153,9 +153,11 @@ const AuctionItems: React.FC<Props> = ({ items }) => {
               price={item.price}
               name={item.highestBid}
               title={item.title}
+              deletion={()=> openModal(item)}
             />
           );
         })}
+        <button className="text-white font-bold w-40 h-40 rounded-full bg-gradient-to-r from-[#f093fb] to-[#f5576c] text-7xl shadow-sm hover:shadow-2xl hover:shadow-white/40 transition-shadow duration-300" onClick={() => alert('Clicked')}>+</button>
         <Modal
           isOpen={modalOpen}
           shouldCloseOnOverlayClick
@@ -166,7 +168,7 @@ const AuctionItems: React.FC<Props> = ({ items }) => {
           <div className="w-full max-w-xs bg-gray-800 rounded">
             {activeItem ? (
               <form
-                className="bg-gray-600 shadow-md rounded px-8 pt-6 pb-8 mb-4"
+                className="bg-gradient-to-r from-[#f093fb] to-[#f5576c] shadow-md rounded px-8 pt-6 pb-8 mb-4"
                 onSubmit={bid}
               >
                 <div className="text-2xl">By på</div>
