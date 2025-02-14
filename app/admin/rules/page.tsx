@@ -76,7 +76,7 @@ export default function AdminRulePage() {
   return (
     <div className="mx-auto container px-4">
       <main className="flex flex-col">
-        <h1 className="text-2xl font-semibold">
+        <h1 className="text-4xl font-semibold">
           Legg inn eller rediger regler
         </h1>
 
@@ -93,7 +93,7 @@ export default function AdminRulePage() {
         </div>
         <button
           onClick={() => submitRuleSheet({ ruleSheet })}
-          className="px-4 py-2 border-onlineOrange border text-onlineOrange  rounded-lg hover:border-orange-600 hover:text-orange-600"
+          className="px-4 py-2 mt-8 border-onlineOrange border text-onlineOrange  rounded-lg hover:border-orange-600 hover:text-orange-600"
         >
           Send inn
         </button>
