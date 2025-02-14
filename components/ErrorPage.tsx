@@ -17,7 +17,7 @@ export default function ErrorPage({
   const router = useRouter();
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center  bg-inherit">
+    <div className="flex mt-24  flex-col items-center justify-center  bg-inherit">
       <div className="mx-auto max-w-2xl px-4 text-center">
         <h1 className="mb-4 text-6xl font-bold text-red-500">{code}</h1>
         <h2 className="mb-4 text-4xl font-semibold">{title}</h2>
