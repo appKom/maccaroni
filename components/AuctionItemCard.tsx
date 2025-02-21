@@ -3,7 +3,21 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 
-const AuctionItemCard = () => {
+interface AuctionItemCardProps {
+  title: string;
+  highestBid: number;
+  minIncrease: number;
+  description: string;
+  image: string; // Add image prop
+}
+
+const AuctionItemCard: React.FC<AuctionItemCardProps> = ({
+  title,
+  highestBid,
+  minIncrease,
+  description,
+  image,
+}) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [formData, setFormData] = useState({ amount: "", nameOfBidder: "" });
 
@@ -51,27 +65,37 @@ const AuctionItemCard = () => {
   };
 
   return (
-    <div>
+    <div className="flex">
       <div
-        className="bg-containerBlue rounded overflow-hidden shadow-lg m-2 text-center px-4 py-2 cursor-pointer hover:bg-regalblue"
+        className="bg-containerBlue rounded-xl overflow-hidden shadow-lg m-8 text-left px-0 py-0 cursor-pointer hover:bg-regalblue"
         onClick={openModal}
         style={{
-          width: "20rem",
+          width: "24rem",
         }}
       >
-        <div className="text-darkblue font-bold text-2xl mb-2">Auction Item</div>
-        <div className="text-darkblue font-bold text-2xl mb-2">100,-</div>
-        <span className="text-beige text-base mt-4 mb-4 text-2xl">
-          <i>Høyeste budgiver: </i>John Doe
-        </span>
-        <hr />
-        <p className="text-black text-base mt-4 mb-4 text-2xl">Description</p>
+        <img src={image} alt={title} className="w-full h-52 object-cover bg-transparent/40" />
+        <div className="px-6 py-4">
+          <div className="text-darkblue font-bold text-2xl mb-2">{title}</div>
+          <div className="flex flex-col justify-between w-128 rounded-md px-3 py-2 bg-transparent/20">
+            <div className="flex text-xl">
+              <span className="flex-1">Høyeste bud:</span>
+              <span className="flex-1">Minste økning:</span>
+            </div>
+            <div className="flex text-3xl">
+              <span className="flex-1 font-bold">{highestBid},-</span>
+              <span className="flex-1">{minIncrease},-</span>
+            </div>
+          </div>
+
+          <p className="text-black mt-4 mb-4 text-xl">{description}</p>
+        </div>
+        
       </div>
 
       <Modal isOpen={modalOpen} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false}>
         <form onSubmit={handleSubmit}>
           <div className="text-2xl text-white font-bold italic mb-4">
-            By på Auction Item
+            By på {title}
           </div>
           <div className="mb-4">
             <label className="block text-white text-lg font-bold mb-2" htmlFor="amount">
