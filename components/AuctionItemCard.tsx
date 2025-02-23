@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Modal from "react-modal";
+import { useSession } from "next-auth/react";
 
 interface AuctionItemCardProps {
   title: string;
@@ -19,14 +20,15 @@ const AuctionItemCard: React.FC<AuctionItemCardProps> = ({
   image,
 }) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [formData, setFormData] = useState({ amount: "", nameOfBidder: "" });
+  const [formData, setFormData] = useState({ amount: "" });
+  const { data: session } = useSession();
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const response = await fetch("/api/test", {
+    const response = await fetch("/api/addBid", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -34,7 +36,7 @@ const AuctionItemCard: React.FC<AuctionItemCardProps> = ({
       body: JSON.stringify({
         id: Math.random().toString(36).substr(2, 9), // Generate a random id
         amount: parseFloat(formData.amount),
-        nameOfBidder: formData.nameOfBidder,
+        nameOfBidder: session?.user?.name, // Use the logged-in user's name
       }),
     });
 
@@ -106,19 +108,6 @@ const AuctionItemCard: React.FC<AuctionItemCardProps> = ({
               type="number"
               value={formData.amount}
               onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-              required
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-white text-lg font-bold mb-2" htmlFor="nameOfBidder">
-              Name of Bidder:
-            </label>
-            <input
-              id="nameOfBidder"
-              type="text"
-              value={formData.nameOfBidder}
-              onChange={(e) => setFormData({ ...formData, nameOfBidder: e.target.value })}
               required
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
