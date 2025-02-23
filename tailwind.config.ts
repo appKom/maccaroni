@@ -16,6 +16,7 @@ const config: Config = {
         onlineOrange: "#F9B759",
         onlineBlue: "#0D5474",
         gold: "#FFD700",
+        containerBlue: "#818cf8",
       },
     },
   },
