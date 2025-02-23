@@ -44,24 +44,26 @@ export default function AuctionItemsPage() {
 
   return (
     <div className="flex-grow">
-      <div className="flex justify-center pt-10 mx-10">
-        {auctions.map((auction) => {
-          const highestBid = auction.bids && auction.bids.length > 0
-            ? Math.max(...auction.bids.map(bid => bid.amount))
-            : auction.startPrice;
+      <div className="max-w-8x1 mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-center flex-wrap gap-8">
+          {auctions.map((auction) => {
+            const highestBid = auction.bids && auction.bids.length > 0
+              ? Math.max(...auction.bids.map(bid => bid.amount))
+              : auction.startPrice;
 
-          return (
-            <AuctionItemCard
-              key={auction.id}
-              id={auction.id}
-              title={auction.name}
-              highestBid={highestBid}
-              minIncrease={auction.minimumIncrease}
-              description={auction.description}
-              image="/Online_hvit_o.svg" // Replace with actual image if available
-            />
-          );
-        })}
+            return (
+              <AuctionItemCard
+                key={auction.id}
+                id={auction.id}
+                title={auction.name}
+                highestBid={highestBid}
+                minIncrease={auction.minimumIncrease}
+                description={auction.description}
+                image="/Online_hvit_o.svg" // Replace with actual image if available
+              />
+            );
+          })}
+        </div>
       </div>
     </div>
   );

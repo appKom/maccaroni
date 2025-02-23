@@ -79,7 +79,7 @@ const AuctionItemCard: React.FC<AuctionItemCardProps> = ({
   return (
     <div className="flex">
       <div
-        className="bg-containerBlue rounded-xl overflow-hidden shadow-lg m-8 text-left px-0 py-0 cursor-pointer hover:bg-regalblue"
+        className="bg-containerBlue rounded-xl overflow-hidden shadow-lg text-left cursor-pointer hover:bg-regalblue"
         onClick={openModal}
         style={{
           width: "24rem",
