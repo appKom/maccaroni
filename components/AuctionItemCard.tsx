@@ -5,6 +5,7 @@ import Modal from "react-modal";
 import { useSession } from "next-auth/react";
 
 interface AuctionItemCardProps {
+  id: string;
   title: string;
   highestBid: number;
   minIncrease: number;
@@ -13,6 +14,7 @@ interface AuctionItemCardProps {
 }
 
 const AuctionItemCard: React.FC<AuctionItemCardProps> = ({
+  id,
   title,
   highestBid,
   minIncrease,
@@ -28,6 +30,13 @@ const AuctionItemCard: React.FC<AuctionItemCardProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const bidAmount = parseFloat(formData.amount);
+
+    if (bidAmount < highestBid + minIncrease) {
+      alert(`Budet ditt må være minst ${minIncrease}kr høyere enn det nåværende høyeste budet. Altså minst ${highestBid + minIncrease}kr`);
+      return;
+    }
+
     const response = await fetch("/api/addBid", {
       method: "POST",
       headers: {
@@ -35,8 +44,9 @@ const AuctionItemCard: React.FC<AuctionItemCardProps> = ({
       },
       body: JSON.stringify({
         id: Math.random().toString(36).substr(2, 9), // Generate a random id
-        amount: parseFloat(formData.amount),
+        amount: bidAmount,
         nameOfBidder: session?.user?.name, // Use the logged-in user's name
+        auctionId: id, // Include the auction ID
       }),
     });
 

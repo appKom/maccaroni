@@ -1,33 +1,67 @@
 "use client";
 
-import Link from "next/link";
+import { useEffect, useState } from "react";
 import AuctionItemCard from "@/components/AuctionItemCard";
 
+interface BidType {
+  id: string;
+  amount: number;
+  nameOfBidder: string;
+  auctionId: string;
+}
+
+interface AuctionType {
+  id: string;
+  name: string;
+  description: string;
+  minimumIncrease: number;
+  startPrice: number;
+  bids: BidType[];
+}
+
 export default function AuctionItemsPage() {
+  const [auctions, setAuctions] = useState<AuctionType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAuctions = async () => {
+      try {
+        const response = await fetch("/api/auctions");
+        const data = await response.json();
+        setAuctions(data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch auctions:", error);
+      }
+    };
+
+    fetchAuctions();
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="flex-grow">
       <div className="flex justify-center pt-10 mx-10">
-        <AuctionItemCard
-          title="Egen side på infoskjermen"
-          highestBid={100}
-          minIncrease={10}
-          description="Hvem vil vel ikke ha en egen tide på inforskjermen på A4. Nå har du muligheten til å få akuratt det!"
-          image="/Online_hvit_o.svg"
-        />
-        <AuctionItemCard
-          title="Date med Dina"
-          highestBid={200}
-          minIncrease={20}
-          description="Nå har du muligheten til å gå på en fantastisk date med Dina! Dette er en unik mulighet som du ikke vil gå glipp av!"
-          image="/Online_hvit_o.svg"
-        />
-        <AuctionItemCard
-          title="Egen drikkelek i appen"
-          highestBid={300}
-          minIncrease={30}
-          description="Vil du har en egen drikkelek i appen til ære for deg?"
-          image="/Online_hvit_o.svg"
-        />
+        {auctions.map((auction) => {
+          const highestBid = auction.bids && auction.bids.length > 0
+            ? Math.max(...auction.bids.map(bid => bid.amount))
+            : auction.startPrice;
+
+          return (
+            <AuctionItemCard
+              key={auction.id}
+              id={auction.id}
+              title={auction.name}
+              highestBid={highestBid}
+              minIncrease={auction.minimumIncrease}
+              description={auction.description}
+              image="/Online_hvit_o.svg" // Replace with actual image if available
+            />
+          );
+        })}
       </div>
     </div>
   );
