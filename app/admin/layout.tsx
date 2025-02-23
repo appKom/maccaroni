@@ -11,7 +11,7 @@ export default function AdminLayout({
 
   if (status === "loading") {
     return (
-      <div className="min-h-screen text-white flex items-center justify-center">
+      <div className="min-h-screen text-white bg-inherit flex items-center justify-center">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-16 w-16 border-y-2  mb-4"></div>
           <h2 className="text-2xl font-semibold">
@@ -27,7 +27,7 @@ export default function AdminLayout({
 
   if (!session?.user.isAdmin) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
+      <div className="flex flex-col bg-inherit items-center justify-center min-h-screen">
         <div className="flex flex-col items-center justify-center px-6 gap-5">
           <h1 className="text-3xl">Du har ikke tilgang til denne siden</h1>
           <h2 className="text-xl">{session?.user.name}</h2>
@@ -42,5 +42,5 @@ export default function AdminLayout({
     );
   }
 
-  return <div className="flex flex-col ">{children}</div>;
+  return <div className="flex flex-col bg-inherit">{children}</div>;
 }
