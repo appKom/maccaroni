@@ -27,12 +27,10 @@ export default function Index() {
   return (
     <>
       <div className={"flex flex-col"}>
-        <div className={"w-screen"}>
           <ProgressBar
             stretchGoals={data.stretchGoals}
             totalAmount={data.totalAmount}
           />
-        </div>
 
         <div className="flex max-w-full flex-grow justify-evenly flex-wrap mt-10 text-beige">
           <div className={""}>

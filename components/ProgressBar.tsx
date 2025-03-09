@@ -8,7 +8,6 @@ interface Props {
 
 export default function ProgressBar({ stretchGoals, totalAmount }: Props) {
   const maxAmount = stretchGoals[stretchGoals.length - 1]?.goal;
-  const meterLen = Math.floor((totalAmount / maxAmount) * 100);
   const nextGoal = stretchGoals.find(
     (stretchGoal) => stretchGoal.goal > totalAmount
   );
@@ -24,18 +23,14 @@ export default function ProgressBar({ stretchGoals, totalAmount }: Props) {
         </div>
         <div className="flex flex-col items-center justify-center w-full">
           <div className="relative flex w-full h-20 m-1 overflow-hidden text-xs bg-regalblue rounded-3xl">
-            <div
-              style={{ width: `${meterLen}%`, transition: "width 2s" }}
-              className="bg-turquise shadow-none"
-            ></div>
-            <p className="absolute flex items-center justify-center w-full h-full text-2xl text-beige">{`${totalAmount}kr av ${maxAmount}kr`}</p>
+            <p className="relative flex flex-col items-center justify-center w-full h-full text-2xl text-beige">{`${totalAmount}kr av ${maxAmount}kr`}</p>
           </div>
           <div className="flex w-full text-left">
             <p className="p-3 text-4xl">Neste stretch goal: </p>
           </div>
 
           <div className="relative flex w-full h-20 m-1 overflow-hidden text-xs bg-indigo-400 rounded-3xl mb-5">
-            <p className="absolute flex items-center justify-center w-full h-full text-2xl text-black">
+            <p className="flex items-center justify-center w-full h-full text-2xl text-black">
               {nextGoal
                 ? `${nextGoal.description} på ${nextGoal.goal}kr`
                 : "Tomt for stretchGoals :("}{" "}
