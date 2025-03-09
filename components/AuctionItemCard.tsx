@@ -23,8 +23,8 @@ import toast from "react-hot-toast";
 interface AuctionItemCardProps {
   title: string;
   highestBid: number;
+  startPrice: number;
   minIncrease: number;
-  minBid: number;
   description: string;
   image: string;
   auctionId: string;
@@ -33,7 +33,7 @@ interface AuctionItemCardProps {
 export default function AuctionItemCard({
   title,
   highestBid,
-  minBid,
+  startPrice,
   minIncrease,
   description,
   image,
@@ -82,6 +82,8 @@ export default function AuctionItemCard({
     }
   };
 
+  const minBid = highestBid === 0 ? startPrice : highestBid + minIncrease;
+
   const formContent = (
     <form onSubmit={handleSubmit} className="space-y-4 flex flex-col h-full">
       <div className="space-y-2">
@@ -102,7 +104,7 @@ export default function AuctionItemCard({
       </div>
       <div className="space-y-2">
         <Label htmlFor="amount" className="text-slate-300">
-          Beløp: (minst {highestBid + minIncrease}kr)
+          Beløp: (minst {minBid}kr)
         </Label>
         <Input
           id="amount"
@@ -112,7 +114,7 @@ export default function AuctionItemCard({
           onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
           required
           className="bg-slate-700 border-slate-600 text-white focus:border-teal-500 focus:ring-teal-500/20"
-          min={highestBid + minIncrease}
+          min={minBid}
         />
       </div>
       <div className="flex justify-between pt-4 gap-4 sm:gap-8 mt-auto">

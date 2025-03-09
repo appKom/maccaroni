@@ -28,7 +28,7 @@ export default async function AuctionItemsPage() {
           <AuctionItemCard
             key={item.id}
             title={item.name}
-            minBid={item.startPrice}
+            startPrice={item.startPrice}
             highestBid={
               highestBid.find((bid) => bid.auctionId === item.id)?.amount || 0
             }

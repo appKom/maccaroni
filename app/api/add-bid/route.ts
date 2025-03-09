@@ -42,6 +42,13 @@ export const POST = async (req: NextRequest) => {
     }
   }
 
+  if (amount < auction.startPrice) {
+    return NextResponse.json(
+      { error: "Beløpet er lavere en startprisen" },
+      { status: 400 }
+    );
+  }
+
   if (auction.minimumIncrease > amount) {
     return NextResponse.json(
       { error: "Beløpet er lavere en minimum økningen" },
