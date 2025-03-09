@@ -26,6 +26,7 @@ interface AuctionItemCardProps {
   minIncrease: number;
   description: string;
   image: string;
+  auctionId: string;
 }
 
 export default function AuctionItemCard({
@@ -34,6 +35,7 @@ export default function AuctionItemCard({
   minIncrease,
   description,
   image,
+  auctionId,
 }: AuctionItemCardProps) {
   const [open, setOpen] = useState<boolean>(false);
   const [formData, setFormData] = useState({ amount: "", nameOfBidder: "" });
@@ -41,6 +43,17 @@ export default function AuctionItemCard({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (Number(formData.amount) < highestBid + minIncrease) {
+      toast.error("Budet må være minst " + (highestBid + minIncrease) + "kr");
+      return;
+    }
+
+    if (formData.nameOfBidder === "") {
+      toast.error("Du må fylle inn navnet ditt.");
+      return;
+    }
+
     try {
       const response = await fetch("/api/add-bid", {
         method: "POST",
@@ -48,15 +61,16 @@ export default function AuctionItemCard({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          id: Math.random().toString(36).substr(2, 9),
           amount: Number.parseFloat(formData.amount),
           nameOfBidder: formData.nameOfBidder,
+          auctionId: auctionId,
         }),
       });
 
       if (response.ok) {
         toast.success("Bud sendt inn!");
         setOpen(false);
+        window.location.reload();
       } else {
         toast.error("Kunne ikke sende inn bud.");
       }

@@ -34,6 +34,7 @@ export default async function AuctionItemsPage() {
             minIncrease={item.minimumIncrease}
             description={item.description}
             image="/Online_hvit_o.svg"
+            auctionId={item.id}
           />
         ))}
       </div>

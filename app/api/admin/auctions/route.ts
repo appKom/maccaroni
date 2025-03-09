@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/authOptions";
+import { revalidatePath } from "next/cache";
 
 export const POST = async (req: NextRequest) => {
   try {
@@ -25,6 +26,8 @@ export const POST = async (req: NextRequest) => {
       data: auction,
     });
 
+    revalidatePath("/");
+    revalidatePath("/auksjon");
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json(
