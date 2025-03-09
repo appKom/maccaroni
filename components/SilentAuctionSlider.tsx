@@ -1,24 +1,31 @@
+import { Auction, Bid } from "@prisma/client";
 import styles from "./SilentAuctionSlider.module.css";
 
-interface Props {
-  items: {
-    id: number;
-    title: string;
-    price: number;
-    highestBid: number;
-  }[];
+interface AuctionWithBids extends Auction {
+  bids: Bid[];
 }
 
-const SilentAuctionSlider = ({ items }: Props) => {
-  items = items.sort((a, b) => {
-    return a.price - b.price;
-  });
+interface Props {
+  auctions: AuctionWithBids[];
+}
 
-  const itemRows = items.map((item, index) => (
+const SilentAuctionSlider = ({ auctions }: Props) => {
+  const highestBid = (bids: Bid[]) => {
+    if (bids.length === 0) {
+      return null;
+    }
+    return bids.reduce((prev, current) =>
+      prev.amount > current.amount ? prev : current
+    );
+  };
+
+  const itemRows = auctions.map((item, index) => (
     <tr key={index}>
-      <td className="m-1 text-2xl">{item.title}</td>
-      <td className="m-1 text-2xl">{item.price},-</td>
-      <td className="m-1 text-2xl">{item.highestBid}</td>
+      <td className="m-1 text-2xl">{item.name}</td>
+      <td className="m-1 text-2xl">{highestBid(item.bids)?.amount ?? 0}kr</td>
+      <td className="m-1 text-2xl">
+        {highestBid(item.bids)?.nameOfBidder ?? "Ingen bud"}
+      </td>
     </tr>
   ));
 
@@ -30,7 +37,7 @@ const SilentAuctionSlider = ({ items }: Props) => {
       <table className={styles.tableMain}>
         <tbody>
           <tr className={styles.header}>
-            <th className="m-1 text-lg sm:text-3xl ">Auksjon</th>
+            <th className="m-1 text-lg sm:text-3xl">Auksjon</th>
             <th className="m-1 text-lg sm:text-3xl">Pris</th>
             <th className="m-1 text-lg sm:text-3xl">Høyeste budgiver</th>
           </tr>
