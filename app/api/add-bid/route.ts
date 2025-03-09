@@ -29,15 +29,17 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json({ error: "Fant ikke auksjoner" }, { status: 404 });
   }
 
-  const highestBid = auction.bids.reduce((prev, current) =>
-    prev.amount > current.amount ? prev : current
-  );
-
-  if (highestBid.amount >= amount) {
-    return NextResponse.json(
-      { error: "Beløpet er lavere en høyeste bud" },
-      { status: 400 }
+  if (auction.bids.length > 0) {
+    const highestBid = auction.bids.reduce((prev, current) =>
+      prev.amount > current.amount ? prev : current
     );
+
+    if (highestBid.amount >= amount) {
+      return NextResponse.json(
+        { error: "Beløpet er lavere en høyeste bud" },
+        { status: 400 }
+      );
+    }
   }
 
   if (auction.minimumIncrease > amount) {
@@ -50,9 +52,10 @@ export const POST = async (req: NextRequest) => {
   try {
     const newBid = await prisma.bid.create({
       data: {
-        amount,
-        nameOfBidder,
-        auctionId,
+        amount: amount,
+        nameOfBidder: nameOfBidder,
+        owId: session.user.owId,
+        Auction: { connect: { id: auctionId } },
       },
     });
 
@@ -60,6 +63,7 @@ export const POST = async (req: NextRequest) => {
     revalidatePath("/auksjon");
     return NextResponse.json(newBid, { status: 201 });
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { error: "Error creating bid" + error },
       { status: 500 }

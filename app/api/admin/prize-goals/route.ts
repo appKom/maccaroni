@@ -13,23 +13,26 @@ export const POST = async (req: NextRequest) => {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
 
-    const auction = await req.json();
+    const prizeGoal = await req.json();
 
-    if (!auction) {
+    if (!prizeGoal) {
       return NextResponse.json(
         { error: "Missing auction item" },
         { status: 400 }
       );
     }
 
-    await prisma.auction.create({
-      data: auction,
+    await prisma.prizeGoal.create({
+      data: {
+        goal: prizeGoal.goal,
+        description: prizeGoal.description,
+      },
     });
 
     revalidatePath("/");
-    revalidatePath("/auksjon");
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Unknown error" },
       { status: 500 }
@@ -45,25 +48,25 @@ export const PUT = async (req: NextRequest) => {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
 
-    const auction = await req.json();
+    const prizeGoal = await req.json();
 
-    if (!auction) {
+    if (!prizeGoal) {
       return NextResponse.json(
         { error: "Missing auction item" },
         { status: 400 }
       );
     }
 
-    await prisma.auction.update({
-      where: { id: auction.id },
-      data: auction,
+    await prisma.prizeGoal.update({
+      where: { id: prizeGoal.id },
+      data: prizeGoal,
     });
 
     revalidatePath("/");
-    revalidatePath("/auksjon");
 
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Unknown error" },
       { status: 500 }
@@ -88,15 +91,14 @@ export const DELETE = async (req: NextRequest) => {
       );
     }
 
-    await prisma.auction.delete({
+    await prisma.prizeGoal.delete({
       where: { id: id as string },
     });
 
     revalidatePath("/");
-    revalidatePath("/auksjon");
-
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Unknown error" },
       { status: 500 }

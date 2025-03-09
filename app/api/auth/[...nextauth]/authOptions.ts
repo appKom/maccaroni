@@ -76,6 +76,9 @@ export const authOptions: NextAuthOptions = {
           (session.user as { isAdmin?: boolean }).isAdmin =
             token.isAdmin as boolean;
         }
+
+        session.user.owId = token.sub as string;
+
         return session;
       } catch (error) {
         console.error("Error in session callback:", error);

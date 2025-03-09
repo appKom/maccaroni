@@ -68,9 +68,9 @@ export default function AuctionItemCard({
       });
 
       if (response.ok) {
-        toast.success("Bud sendt inn!");
         setOpen(false);
         window.location.reload();
+        toast.success("Bud sendt inn!");
       } else {
         toast.error("Kunne ikke sende inn bud.");
       }

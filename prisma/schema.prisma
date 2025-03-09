@@ -17,6 +17,7 @@ model Bid {
   id           String  @id @default(cuid())
   amount       Float
   nameOfBidder String
+  owId         String
   Auction      Auction @relation(fields: [auctionId], references: [id])
   auctionId    String
 }
@@ -33,4 +34,11 @@ model Auction {
 model RuleSheet {
   id          String @id @default(cuid())
   description String
+}
+
+model PrizeGoal {
+  id             String @id @default(cuid())
+  goal           Int
+  description    String
+  totalCollected Int    @default(0)
 }
