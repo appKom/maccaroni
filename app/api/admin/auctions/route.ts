@@ -14,8 +14,6 @@ export const POST = async (req: NextRequest) => {
 
     const auction = await req.json();
 
-    console.log(auction);
-
     if (!auction) {
       return NextResponse.json(
         { error: "Missing auction item" },
