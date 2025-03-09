@@ -24,6 +24,7 @@ interface AuctionItemCardProps {
   title: string;
   highestBid: number;
   minIncrease: number;
+  minBid: number;
   description: string;
   image: string;
   auctionId: string;
@@ -32,6 +33,7 @@ interface AuctionItemCardProps {
 export default function AuctionItemCard({
   title,
   highestBid,
+  minBid,
   minIncrease,
   description,
   image,
@@ -146,12 +148,16 @@ export default function AuctionItemCard({
         <div className="px-3 sm:px-6 py-3 sm:py-4 flex flex-col flex-grow">
           <div className="flex flex-col justify-between rounded-md px-3 sm:px-4 py-2 sm:py-3 bg-slate-700/50 backdrop-blur-sm border border-teal-500/20">
             <div className="flex text-base sm:text-lg text-slate-300">
-              <span className="flex-1">Høyeste bud:</span>
+              {highestBid === 0 ? (
+                <span className="flex-1">Minimum bud:</span>
+              ) : (
+                <span className="flex-1">Høyeste bud:</span>
+              )}
               <span className="flex-1">Minimum økning:</span>
             </div>
             <div className="flex text-xl sm:text-3xl text-white">
               <span className="flex-1 font-bold text-teal-400">
-                {highestBid},-
+                {highestBid === 0 ? minBid : highestBid},-
               </span>
               <span className="flex-1">{minIncrease},-</span>
             </div>

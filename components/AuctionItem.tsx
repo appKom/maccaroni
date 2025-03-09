@@ -18,12 +18,12 @@ const AuctionItem = ({ title, price, name, description, onClick }: Props) => {
     >
       <div className="text-darkblue  font-bold text-2xl mb-2">{title}</div>
       <div className="text-darkblue font-bold text-2xl mb-2">{price},-</div>
-      <span className="text-beige text-base mt-4 mb-4 text-2xl">
+      <span className="text-beige  mt-4 mb-4 text-2xl">
         <i>Høyeste budgiver: </i>
         {name}
       </span>
       <hr />
-      <p className="text-black text-base mt-4 mb-4 text-2xl">{description}</p>
+      <p className="text-black t mt-4 mb-4 text-2xl">{description}</p>
     </div>
   );
 };

@@ -22,7 +22,9 @@ const SilentAuctionSlider = ({ auctions }: Props) => {
   const itemRows = auctions.map((item, index) => (
     <tr key={index}>
       <td className="m-1 text-2xl">{item.name}</td>
-      <td className="m-1 text-2xl">{highestBid(item.bids)?.amount ?? 0}kr</td>
+      <td className="m-1 text-2xl">
+        {highestBid(item.bids)?.amount ?? item.startPrice}kr
+      </td>
       <td className="m-1 text-2xl">
         {highestBid(item.bids)?.nameOfBidder ?? "Ingen bud"}
       </td>

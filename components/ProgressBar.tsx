@@ -2,18 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { Check, Gift, Trophy } from "lucide-react";
-import { PrizeGoal } from "@prisma/client";
+import { Collected, PrizeGoal } from "@prisma/client";
 
 interface Props {
   prizeGoals: PrizeGoal[];
-  collectedAmount?: number;
+  collected: Collected[];
   className?: string;
 }
 
 export default function StretchGoals({
   prizeGoals,
-  //TODO change to actual collected amount
-  collectedAmount = 2000,
+  collected,
   className = "",
 }: Props) {
   const [animate, setAnimate] = useState(false);
@@ -22,6 +21,9 @@ export default function StretchGoals({
     (acc, goal) => Math.max(acc, goal.goal),
     0
   );
+
+  const collectedAmount = collected.reduce((acc, goal) => acc + goal.amount, 0);
+
   const progressPercentage = Math.min(
     100,
     Math.round((collectedAmount / maxAmount) * 100)
