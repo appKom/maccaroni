@@ -8,15 +8,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
 import { Button } from "./Button";
 import toast from "react-hot-toast";
 
@@ -41,7 +35,6 @@ export default function AuctionItemCard({
 }: AuctionItemCardProps) {
   const [open, setOpen] = useState<boolean>(false);
   const [formData, setFormData] = useState({ amount: "", nameOfBidder: "" });
-  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -175,29 +168,16 @@ export default function AuctionItemCard({
         </div>
       </div>
 
-      {isDesktop ? (
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogContent className="bg-slate-800 border border-teal-500/30 text-white sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle className="text-xl sm:text-2xl font-bold text-teal-400">
-                By på {title}
-              </DialogTitle>
-            </DialogHeader>
-            {formContent}
-          </DialogContent>
-        </Dialog>
-      ) : (
-        <Drawer open={open} onOpenChange={setOpen}>
-          <DrawerContent className="bg-slate-800 text-white border-t border-teal-500/30">
-            <DrawerHeader className="border-b border-slate-700">
-              <DrawerTitle className="text-xl font-bold text-teal-400">
-                By på {title}
-              </DrawerTitle>
-            </DrawerHeader>
-            <div className="px-4 py-4">{formContent}</div>
-          </DrawerContent>
-        </Drawer>
-      )}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="bg-slate-800 border border-teal-500/30 text-white sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-xl sm:text-2xl font-bold text-teal-400">
+              By på {title}
+            </DialogTitle>
+          </DialogHeader>
+          {formContent}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
