@@ -36,11 +36,9 @@ const RootLayout = ({ children }: RootLayoutProps) => {
       <div className="flex flex-col items-center justify-center flex-grow">
         <div className="flex flex-col items-center justify-center px-6 gap-5">
           <h1 className="text-3xl">Vennligst logg inn</h1>
-          <Button
-            title="Logg inn med OW"
-            color="onlineOrange"
-            onClick={handleLogin}
-          />
+          <Button color="onlineOrange" onClick={handleLogin}>
+            Logg inn med OW
+          </Button>
         </div>
       </div>
     );
