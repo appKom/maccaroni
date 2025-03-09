@@ -59,6 +59,14 @@ export const POST = async (req: NextRequest) => {
       },
     });
 
+    await prisma.collected.create({
+      data: {
+        amount: amount,
+        type: "SILENT_AUCTION",
+        description: "Bud på " + auction.name,
+      },
+    });
+
     revalidatePath("/");
     revalidatePath("/auksjon");
     return NextResponse.json(newBid, { status: 201 });

@@ -41,3 +41,16 @@ model PrizeGoal {
   goal        Int
   description String
 }
+
+enum CollectedType {
+  SILENT_AUCTION
+  LIVE_AUCTION
+  VIPPS
+}
+
+model Collected {
+  id          String        @id @default(cuid())
+  amount      Int
+  type        CollectedType
+  description String?
+}

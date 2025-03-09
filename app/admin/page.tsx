@@ -2,7 +2,12 @@
 
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { BookIcon, CircleDollarSign, ShoppingCart } from "lucide-react";
+import {
+  BookIcon,
+  CircleDollarSign,
+  GoalIcon,
+  ShoppingCart,
+} from "lucide-react";
 
 interface IRoute {
   title: string;
@@ -30,8 +35,14 @@ const AdminPage = () => {
     {
       title: "Prismål",
       href: "/admin/prize-goals",
-      icon: CircleDollarSign,
+      icon: GoalIcon,
       description: "Se og rediger prismål",
+    },
+    {
+      title: "Innsamlet",
+      href: "/admin/collected",
+      icon: CircleDollarSign,
+      description: "Se og rediger innsamlet beløp",
     },
   ];
 
