@@ -1,4 +1,3 @@
-import StretchGoals from "../components/StretchGoals";
 import SilentAuctionSlider from "../components/SilentAuctionSlider";
 import Vipps from "../components/Vipps";
 import ProgressBar from "../components/ProgressBar";
@@ -27,31 +26,21 @@ export default async function Index() {
     },
   });
 
+  const prizeGoals = await prisma.prizeGoal.findMany();
+
   return (
     <>
-      <div className={"flex flex-col"}>
-        <ProgressBar
-          stretchGoals={data.stretchGoals}
-          totalAmount={data.totalAmount}
-        />
+      <div className={"flex flex-col mx-auto container px-4"}>
+        <div className="grid grid-cols-1 lg:grid-cols-7 gap-8 pt-8 ">
+          <section className="col-span-5 flex flex-col items-center">
+            <ProgressBar prizeGoals={prizeGoals} />
+            <SilentAuctionSlider auctions={auctions} />
+          </section>
 
-        <div className="flex max-w-full flex-grow justify-evenly flex-wrap mt-10 text-beige">
-          <div className={""}>
-            <StretchGoals
-              stretchGoals={data.stretchGoals}
-              totalAmount={data.totalAmount}
-            />
-          </div>
-          <div
-            className={
-              "flex-grow max-w-lg bg-regalblue rounded-md p-5 text-beige"
-            }
-          >
-            <Vipps items={data.vipps} topDonor={data.topDonor} />
-          </div>
+          <section className="col-span-2">
+            <Vipps items={data.vipps} />
+          </section>
         </div>
-
-        <SilentAuctionSlider auctions={auctions} />
       </div>
     </>
   );
