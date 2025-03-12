@@ -23,11 +23,12 @@ model Bid {
 }
 
 model Auction {
-  id              String @id @default(cuid())
+  id              String  @id @default(cuid())
   name            String
   description     String
   minimumIncrease Int
   startPrice      Int
+  image           String?
   bids            Bid[]
 }
 
