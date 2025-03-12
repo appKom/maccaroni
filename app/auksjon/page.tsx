@@ -1,25 +1,90 @@
-import { prisma } from "@/lib/prisma";
+"use client";
+
+import { useState, useEffect } from "react";
 import AuctionItemCard from "@/components/AuctionItemCard";
 
-export default async function AuctionItemsPage() {
-  const items = await prisma.auction.findMany({
-    include: {
-      bids: true,
-    },
-  });
+interface Bid {
+  id: string;
+  amount: number;
+  nameOfBidder: string;
+  auctionId: string;
+}
 
-  const highestBid = items.map((item) => {
-    if (item.bids.length === 0) {
-      return { auctionId: item.id, amount: 0 };
-    }
-    return item.bids.reduce((prev, current) =>
-      prev.amount > current.amount ? prev : current
+interface Auction {
+  id: string;
+  name: string;
+  description: string;
+  startPrice: number;
+  minimumIncrease: number;
+  image: string | null;
+  bids: Bid[];
+}
+
+export default function AuctionItemsPage() {
+  const [items, setItems] = useState<Auction[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAuctions = async () => {
+      try {
+        const response = await fetch("/api/auctions");
+        if (response.ok) {
+          const data = await response.json();
+          setItems(data);
+        } else {
+          console.error("Failed to fetch auctions");
+        }
+      } catch (error) {
+        console.error("Error fetching auctions:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAuctions();
+  }, []);
+
+  const handleBidSubmitted = (
+    auctionId: string,
+    amount: number,
+    nameOfBidder: string
+  ) => {
+    setItems((prevItems) =>
+      prevItems.map((item) => {
+        if (item.id === auctionId) {
+          const newBid: Bid = {
+            id: `temp-${Date.now()}`,
+            amount,
+            nameOfBidder,
+            auctionId,
+          };
+
+          return {
+            ...item,
+            bids: [...item.bids, newBid],
+          };
+        }
+        return item;
+      })
     );
-  });
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        Laster auksjoner...
+      </div>
+    );
+  }
 
   if (!items || items.length === 0) {
     return <p>Fant ingen auksjoner :(</p>;
   }
+
+  const getHighestBid = (bids: Bid[]) => {
+    if (bids.length === 0) return 0;
+    return Math.max(...bids.map((bid) => bid.amount));
+  };
 
   return (
     <main className="mx-auto flex flex-col items-center container px-8">
@@ -29,13 +94,12 @@ export default async function AuctionItemsPage() {
             key={item.id}
             title={item.name}
             startPrice={item.startPrice}
-            highestBid={
-              highestBid.find((bid) => bid.auctionId === item.id)?.amount || 0
-            }
+            highestBid={getHighestBid(item.bids)}
             minIncrease={item.minimumIncrease}
             description={item.description}
             image={item.image ? item.image : "/Online_hvit_o.svg"}
             auctionId={item.id}
+            onBidSubmitted={handleBidSubmitted}
           />
         ))}
       </div>

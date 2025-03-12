@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useState } from "react";
+import { useState, useOptimistic } from "react";
 import {
   Dialog,
   DialogContent,
@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "./Button";
 import toast from "react-hot-toast";
+import { startTransition } from "react";
 
 interface AuctionItemCardProps {
   title: string;
@@ -22,6 +23,11 @@ interface AuctionItemCardProps {
   description: string;
   image: string;
   auctionId: string;
+  onBidSubmitted: (
+    auctionId: string,
+    amount: number,
+    nameOfBidder: string
+  ) => void;
 }
 
 export default function AuctionItemCard({
@@ -32,22 +38,38 @@ export default function AuctionItemCard({
   description,
   image,
   auctionId,
+  onBidSubmitted,
 }: AuctionItemCardProps) {
   const [open, setOpen] = useState<boolean>(false);
   const [formData, setFormData] = useState({ amount: "", nameOfBidder: "" });
+  const [isPending, setIsPending] = useState(false);
+
+  const [optimisticHighestBid, setOptimisticHighestBid] = useOptimistic(
+    highestBid,
+    (state, newAmount: number) => newAmount
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsPending(true);
 
-    if (Number(formData.amount) < highestBid + minIncrease) {
+    const bidAmount = Number(formData.amount);
+
+    if (bidAmount < highestBid + minIncrease) {
       toast.error("Budet må være minst " + (highestBid + minIncrease) + "kr");
+      setIsPending(false);
       return;
     }
 
     if (formData.nameOfBidder === "") {
       toast.error("Du må fylle inn navnet ditt.");
+      setIsPending(false);
       return;
     }
+
+    startTransition(() => {
+      setOptimisticHighestBid(bidAmount);
+    });
 
     try {
       const response = await fetch("/api/add-bid", {
@@ -56,7 +78,7 @@ export default function AuctionItemCard({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: Number.parseFloat(formData.amount),
+          amount: bidAmount,
           nameOfBidder: formData.nameOfBidder,
           auctionId: auctionId,
         }),
@@ -64,18 +86,31 @@ export default function AuctionItemCard({
 
       if (response.ok) {
         setOpen(false);
-        window.location.reload();
         toast.success("Bud sendt inn!");
+        onBidSubmitted(auctionId, bidAmount, formData.nameOfBidder);
+        setFormData({ amount: "", nameOfBidder: "" });
       } else {
+        startTransition(() => {
+          setOptimisticHighestBid(bidAmount);
+        });
+
         toast.error("Kunne ikke sende inn bud.");
       }
     } catch (error) {
+      startTransition(() => {
+        setOptimisticHighestBid(bidAmount);
+      });
+
       toast.error("Feil ved innsending av bud: " + error);
-      toast.error("En feil oppstod ved innsending av budet ditt.");
+    } finally {
+      setIsPending(false);
     }
   };
 
-  const minBid = highestBid === 0 ? startPrice : highestBid + minIncrease;
+  const minBid =
+    optimisticHighestBid === 0
+      ? startPrice
+      : optimisticHighestBid + minIncrease;
 
   const formContent = (
     <form onSubmit={handleSubmit} className="space-y-4 flex flex-col h-full">
@@ -93,6 +128,7 @@ export default function AuctionItemCard({
           }
           required
           className="bg-slate-700 border-slate-600 text-white focus:border-teal-500 focus:ring-teal-500/20"
+          disabled={isPending}
         />
       </div>
       <div className="space-y-2">
@@ -108,14 +144,20 @@ export default function AuctionItemCard({
           required
           className="bg-slate-700 border-slate-600 text-white focus:border-teal-500 focus:ring-teal-500/20"
           min={minBid}
+          disabled={isPending}
         />
       </div>
       <div className="flex justify-between pt-4 gap-4 sm:gap-8 mt-auto">
-        <Button type="button" onClick={() => setOpen(false)} color="red">
+        <Button
+          type="button"
+          onClick={() => setOpen(false)}
+          color="red"
+          disabled={isPending}
+        >
           Avbryt
         </Button>
-        <Button type="submit" color="green">
-          Send bud
+        <Button type="submit" color="green" disabled={isPending}>
+          {isPending ? "Sender..." : "Send bud"}
         </Button>
       </div>
     </form>
@@ -143,7 +185,7 @@ export default function AuctionItemCard({
         <div className="px-3 sm:px-6 py-3 sm:py-4 flex flex-col flex-grow">
           <div className="flex flex-col justify-between rounded-md px-3 sm:px-4 py-2 sm:py-3 bg-slate-700/50 backdrop-blur-sm border border-teal-500/20">
             <div className="flex text-base sm:text-lg text-slate-300">
-              {highestBid === 0 ? (
+              {optimisticHighestBid === 0 ? (
                 <span className="flex-1">Minimum bud:</span>
               ) : (
                 <span className="flex-1">Høyeste bud:</span>
@@ -152,7 +194,7 @@ export default function AuctionItemCard({
             </div>
             <div className="flex text-xl sm:text-3xl text-white">
               <span className="flex-1 font-bold text-teal-400">
-                {highestBid === 0 ? minBid : highestBid},-
+                {optimisticHighestBid === 0 ? minBid : optimisticHighestBid},-
               </span>
               <span className="flex-1">{minIncrease},-</span>
             </div>

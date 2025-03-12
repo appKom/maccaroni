@@ -12,6 +12,7 @@ interface Props {
   children?: React.ReactNode;
   type?: "button" | "submit" | "reset";
   className?: string;
+  disabled?: boolean;
 }
 
 export const Button = ({
@@ -21,6 +22,7 @@ export const Button = ({
   children,
   className,
   type = "button",
+  disabled,
 }: Props) => {
   const colorStyle =
     color == "onlineOrange"
@@ -45,6 +47,7 @@ export const Button = ({
   return (
     <UIButton
       type={type}
+      disabled={disabled}
       variant="outline"
       className={`${className} w-full bg-transparent border ${colorStyle}`}
       onClick={onClick}

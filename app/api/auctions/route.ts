@@ -11,7 +11,11 @@ export const GET = async () => {
   }
 
   try {
-    const auctions = await prisma.auction.findMany();
+    const auctions = await prisma.auction.findMany({
+      include: {
+        bids: true,
+      },
+    });
 
     if (!auctions) {
       return NextResponse.json({ description: "Could not find any auctions" });
