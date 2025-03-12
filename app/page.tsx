@@ -1,7 +1,7 @@
 import Vipps from "../components/Vipps";
-import ProgressBar from "../components/ProgressBar";
 import { prisma } from "@/lib/prisma";
 import SilentAuctionTable from "@/components/SilentAuctionTable";
+import StretchGoals from "@/components/StretchGoals";
 
 export default async function Index() {
   const data = {
@@ -27,7 +27,7 @@ export default async function Index() {
       <div className={"flex flex-col mx-auto container px-4"}>
         <div className="grid grid-cols-1 lg:grid-cols-7 gap-8 pt-8 ">
           <section className="col-span-5 flex flex-col items-center">
-            <ProgressBar prizeGoals={prizeGoals} collected={collected} />
+            <StretchGoals prizeGoals={prizeGoals} collected={collected} />
             <SilentAuctionTable auctions={auctions} />
           </section>
 

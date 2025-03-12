@@ -51,10 +51,9 @@ export default function StretchGoals({
       className={`rounded-lg w-full shadow-lg bg-gradient-to-r from-orange-800 to-amber-800  ${className}`}
     >
       <div className="p-6 space-y-4">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col w-full sm:flex-row justify-between items-start sm:items-center">
           <h2 className="text-4xl font-bold text-white">Stretchgoals</h2>
-
-          <div className="text-4xl font-bold text-orange-100">
+          <div className="text-2xl sm:text-4xl font-bold text-orange-100">
             {collectedAmount.toLocaleString("nb-NO")} /{" "}
             {maxAmount.toLocaleString("nb-NO")}
           </div>
