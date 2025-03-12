@@ -52,5 +52,6 @@ model Collected {
   id          String        @id @default(cuid())
   amount      Int
   type        CollectedType
+  auctionId   String?
   description String?
 }

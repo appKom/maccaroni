@@ -66,11 +66,20 @@ export const POST = async (req: NextRequest) => {
       },
     });
 
+    // Sletter tidligere bud fra collected
+    await prisma.collected.deleteMany({
+      where: {
+        auctionId: auctionId,
+      },
+    });
+
+    // Legger til nytt bud i collected
     await prisma.collected.create({
       data: {
         amount: amount,
         type: "SILENT_AUCTION",
         description: "Bud på " + auction.name,
+        auctionId: auctionId,
       },
     });
 

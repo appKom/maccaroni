@@ -1,7 +1,7 @@
 "use client";
 import { ReactNode } from "react";
 import { signIn, useSession } from "next-auth/react";
-import { Button } from "@/components/Button";
+import LoginScreen from "./LoginScreen";
 
 interface RootLayoutProps {
   children: ReactNode;
@@ -17,7 +17,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
 
   if (status === "loading") {
     return (
-      <div className="flex-grow text-white flex items-center justify-center">
+      <div className="flex-grow min-h-[80vh] text-white flex items-center justify-center">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-16 w-16 border-y-2  mb-4"></div>
           <h2 className="text-2xl font-semibold">
@@ -32,16 +32,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
   }
 
   if (!session) {
-    return (
-      <div className="flex flex-col items-center justify-center flex-grow">
-        <div className="flex flex-col items-center justify-center px-6 gap-5">
-          <h1 className="text-3xl">Vennligst logg inn</h1>
-          <Button color="onlineOrange" onClick={handleLogin}>
-            Logg inn med OW
-          </Button>
-        </div>
-      </div>
-    );
+    return <LoginScreen handleLogin={handleLogin} />;
   }
 
   return <>{children}</>;
