@@ -55,3 +55,11 @@ model Collected {
   auctionId   String?
   description String?
 }
+
+model Competition {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  image       String?
+  time        DateTime
+}

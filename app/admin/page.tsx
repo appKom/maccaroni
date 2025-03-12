@@ -5,6 +5,7 @@ import Link from "next/link";
 import {
   BookIcon,
   CircleDollarSign,
+  FlagIcon,
   GoalIcon,
   ShoppingCart,
 } from "lucide-react";
@@ -43,6 +44,12 @@ const AdminPage = () => {
       href: "/admin/collected",
       icon: CircleDollarSign,
       description: "Se og rediger innsamlet beløp",
+    },
+    {
+      title: "Konkurranser",
+      href: "/admin/competitions",
+      icon: FlagIcon,
+      description: "Se og rediger konkurranser",
     },
   ];
 

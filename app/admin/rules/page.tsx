@@ -1,39 +1,12 @@
 "use client";
 import LoadingCircle from "@/components/admin/LoadingCircle";
+import { quillFormats, quillModules } from "@/components/markdown/Quill";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import "react-quill-new/dist/quill.snow.css";
 
 const QuillEditor = dynamic(() => import("react-quill-new"), { ssr: false });
-
-const quillModules = {
-  toolbar: [
-    [{ header: [1, 2, 3, false] }],
-    ["bold", "italic", "underline", "strike", "blockquote"],
-    [{ list: "ordered" }, { list: "bullet" }],
-    ["link", "image"],
-    [{ align: [] }],
-    [{ color: [] }],
-    ["code-block"],
-    ["clean"],
-  ],
-};
-
-const quillFormats = [
-  "header",
-  "bold",
-  "italic",
-  "underline",
-  "strike",
-  "blockquote",
-  "list",
-  "link",
-  "image",
-  "align",
-  "color",
-  "code-block",
-];
 
 export default function AdminRulePage() {
   const [ruleSheet, setRuleSheet] = useState<string>("");
