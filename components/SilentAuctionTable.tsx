@@ -63,7 +63,7 @@ const SilentAuctionTable = ({ auctions }: Props) => {
     <Card className="w-full mx-auto mt-16 bg-gradient-to-br from-tealBlue/10 to-lightBlue/30 border border-lightBlue shadow-lg">
       <CardHeader className="pb-0">
         <CardTitle className="text-2xl md:text-4xl font-bold text-start bg-clip-text text-transparent text-white py-4">
-          Enkel oversikt auksjoner
+          Stille auksjoner
         </CardTitle>
       </CardHeader>
       <CardContent className="p-4 md:p-6">

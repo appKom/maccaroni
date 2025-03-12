@@ -129,7 +129,7 @@ const AdminPrizeGoalsPage = () => {
     }
 
     try {
-      const response = await fetch("/api/admin/prize-goals", {
+      const response = await fetch("/api/admin/collected", {
         method: "DELETE",
         body: JSON.stringify(id),
       });
@@ -152,6 +152,22 @@ const AdminPrizeGoalsPage = () => {
     {
       header: "Beskrivelse",
       accessor: "description" as keyof Collected,
+    },
+    {
+      header: "Type",
+      accessor: "type" as keyof Collected,
+      renderCell: (collected: Collected) => {
+        switch (collected.type) {
+          case CollectedType.SILENT_AUCTION:
+            return "Stille Auksjon";
+          case CollectedType.LIVE_AUCTION:
+            return "Fysisk Auksjon";
+          case CollectedType.VIPPS:
+            return "Vipps";
+          default:
+            return collected.type;
+        }
+      },
     },
   ];
 
@@ -181,11 +197,13 @@ const AdminPrizeGoalsPage = () => {
 
         <SelectInput
           label="Type"
+          defaultValue={editingPrizeGoal ? editingPrizeGoal.type : ""}
+          value={type}
           updateInputValues={(value: string) => setType(value as CollectedType)}
           options={[
             { label: "Live Auksjon", value: CollectedType.LIVE_AUCTION },
-            { label: "Silent Auksjon", value: CollectedType.SILENT_AUCTION },
-            { label: "Begge", value: CollectedType.VIPPS },
+            { label: "Stille Auksjon", value: CollectedType.SILENT_AUCTION },
+            { label: "Vipps", value: CollectedType.VIPPS },
           ]}
         />
 
