@@ -1,7 +1,7 @@
-import SilentAuctionSlider from "../components/SilentAuctionSlider";
 import Vipps from "../components/Vipps";
 import ProgressBar from "../components/ProgressBar";
 import { prisma } from "@/lib/prisma";
+import SilentAuctionTable from "@/components/SilentAuctionTable";
 
 export default async function Index() {
   const data = {
@@ -28,7 +28,7 @@ export default async function Index() {
         <div className="grid grid-cols-1 lg:grid-cols-7 gap-8 pt-8 ">
           <section className="col-span-5 flex flex-col items-center">
             <ProgressBar prizeGoals={prizeGoals} collected={collected} />
-            <SilentAuctionSlider auctions={auctions} />
+            <SilentAuctionTable auctions={auctions} />
           </section>
 
           <section className="col-span-2">

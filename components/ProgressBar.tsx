@@ -52,7 +52,7 @@ export default function StretchGoals({
     >
       <div className="p-6 space-y-4">
         <div className="flex justify-between items-center">
-          <h2 className="text-4xl font-bold text-orange-100">Stretchgoals</h2>
+          <h2 className="text-4xl font-bold text-white">Stretchgoals</h2>
 
           <div className="text-4xl font-bold text-orange-100">
             {collectedAmount.toLocaleString("nb-NO")} /{" "}
