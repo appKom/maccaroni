@@ -37,7 +37,7 @@ export default function WrappedRootLayout({
           <Toaster />
           <Navbar />
           <RootLayout>
-            <main className="flex-grow mt-24">{children}</main>
+            <main className="flex-grow mt-24 pb-24">{children}</main>
           </RootLayout>
           <Footer />
         </SessionWrapper>
