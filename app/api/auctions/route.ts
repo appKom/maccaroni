@@ -15,6 +15,11 @@ export const GET = async () => {
       include: {
         bids: true,
       },
+      orderBy: {
+        bids: {
+          _count: "desc",
+        },
+      },
     });
 
     if (!auctions) {
