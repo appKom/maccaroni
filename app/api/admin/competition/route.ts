@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
   try {
     const { title, description, time, image } = await req.json();
 
-    if (!title || !description || !time || !image) {
+    if (!title || !description || !time) {
       console.error("Missing required fields");
       return NextResponse.json(
         { error: "Missing required fields" },
@@ -35,50 +35,56 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (typeof image !== "string" || !image.includes("base64")) {
-      console.error("Invalid image format. Expected base64 string.");
-      return NextResponse.json(
-        { error: "Invalid image format. Expected base64 string." },
-        { status: 400 }
-      );
-    }
+    let imageHref = null;
 
-    const base64Data = image.split(",")[1];
-    if (!base64Data) {
-      console.error("Invalid base64 image format");
-      return NextResponse.json(
-        { error: "Invalid base64 image format" },
-        { status: 400 }
-      );
-    }
+    if (image) {
+      if (typeof image !== "string" || !image.includes("base64")) {
+        console.error("Invalid image format. Expected base64 string.");
+        return NextResponse.json(
+          { error: "Invalid image format. Expected base64 string." },
+          { status: 400 }
+        );
+      }
 
-    const buffer = Buffer.from(base64Data, "base64");
-    const filename = `competition-${Date.now()}.png`;
+      const base64Data = image.split(",")[1];
+      if (!base64Data) {
+        console.error("Invalid base64 image format");
+        return NextResponse.json(
+          { error: "Invalid base64 image format" },
+          { status: 400 }
+        );
+      }
 
-    const { error: uploadError } = await supabase.storage
-      .from("competitions")
-      .upload(filename, buffer, {
-        contentType: "image/png",
-      });
+      const buffer = Buffer.from(base64Data, "base64");
+      const filename = `competition-${Date.now()}.png`;
 
-    if (uploadError) {
-      console.error("Failed to upload image:", uploadError);
-      return NextResponse.json(
-        { error: "Failed to upload image: " + uploadError.message },
-        { status: 500 }
-      );
-    }
+      const { error: uploadError } = await supabase.storage
+        .from("competitions")
+        .upload(filename, buffer, {
+          contentType: "image/png",
+        });
 
-    const {
-      data: { publicUrl },
-    } = supabase.storage.from("competitions").getPublicUrl(filename);
+      if (uploadError) {
+        console.error("Failed to upload image:", uploadError);
+        return NextResponse.json(
+          { error: "Failed to upload image: " + uploadError.message },
+          { status: 500 }
+        );
+      }
 
-    if (!publicUrl) {
-      console.error("Failed to get public URL");
-      return NextResponse.json(
-        { error: "Failed to get public URL" },
-        { status: 500 }
-      );
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("competitions").getPublicUrl(filename);
+
+      imageHref = publicUrl;
+
+      if (!publicUrl) {
+        console.error("Failed to get public URL");
+        return NextResponse.json(
+          { error: "Failed to get public URL" },
+          { status: 500 }
+        );
+      }
     }
 
     const competition = await prisma.competition.create({
@@ -86,7 +92,7 @@ export async function POST(req: NextRequest) {
         title,
         description,
         time: new Date(time),
-        image: publicUrl,
+        image: imageHref ?? null,
       },
     });
 
@@ -126,7 +132,38 @@ export async function PUT(req: NextRequest) {
       time: new Date(time),
     };
 
-    if (image && typeof image === "string" && image.includes("base64")) {
+    const currentCompetition = await prisma.competition.findUnique({
+      where: { id },
+    });
+
+    if (!currentCompetition) {
+      return NextResponse.json(
+        { error: "Competition not found" },
+        { status: 404 }
+      );
+    }
+
+    if (image === null && currentCompetition.image) {
+      try {
+        const url = new URL(currentCompetition.image);
+        const pathParts = url.pathname.split("/");
+        const filename = pathParts[pathParts.length - 1];
+
+        if (filename) {
+          const { error: deleteError } = await supabase.storage
+            .from("competitions")
+            .remove([filename]);
+
+          if (deleteError) {
+            console.error("Failed to delete image:", deleteError);
+          }
+        }
+      } catch (error) {
+        console.error("Error parsing image URL:", error);
+      }
+
+      updateData.image = null;
+    } else if (image && typeof image === "string" && image.includes("base64")) {
       const base64Data = image.split(",")[1];
       const buffer = Buffer.from(base64Data, "base64");
       const filename = `competition-${Date.now()}.png`;
@@ -150,6 +187,20 @@ export async function PUT(req: NextRequest) {
       } = supabase.storage.from("competitions").getPublicUrl(filename);
 
       updateData.image = publicUrl;
+
+      if (currentCompetition.image) {
+        try {
+          const url = new URL(currentCompetition.image);
+          const pathParts = url.pathname.split("/");
+          const filename = pathParts[pathParts.length - 1];
+
+          if (filename) {
+            await supabase.storage.from("competitions").remove([filename]);
+          }
+        } catch (error) {
+          console.error("Error deleting old image:", error);
+        }
+      }
     } else if (image) {
       updateData.image = image;
     }

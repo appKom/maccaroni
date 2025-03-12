@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { UserPlus, XIcon, Edit, Upload } from "lucide-react";
+import { UserPlus, XIcon, Edit, Upload, Trash2Icon } from "lucide-react";
 import toast from "react-hot-toast";
 import Table from "@/components/form/Table";
 import { Competition } from "@prisma/client";
@@ -65,7 +65,7 @@ const AdminPrizeGoalsPage = () => {
   };
 
   const createPrizeGoal = async () => {
-    if (!title || !description || !imagePreview || !time) {
+    if (!title || !description || !time) {
       toast.error("Fyll ut alle feltene");
       return;
     }
@@ -264,11 +264,34 @@ const AdminPrizeGoalsPage = () => {
 
           <button
             type="button"
-            onClick={() => fileInputRef.current?.click()}
-            className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            onClick={() => {
+              if (imagePreview) {
+                setImage(null);
+                setImagePreview(null);
+
+                if (editingCompetition) {
+                  setEditingCompetition({
+                    ...editingCompetition,
+                    image: null,
+                  });
+                }
+              } else {
+                fileInputRef.current?.click();
+              }
+            }}
+            className={`px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white ${
+              imagePreview
+                ? "bg-red-600 hover:bg-red-700 focus:ring-red-500"
+                : "bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500"
+            }  focus:outline-none focus:ring-2 focus:ring-offset-2 `}
           >
-            <Upload className="inline-block mr-2 h-4 w-4" />
-            Last opp bilde
+            {imagePreview ? (
+              <Trash2Icon className="inline-block mr-2 h-4 w-4" />
+            ) : (
+              <Upload className="inline-block mr-2 h-4 w-4" />
+            )}
+
+            {imagePreview ? "Slett bilde" : "Last opp bilde"}
           </button>
 
           {imagePreview && (

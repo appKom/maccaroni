@@ -24,7 +24,13 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
         return "";
       }
 
-      return dateValue.toISOString().slice(0, 16);
+      const year = dateValue.getFullYear();
+      const month = String(dateValue.getMonth() + 1).padStart(2, "0");
+      const day = String(dateValue.getDate()).padStart(2, "0");
+      const hours = String(dateValue.getHours()).padStart(2, "0");
+      const minutes = String(dateValue.getMinutes()).padStart(2, "0");
+
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
     } catch (error) {
       console.error("Error formatting date:", error);
       return "";
