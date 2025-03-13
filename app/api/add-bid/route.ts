@@ -78,6 +78,7 @@ export const POST = async (req: NextRequest) => {
         type: "SILENT_AUCTION",
         description: "Bud på " + auction.name,
         nameOfBidder: session.user.name || "Dotkom",
+        emailOfBidder: session.user.email,
         auctionId: auctionId,
         bidId: newBid.id,
       },

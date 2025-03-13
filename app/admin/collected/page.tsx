@@ -159,6 +159,18 @@ const AdminPrizeGoalsPage = () => {
       accessor: "nameOfBidder" as keyof Collected,
     },
     {
+      header: "Epost på Budgiver",
+      accessor: "emailOfBidder" as keyof Collected,
+      renderCell: (collected: Collected) => {
+        switch (collected.emailOfBidder) {
+          case undefined:
+            return "";
+          default:
+            return collected.emailOfBidder;
+        }
+      },
+    },
+    {
       header: "Beskrivelse",
       accessor: "description" as keyof Collected,
     },
