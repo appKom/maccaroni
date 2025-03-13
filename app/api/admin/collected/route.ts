@@ -85,6 +85,25 @@ export const DELETE = async (req: NextRequest) => {
         { status: 400 }
       );
     }
+    const collected = await prisma.collected.findUnique({
+      where: { id: id as string },
+    });
+
+    if (!collected) {
+      console.error("Collected item not found");
+      return NextResponse.json(
+        { error: "Collected item not found" },
+        { status: 404 }
+      );
+    }
+
+    if (collected.type === "SILENT_AUCTION") {
+      if (collected.bidId) {
+        await prisma.bid.deleteMany({
+          where: { id: collected.bidId },
+        });
+      }
+    }
 
     await prisma.collected.delete({
       where: { id: id as string },

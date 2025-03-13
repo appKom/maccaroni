@@ -50,11 +50,13 @@ enum CollectedType {
 }
 
 model Collected {
-  id          String        @id @default(cuid())
-  amount      Int
-  type        CollectedType
-  auctionId   String?
-  description String?
+  id           String        @id @default(cuid())
+  amount       Int
+  nameOfBidder String
+  type         CollectedType
+  auctionId    String?
+  bidId        String?
+  description  String?
 }
 
 model Competition {

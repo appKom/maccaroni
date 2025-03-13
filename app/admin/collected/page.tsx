@@ -8,9 +8,11 @@ import NumberInput from "@/components/form/NumberInput";
 import TextAreaInput from "@/components/form/TextAreaInput";
 import { Collected, CollectedType } from "@prisma/client";
 import SelectInput from "@/components/form/SelectedInput";
+import TextInput from "@/components/form/TextInput";
 
 const AdminPrizeGoalsPage = () => {
   const [amount, setAmount] = useState(0);
+  const [nameOfBidder, setNameOfBidder] = useState("");
   const [description, setDescription] = useState("");
   const [type, setType] = useState<CollectedType>(CollectedType.LIVE_AUCTION);
 
@@ -67,6 +69,7 @@ const AdminPrizeGoalsPage = () => {
         },
         body: JSON.stringify({
           amount,
+          nameOfBidder,
           description,
           type,
         }),
@@ -93,6 +96,7 @@ const AdminPrizeGoalsPage = () => {
         body: JSON.stringify({
           id: editingPrizeGoal?.id,
           amount,
+          nameOfBidder,
           description,
           type,
         }),
@@ -112,6 +116,7 @@ const AdminPrizeGoalsPage = () => {
   const handleEdit = (collected: Collected) => {
     setEditingPrizeGoal(collected);
     setAmount(collected.amount);
+    setNameOfBidder(collected.nameOfBidder);
     if (collected.description) {
       setDescription(collected.description);
     }
@@ -150,6 +155,10 @@ const AdminPrizeGoalsPage = () => {
       accessor: "amount" as keyof Collected,
     },
     {
+      header: "Navn på Budgiver",
+      accessor: "nameOfBidder" as keyof Collected,
+    },
+    {
       header: "Beskrivelse",
       accessor: "description" as keyof Collected,
     },
@@ -177,10 +186,20 @@ const AdminPrizeGoalsPage = () => {
       <form onSubmit={handleSubmit} className="space-y-4 mb-8">
         <NumberInput
           id="name"
-          label="Navn"
+          label="Pris"
           value={amount}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setAmount(parseInt(e.target.value))
+          }
+          required
+        />
+
+        <TextInput
+          id="nameOfBidder"
+          label="Navn på Budgiver"
+          value={nameOfBidder}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setNameOfBidder(e.target.value)
           }
           required
         />
