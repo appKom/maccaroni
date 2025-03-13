@@ -15,6 +15,8 @@ export const POST = async (req: NextRequest) => {
 
     const collected = await req.json();
 
+    console.log(collected);
+
     if (!collected) {
       return NextResponse.json(
         { error: "Missing collected item" },

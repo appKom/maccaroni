@@ -13,6 +13,7 @@ import TextInput from "@/components/form/TextInput";
 const AdminPrizeGoalsPage = () => {
   const [amount, setAmount] = useState(0);
   const [nameOfBidder, setNameOfBidder] = useState("");
+  const [emailOfBidder, setEmailOfBidder] = useState<string | null>(null);
   const [description, setDescription] = useState("");
   const [type, setType] = useState<CollectedType>(CollectedType.LIVE_AUCTION);
 
@@ -42,6 +43,9 @@ const AdminPrizeGoalsPage = () => {
   const resetForm = () => {
     setAmount(0);
     setDescription("");
+    setEmailOfBidder("");
+    setNameOfBidder("");
+    setEditingPrizeGoal(null);
     setType(CollectedType.LIVE_AUCTION);
     setIsLoading(false);
   };
@@ -70,6 +74,7 @@ const AdminPrizeGoalsPage = () => {
         body: JSON.stringify({
           amount,
           nameOfBidder,
+          emailOfBidder,
           description,
           type,
         }),
@@ -97,6 +102,7 @@ const AdminPrizeGoalsPage = () => {
           id: editingPrizeGoal?.id,
           amount,
           nameOfBidder,
+          emailOfBidder,
           description,
           type,
         }),
@@ -117,6 +123,7 @@ const AdminPrizeGoalsPage = () => {
     setEditingPrizeGoal(collected);
     setAmount(collected.amount);
     setNameOfBidder(collected.nameOfBidder);
+    setEmailOfBidder(collected.emailOfBidder);
     if (collected.description) {
       setDescription(collected.description);
     }
@@ -214,6 +221,14 @@ const AdminPrizeGoalsPage = () => {
             setNameOfBidder(e.target.value)
           }
           required
+        />
+        <TextInput
+          id="emailOfBidder"
+          label="Epost til Budgiver"
+          value={emailOfBidder ?? ""}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setEmailOfBidder(e.target.value)
+          }
         />
 
         <TextAreaInput
