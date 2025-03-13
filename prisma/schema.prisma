@@ -14,12 +14,13 @@ datasource db {
 }
 
 model Bid {
-  id           String  @id @default(cuid())
-  amount       Float
-  nameOfBidder String
-  owId         String
-  Auction      Auction @relation(fields: [auctionId], references: [id])
-  auctionId    String
+  id            String  @id @default(cuid())
+  amount        Float
+  nameOfBidder  String
+  emailOfBidder String
+  owId          String
+  Auction       Auction @relation(fields: [auctionId], references: [id])
+  auctionId     String
 }
 
 model Auction {

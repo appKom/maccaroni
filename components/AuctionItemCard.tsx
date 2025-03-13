@@ -61,12 +61,6 @@ export default function AuctionItemCard({
       return;
     }
 
-    if (formData.nameOfBidder === "") {
-      toast.error("Du må fylle inn navnet ditt.");
-      setIsPending(false);
-      return;
-    }
-
     startTransition(() => {
       setOptimisticHighestBid(bidAmount);
     });
@@ -79,7 +73,6 @@ export default function AuctionItemCard({
         },
         body: JSON.stringify({
           amount: bidAmount,
-          nameOfBidder: formData.nameOfBidder,
           auctionId: auctionId,
         }),
       });
@@ -114,23 +107,6 @@ export default function AuctionItemCard({
 
   const formContent = (
     <form onSubmit={handleSubmit} className="space-y-4 flex flex-col h-full">
-      <div className="space-y-2">
-        <Label htmlFor="nameOfBidder" className="text-slate-300">
-          Navnet ditt:
-        </Label>
-        <Input
-          id="nameOfBidder"
-          type="text"
-          placeholder="Ola Nordmann"
-          value={formData.nameOfBidder}
-          onChange={(e) =>
-            setFormData({ ...formData, nameOfBidder: e.target.value })
-          }
-          required
-          className="bg-slate-700 border-slate-600 text-white focus:border-teal-500 focus:ring-teal-500/20"
-          disabled={isPending}
-        />
-      </div>
       <div className="space-y-2">
         <Label htmlFor="amount" className="text-slate-300">
           Beløp: (minst {minBid}kr)

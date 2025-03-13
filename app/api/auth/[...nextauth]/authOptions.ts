@@ -40,6 +40,10 @@ export const authOptions: NextAuthOptions = {
             }
 
             const userInfo = await response.json();
+
+            token.name = userInfo.first_name + " " + userInfo.last_name;
+            token.email = userInfo.email;
+
             const commiteeUrl = `https://old.online.ntnu.no/api/v1/group/online-groups/?members__user=${userInfo.id}`;
             const committeeResponse = await fetch(commiteeUrl, { headers });
 
@@ -77,6 +81,8 @@ export const authOptions: NextAuthOptions = {
             token.isAdmin as boolean;
         }
 
+        session.user.name = token.name as string;
+        session.user.email = token.email as string;
         session.user.owId = token.sub as string;
 
         return session;

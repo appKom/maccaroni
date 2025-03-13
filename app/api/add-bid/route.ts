@@ -11,13 +11,10 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
-  const { amount, nameOfBidder, auctionId } = await req.json();
+  const { amount, auctionId } = await req.json();
 
-  if (!amount || !nameOfBidder) {
-    return NextResponse.json(
-      { error: "Amount and nameOfBidder are required" },
-      { status: 400 }
-    );
+  if (!amount) {
+    return NextResponse.json({ error: "Amount is required" }, { status: 400 });
   }
 
   const auction = await prisma.auction.findUnique({
@@ -60,7 +57,8 @@ export const POST = async (req: NextRequest) => {
     const newBid = await prisma.bid.create({
       data: {
         amount: amount,
-        nameOfBidder: nameOfBidder,
+        nameOfBidder: session.user.name || "Dotkom",
+        emailOfBidder: session.user.email,
         owId: session.user.owId,
         Auction: { connect: { id: auctionId } },
       },
@@ -79,7 +77,7 @@ export const POST = async (req: NextRequest) => {
         amount: amount,
         type: "SILENT_AUCTION",
         description: "Bud på " + auction.name,
-        nameOfBidder: nameOfBidder,
+        nameOfBidder: session.user.name || "Dotkom",
         auctionId: auctionId,
         bidId: newBid.id,
       },
