@@ -28,7 +28,7 @@ const AdminPrizeGoalsPage = () => {
     try {
       const response = await fetch("/api/collected");
       const data = await response.json();
-      setCollected(data);
+      setCollected(data.filter((item: Collected) => item.type !== "VIPPS"));
       setIsLoading(false);
     } catch (error) {
       toast.error("Kunne ikke hente innsamlinger" + error);
