@@ -57,7 +57,7 @@ export const POST = async (req: NextRequest) => {
     const newBid = await prisma.bid.create({
       data: {
         amount: amount,
-        nameOfBidder: session.user.name || "Dotkom",
+        nameOfBidder: session.user.name || "N/A",
         emailOfBidder: session.user.email,
         owId: session.user.owId,
         Auction: { connect: { id: auctionId } },
@@ -76,8 +76,8 @@ export const POST = async (req: NextRequest) => {
       data: {
         amount: amount,
         type: "SILENT_AUCTION",
-        description: "Bud på " + auction.name,
-        nameOfBidder: session.user.name || "Dotkom",
+        description: auction.name,
+        nameOfBidder: session.user.name || "N/A",
         emailOfBidder: session.user.email,
         auctionId: auctionId,
         bidId: newBid.id,
