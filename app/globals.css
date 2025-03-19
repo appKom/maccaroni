@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+::-moz-selection {
+  color: #F9B759;
+  background: #0D5474;
+}
+
+::selection {
+  color: #F9B759;
+  background: #0D5474;
+}
 
 
 @layer base {
