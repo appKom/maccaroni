@@ -2,26 +2,10 @@
 
 import { useState, useEffect } from "react";
 import AuctionItemCard from "@/components/AuctionItemCard";
-
-interface Bid {
-  id: string;
-  amount: number;
-  nameOfBidder: string;
-  auctionId: string;
-}
-
-interface Auction {
-  id: string;
-  name: string;
-  description: string;
-  startPrice: number;
-  minimumIncrease: number;
-  image: string | null;
-  bids: Bid[];
-}
+import { Auction, Bid } from "@prisma/client";
 
 export default function AuctionItemsPage() {
-  const [items, setItems] = useState<Auction[]>([]);
+  const [items, setItems] = useState<(Auction & { bids: Bid[] })[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -47,7 +31,9 @@ export default function AuctionItemsPage() {
   const handleBidSubmitted = (
     auctionId: string,
     amount: number,
-    nameOfBidder: string
+    nameOfBidder: string,
+    owId: string,
+    emailOfBidder: string
   ) => {
     setItems((prevItems) =>
       prevItems.map((item) => {
@@ -57,6 +43,8 @@ export default function AuctionItemsPage() {
             amount,
             nameOfBidder,
             auctionId,
+            owId,
+            emailOfBidder,
           };
 
           return {
@@ -89,9 +77,12 @@ export default function AuctionItemsPage() {
     return <p>Fant ingen auksjoner :(</p>;
   }
 
-  const getHighestBid = (bids: Bid[]) => {
-    if (bids.length === 0) return 0;
-    return Math.max(...bids.map((bid) => bid.amount));
+  const getHighestBid = (bids: Bid[]): Bid | null => {
+    if (bids.length === 0) return null;
+    return bids.reduce(
+      (highest, bid) => (bid.amount > highest.amount ? bid : highest),
+      bids[0]
+    );
   };
 
   return (
@@ -100,13 +91,8 @@ export default function AuctionItemsPage() {
         {items.map((item) => (
           <AuctionItemCard
             key={item.id}
-            title={item.name}
-            startPrice={item.startPrice}
+            auction={item}
             highestBid={getHighestBid(item.bids)}
-            minIncrease={item.minimumIncrease}
-            description={item.description}
-            image={item.image ? item.image : "/Online_hvit_o.svg"}
-            auctionId={item.id}
             onBidSubmitted={handleBidSubmitted}
           />
         ))}

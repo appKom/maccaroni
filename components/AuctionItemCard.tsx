@@ -14,38 +14,46 @@ import { Label } from "@/components/ui/label";
 import { Button } from "./Button";
 import toast from "react-hot-toast";
 import { startTransition } from "react";
+import type { Auction, Bid } from "@prisma/client";
+import { useSession } from "next-auth/react";
 
 interface AuctionItemCardProps {
-  title: string;
-  highestBid: number;
-  startPrice: number;
-  minIncrease: number;
-  description: string;
-  image: string;
-  auctionId: string;
+  auction: Auction;
+  highestBid: Bid | null;
+
   onBidSubmitted: (
     auctionId: string,
     amount: number,
-    nameOfBidder: string
+    nameOfBidder: string,
+    owId: string,
+    emailOfBidder: string
   ) => void;
 }
 
 export default function AuctionItemCard({
-  title,
+  auction,
   highestBid,
-  startPrice,
-  minIncrease,
-  description,
-  image,
-  auctionId,
   onBidSubmitted,
 }: AuctionItemCardProps) {
   const [open, setOpen] = useState<boolean>(false);
   const [formData, setFormData] = useState({ amount: "", nameOfBidder: "" });
   const [isPending, setIsPending] = useState(false);
 
+  const session = useSession();
+
+  if (!highestBid) {
+    highestBid = {
+      id: "1",
+      amount: 0,
+      auctionId: auction.id,
+      nameOfBidder: "Ingen",
+      owId: "1",
+      emailOfBidder: "Ingen",
+    };
+  }
+
   const [optimisticHighestBid, setOptimisticHighestBid] = useOptimistic(
-    highestBid,
+    highestBid.amount,
     (state, newAmount: number) => newAmount
   );
 
@@ -55,8 +63,12 @@ export default function AuctionItemCard({
 
     const bidAmount = Number(formData.amount);
 
-    if (bidAmount < highestBid + minIncrease) {
-      toast.error("Budet må være minst " + (highestBid + minIncrease) + "kr");
+    if (bidAmount < highestBid.amount + auction.minimumIncrease) {
+      toast.error(
+        "Budet må være minst " +
+          (highestBid.amount + auction.minimumIncrease) +
+          "kr"
+      );
       setIsPending(false);
       return;
     }
@@ -73,14 +85,20 @@ export default function AuctionItemCard({
         },
         body: JSON.stringify({
           amount: bidAmount,
-          auctionId: auctionId,
+          auctionId: auction.id,
         }),
       });
 
       if (response.ok) {
         setOpen(false);
         toast.success("Bud sendt inn!");
-        onBidSubmitted(auctionId, bidAmount, formData.nameOfBidder);
+        onBidSubmitted(
+          auction.id,
+          bidAmount,
+          formData.nameOfBidder,
+          session.data?.user.owId ?? "",
+          session.data?.user.email ?? ""
+        );
         setFormData({ amount: "", nameOfBidder: "" });
       } else {
         startTransition(() => {
@@ -102,8 +120,8 @@ export default function AuctionItemCard({
 
   const minBid =
     optimisticHighestBid === 0
-      ? startPrice
-      : optimisticHighestBid + minIncrease;
+      ? auction.startPrice
+      : optimisticHighestBid + auction.minimumIncrease;
 
   const formContent = (
     <form onSubmit={handleSubmit} className="space-y-4 flex flex-col h-full">
@@ -140,6 +158,8 @@ export default function AuctionItemCard({
     </form>
   );
 
+  const yourBid = session.data?.user.owId === highestBid.owId;
+
   return (
     <div className="h-full">
       <div
@@ -148,14 +168,14 @@ export default function AuctionItemCard({
       >
         <div className="relative">
           <img
-            src={image || "/placeholder.svg?height=208&width=384"}
-            alt={title}
+            src={auction.image || "/Online_hvit_o.svg"}
+            alt={auction.name}
             className="w-full h-40 sm:h-52 object-cover brightness-90"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
           <div className="absolute bottom-2 sm:bottom-3 left-3 sm:left-4 right-3 sm:right-4">
             <div className="text-white font-bold text-xl sm:text-2xl drop-shadow-md line-clamp-2">
-              {title}
+              {auction.name}
             </div>
           </div>
         </div>
@@ -173,16 +193,35 @@ export default function AuctionItemCard({
               <span className="flex-1 font-bold text-teal-400">
                 {optimisticHighestBid === 0 ? minBid : optimisticHighestBid},-
               </span>
-              <span className="flex-1">{minIncrease},-</span>
+              <span className="flex-1">{auction.minimumIncrease},-</span>
             </div>
           </div>
 
           <p className="text-slate-300 mt-3 sm:mt-4 mb-3 sm:mb-4 text-base sm:text-lg leading-relaxed line-clamp-4 sm:line-clamp-6 flex-grow">
-            {description}
+            {auction.description}
           </p>
 
           <div className="mt-auto pt-2">
-            <Button color="green">Gi bud</Button>
+            {optimisticHighestBid > 0 && (
+              <div
+                className={`mb-2 py-1 px-3 ${
+                  yourBid
+                    ? "bg-teal-500/20 border border-teal-500/30 text-teal-300"
+                    : "bg-amber-500/20 border border-amber-500/30 text-amber-300"
+                } rounded-md font-medium text-sm flex items-center`}
+              >
+                <span
+                  className={`inline-block w-2 h-2 ${
+                    yourBid ? "bg-teal-400" : "bg-amber-400"
+                  } rounded-full mr-2`}
+                ></span>
+                {yourBid
+                  ? "Dette er ditt bud"
+                  : `Høyeste budgiver: ${highestBid.nameOfBidder}`}
+              </div>
+            )}
+
+            <Button color="green">{yourBid ? "Øk ditt bud" : "Gi bud"}</Button>
           </div>
         </div>
       </div>
@@ -191,7 +230,7 @@ export default function AuctionItemCard({
         <DialogContent className="bg-slate-800 border border-teal-500/30 text-white sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-xl sm:text-2xl font-bold text-teal-400">
-              By på {title}
+              {yourBid ? "Øk ditt bud på" : "By på"} {auction.name}
             </DialogTitle>
           </DialogHeader>
           {formContent}
