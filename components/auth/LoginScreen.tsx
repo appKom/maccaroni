@@ -5,13 +5,15 @@ import { motion } from "framer-motion";
 import { LogIn, Heart } from "lucide-react";
 import { Button } from "../Button";
 import Image from "next/image";
+import { signIn } from "next-auth/react";
 
-export default function LoginScreen({
-  handleLogin,
-}: {
-  handleLogin: () => void;
-}) {
+export default function LoginScreen() {
   const [mounted, setMounted] = useState(false);
+
+  const handleLogin = () =>
+    signIn("auth0", {
+      callbackUrl: "/",
+    });
 
   useEffect(() => {
     setMounted(true);
