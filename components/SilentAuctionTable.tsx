@@ -49,7 +49,7 @@ const SilentAuctionTable = ({ collections, auctions }: Props) => {
         : null;
     return {
       id: auction.id,
-      description: auction.description,
+      description: auction.name,
       amount: highestBid ? highestBid.amount : auction.startPrice,
       type: "SILENT_AUCTION",
       nameOfBidder: highestBid ? highestBid.nameOfBidder : undefined,
