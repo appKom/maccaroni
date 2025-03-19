@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Check, Gift, Trophy } from "lucide-react";
+import { Check, Gift, Star, Trophy } from "lucide-react";
 import { Collected, PrizeGoal } from "@prisma/client";
 
 interface Props {
@@ -52,8 +52,12 @@ export default function StretchGoals({
     >
       <div className="p-2 sm:p-6 space-y-4">
         <div className="flex flex-col w-full sm:flex-row justify-between items-start sm:items-center">
-          <h2 className="text-4xl font-bold text-white">Stretchgoals</h2>
-          <div className="text-2xl sm:text-4xl font-bold text-orange-100">
+          <h2 className="text-4xl font-bold text-white flex items-center gap-2">
+            <Trophy className="h-8 w-8 text-yellow-300" />
+            Stretchgoals
+            <Trophy className="h-8 w-8 text-yellow-300" />
+          </h2>
+          <div className="text-2xl sm:text-4xl font-bold text-orange-100 bg-orange-950/50 px-4 py-1 rounded-full">
             {collectedAmount.toLocaleString("nb-NO")} /{" "}
             {maxAmount.toLocaleString("nb-NO")}kr
           </div>
@@ -67,7 +71,6 @@ export default function StretchGoals({
             style={{ width: `${progressPercentage}%` }}
           />
 
-          {/* Goal markers */}
           {sortedGoals.map((goal) => {
             const markerPosition = (goal.goal / maxAmount) * 100;
             const isReached = collectedAmount >= goal.goal;
@@ -76,23 +79,113 @@ export default function StretchGoals({
               return (
                 <div
                   key={goal.id}
-                  className="absolute top-0 bottom-0 flex items-center justify-center"
+                  className="absolute top-0 bottom-0 flex flex-col items-center"
                   style={{
                     left: `${markerPosition}%`,
                     transform: "translateX(-50%)",
                   }}
                 >
                   <div
-                    className={`h-full border-2 ${
+                    className={`absolute -top-12 transform ${
+                      isReached ? "scale-110" : "scale-100"
+                    } transition-transform duration-300`}
+                  >
+                    <div className="relative">
+                      <div
+                        className={`w-1 h-12 ${
+                          isReached ? "bg-yellow-400" : "bg-gray-400"
+                        }`}
+                      ></div>
+                      <div
+                        className={`absolute top-0 right-0 w-10 h-6 
+                        ${
+                          isReached
+                            ? "bg-gradient-to-r from-yellow-500 to-yellow-300"
+                            : "bg-gradient-to-r from-gray-500 to-gray-400"
+                        } 
+                        flex items-center justify-center text-xs font-bold
+                        ${isReached ? "text-orange-900" : "text-white"}
+                        shadow-md`}
+                      >
+                        {(goal.goal / 1000).toFixed(0)}K
+                      </div>
+                      {isReached && (
+                        <div className="absolute -right-2 -top-2 animate-bounce">
+                          <Star className="h-4 w-4 text-yellow-300 fill-yellow-300" />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div
+                    className={`h-full w-1 ${
                       isReached
-                        ? "bg-green-500 border-white"
-                        : "bg-orange-100 border-white"
-                    } z-10`}
+                        ? "bg-gradient-to-b from-yellow-300 to-green-500 border-white"
+                        : "bg-orange-100 border-orange-600"
+                    } z-10 ${isReached ? "shadow-glow" : ""}`}
                   />
+
+                  {isReached && (
+                    <div className="absolute -bottom-6 bg-green-600 rounded-full p-1 animate-pulse">
+                      <Check className="h-4 w-4 text-white" />
+                    </div>
+                  )}
+                </div>
+              );
+            else
+              return (
+                <div
+                  key={goal.id}
+                  className="absolute top-0 bottom-0 flex flex-col items-center"
+                  style={{
+                    left: `${markerPosition}%`,
+                    transform: "translateX(-50%)",
+                  }}
+                >
+                  <div className="absolute -top-14 transform scale-125 transition-transform duration-300">
+                    <div className="relative">
+                      <div
+                        className={`w-1 h-14 ${
+                          isReached ? "bg-purple-500" : "bg-gray-400"
+                        }`}
+                      ></div>
+                      <div
+                        className={`absolute top-0 right-0 w-12 h-8 
+                      ${
+                        isReached
+                          ? "bg-gradient-to-r from-purple-600 to-purple-400"
+                          : "bg-gradient-to-r from-gray-600 to-gray-400"
+                      } 
+                      flex items-center justify-center text-xs font-bold
+                      ${isReached ? "text-white" : "text-white"}
+                      shadow-md`}
+                      >
+                        Siste
+                      </div>
+                      {isReached && (
+                        <div className="absolute -right-2 -top-2 animate-ping">
+                          <Trophy className="h-5 w-5 text-yellow-300 fill-yellow-300" />
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               );
           })}
         </div>
+
+        {nextGoal && (
+          <div className="text-center text-white animate-pulse">
+            <span className="font-bold">Neste mål: </span>
+            {(nextGoal.goal - collectedAmount).toLocaleString("nb-NO")}kr igjen!
+          </div>
+        )}
+
+        {!nextGoal && reachedGoals.length === sortedGoals.length && (
+          <div className="text-center text-yellow-300 font-bold text-xl animate-bounce">
+            🎉 Alle mål er nådd! Bazinga! 🎉
+          </div>
+        )}
 
         <div className="space-y-3 mt-4">
           {sortedGoals.map((goal) => {
@@ -127,7 +220,7 @@ export default function StretchGoals({
                   </div>
                 </div>
                 <div className="font-bold text-right ml-2 flex-shrink-0">
-                  {goal.goal.toLocaleString()}
+                  {goal.goal.toLocaleString()}kr
                 </div>
               </div>
             );
@@ -135,11 +228,10 @@ export default function StretchGoals({
         </div>
       </div>
 
-      {/* Celebration when all goals are reached */}
       {reachedGoals.length === sortedGoals.length && (
         <div className="bg-gradient-to-r from-amber-500 to-orange-500 p-4 flex items-center justify-center text-white">
           <Trophy className="h-6 w-6 mr-2" />
-          <span className="font-bold">All goals reached! Thank you!</span>
+          <span className="font-bold">Alle mål er nådd! Tusen takk!</span>
         </div>
       )}
     </article>
