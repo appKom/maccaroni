@@ -51,7 +51,7 @@ const SilentAuctionTable = ({ collections, auctions }: Props) => {
       id: auction.id,
       description: auction.description,
       amount: highestBid ? highestBid.amount : auction.startPrice,
-      type: "LIVE_AUCTION",
+      type: "SILENT_AUCTION",
       nameOfBidder: highestBid ? highestBid.nameOfBidder : undefined,
     };
   });
