@@ -29,18 +29,16 @@ export default async function Index() {
   return (
     <>
       <div className={"flex flex-col mx-auto container px-4"}>
-        <div className="grid grid-cols-1 lg:grid-cols-7 gap-8 pt-8 ">
-          <section className="col-span-1 lg:col-span-5 flex flex-col items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-7 gap-8 pt-8">
+          <section className="col-span-1 lg:col-span-5 flex flex-col items-center order-2 lg:order-1">
             <StretchGoals prizeGoals={prizeGoals} collected={collected} />
             <SilentAuctionTable
               collections={collectedWithVippsAndSiltent}
               auctions={auctions}
             />
           </section>
-
-          <section className="col-span-1 lg:col-span-2 w-full">
+          <section className="col-span-1 lg:col-span-2 w-full order-1 lg:order-2">
             <Vipps items={data.vipps} topDonor={data.vipps[2]} />
-            {/* <LiveAuctions collected={collected} /> */}
           </section>
         </div>
       </div>

@@ -13,12 +13,26 @@ export const POST = async (req: NextRequest) => {
 
   const { amount, auctionId } = await req.json();
 
+  if (!auctionId) {
+    return NextResponse.json(
+      { error: "Auction ID is required" },
+      { status: 400 }
+    );
+  }
+
+  if (amount === undefined || amount === null) {
+    return NextResponse.json({ error: "Amount is required" }, { status: 400 });
+  }
+
   if (!amount) {
     return NextResponse.json({ error: "Amount is required" }, { status: 400 });
   }
 
+  if (typeof amount !== "number" || isNaN(amount) || amount <= 0) {
+    return NextResponse.json({ error: "Invalid bid amount" }, { status: 400 });
+  }
+
   if (amount > 1000000) {
-    console.error("Fuck off");
     return NextResponse.json({ error: "Beløpet er for høyt" }, { status: 400 });
   }
 

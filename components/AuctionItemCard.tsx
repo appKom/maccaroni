@@ -87,7 +87,7 @@ export default function AuctionItemCard({
           setOptimisticHighestBid(bidAmount);
         });
 
-        toast.error("Kunne ikke sende inn bud.");
+        toast.error("Kunne ikke sende inn bud" + "\n" + response.statusText);
       }
     } catch (error) {
       startTransition(() => {

@@ -48,20 +48,20 @@ export default function StretchGoals({
 
   return (
     <article
-      className={`rounded-lg w-full shadow-lg bg-gradient-to-r from-orange-800 to-amber-800  ${className}`}
+      className={`rounded-lg w-full shadow-lg bg-gradient-to-r from-orange-800 to-amber-800 ${className}`}
     >
-      <div className="p-6 space-y-4">
+      <div className="p-2 sm:p-6 space-y-4">
         <div className="flex flex-col w-full sm:flex-row justify-between items-start sm:items-center">
           <h2 className="text-4xl font-bold text-white">Stretchgoals</h2>
           <div className="text-2xl sm:text-4xl font-bold text-orange-100">
             {collectedAmount.toLocaleString("nb-NO")} /{" "}
-            {maxAmount.toLocaleString("nb-NO")}
+            {maxAmount.toLocaleString("nb-NO")}kr
           </div>
         </div>
 
         <div className="h-24 bg-orange-950 border border-orange-800 dark:bg-orange-900 rounded-full overflow-hidden relative">
           <div
-            className={`h-full bg-gradient-to-r from-green-700  to-green-900 transition-all duration-1000 ease-out ${
+            className={`h-full bg-gradient-to-r from-green-700 to-green-900 transition-all duration-1000 ease-out ${
               animate ? "animate-pulse" : ""
             }`}
             style={{ width: `${progressPercentage}%` }}
@@ -121,15 +121,12 @@ export default function StretchGoals({
                     <Gift className="h-5 w-5" />
                   )}
                 </div>
-                <div className="flex-1">
-                  <div className="font-medium">{goal.description}</div>
-                  {goal.description && (
-                    <div className="text-sm text-gray-300">
-                      {goal.description}
-                    </div>
-                  )}
+                <div className="flex-1 min-w-0">
+                  <div className="font-medium text-sm sm:text-base break-words break-all overflow-wrap whitespace-normal overflow-hidden">
+                    {goal.description}
+                  </div>
                 </div>
-                <div className="font-bold text-right">
+                <div className="font-bold text-right ml-2 flex-shrink-0">
                   {goal.goal.toLocaleString()}
                 </div>
               </div>
