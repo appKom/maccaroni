@@ -156,7 +156,7 @@ const AdminPrizeGoalsPage = () => {
       <form onSubmit={handleSubmit} className="space-y-4 mb-8">
         <NumberInput
           id="name"
-          label="Navn"
+          label="Pris"
           value={goal}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setGoal(parseInt(e.target.value))
