@@ -28,7 +28,12 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json({ error: "Amount is required" }, { status: 400 });
   }
 
-  if (typeof amount !== "number" || isNaN(amount) || amount <= 0) {
+  if (
+    typeof amount !== "number" ||
+    isNaN(amount) ||
+    amount <= 0 ||
+    /[a-zA-Z]/.test(String(amount))
+  ) {
     return NextResponse.json({ error: "Invalid bid amount" }, { status: 400 });
   }
 

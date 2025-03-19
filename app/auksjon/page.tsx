@@ -95,7 +95,7 @@ export default function AuctionItemsPage() {
   };
 
   return (
-    <main className="mx-auto flex flex-col items-center container px-8">
+    <main className="mx-auto flex flex-col items-center container px-4 md:px-8">
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 w-full">
         {items.map((item) => (
           <AuctionItemCard

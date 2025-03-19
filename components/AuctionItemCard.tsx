@@ -115,6 +115,7 @@ export default function AuctionItemCard({
           id="amount"
           placeholder="1000"
           type="number"
+          inputMode="numeric"
           value={formData.amount}
           onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
           required
