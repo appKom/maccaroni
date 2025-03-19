@@ -16,9 +16,15 @@ export default async function Index() {
 
   const collected = await prisma.collected.findMany();
 
-  const collectedWithoutVipps = collected.filter(
-    (item) => item.type !== "VIPPS"
+  const collectedWithVippsAndSiltent = collected.filter(
+    (item) => item.type !== "VIPPS" && item.type !== "SILENT_AUCTION"
   );
+
+  const auctions = await prisma.auction.findMany({
+    include: {
+      bids: true,
+    },
+  });
 
   return (
     <>
@@ -26,7 +32,10 @@ export default async function Index() {
         <div className="grid grid-cols-1 lg:grid-cols-7 gap-8 pt-8 ">
           <section className="col-span-1 lg:col-span-5 flex flex-col items-center">
             <StretchGoals prizeGoals={prizeGoals} collected={collected} />
-            <SilentAuctionTable collections={collectedWithoutVipps} />
+            <SilentAuctionTable
+              collections={collectedWithVippsAndSiltent}
+              auctions={auctions}
+            />
           </section>
 
           <section className="col-span-1 lg:col-span-2 w-full">

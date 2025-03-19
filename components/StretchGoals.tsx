@@ -104,8 +104,8 @@ export default function StretchGoals({
                   isReached
                     ? "bg-green-900 border-l-4 border-green-500"
                     : goal === nextGoal
-                    ? "bg-orange-900 border-l-4 border-orange-500"
-                    : ":bg-gray-800"
+                    ? "bg-orange-950 border-l-4 border-orange-500"
+                    : "bg-orange-900"
                 }`}
               >
                 <div

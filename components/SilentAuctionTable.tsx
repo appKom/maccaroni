@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { Collected } from "@prisma/client";
+import type { Collected, Auction, Bid } from "@prisma/client";
 import {
   Table,
   TableBody,
@@ -15,25 +15,58 @@ import { ArrowDown, ArrowUp, Award, Package } from "lucide-react";
 
 interface Props {
   collections: Collected[];
+  auctions: (Auction & { bids: Bid[] })[];
 }
 
 type SortDirection = "asc" | "desc" | null;
 
-const SilentAuctionTable = ({ collections }: Props) => {
+interface AuctionRow {
+  id: string;
+  description: string;
+  amount: number;
+  type: "SILENT_AUCTION" | "LIVE_AUCTION";
+  nameOfBidder?: string;
+}
+
+const SilentAuctionTable = ({ collections, auctions }: Props) => {
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const [sortField, setSortField] = useState<"amount" | "type">("amount");
 
-  const sortedAuctions = [...collections].sort((a, b) => {
+  const silentRows: AuctionRow[] = collections.map((item) => ({
+    id: item.id,
+    description: item.description || "",
+    amount: item.amount,
+    type: "SILENT_AUCTION",
+    nameOfBidder: item.nameOfBidder,
+  }));
+
+  const auctionRows: AuctionRow[] = auctions.map((auction) => {
+    const highestBid: Bid | null =
+      auction.bids && auction.bids.length > 0
+        ? auction.bids.reduce((prev, current) =>
+            current.amount > prev.amount ? current : prev
+          )
+        : null;
+    return {
+      id: auction.id,
+      description: auction.description,
+      amount: highestBid ? highestBid.amount : auction.startPrice,
+      type: "LIVE_AUCTION",
+      nameOfBidder: highestBid ? highestBid.nameOfBidder : undefined,
+    };
+  });
+
+  const combinedRows: AuctionRow[] = [...silentRows, ...auctionRows];
+
+  const sortedRows = [...combinedRows].sort((a, b) => {
     if (sortField === "amount") {
-      const priceA = a.amount;
-      const priceB = b.amount;
-      return sortDirection === "asc" ? priceA - priceB : priceB - priceA;
-    } else {
-      const typeA = a.type;
-      const typeB = b.type;
       return sortDirection === "asc"
-        ? typeA.localeCompare(typeB)
-        : typeB.localeCompare(typeA);
+        ? a.amount - b.amount
+        : b.amount - a.amount;
+    } else {
+      return sortDirection === "asc"
+        ? a.type.localeCompare(b.type)
+        : b.type.localeCompare(a.type);
     }
   });
 
@@ -88,7 +121,6 @@ const SilentAuctionTable = ({ collections }: Props) => {
         </CardTitle>
       </CardHeader>
       <CardContent className="p-4 md:p-6">
-        {/* Sort button for mobile view */}
         <div className="md:hidden mb-4 flex gap-2">
           <button
             onClick={() => toggleSort("amount")}
@@ -120,7 +152,6 @@ const SilentAuctionTable = ({ collections }: Props) => {
           </button>
         </div>
 
-        {/* Desktop/Tablet View (hidden on mobile) */}
         <div className="hidden md:block rounded-lg overflow-hidden border border-lightBlue/50 bg-onlineBlue backdrop-blur-sm">
           <Table>
             <TableHeader className="bg-onlineBlue/80 border-b border-tealBlue/30">
@@ -180,10 +211,10 @@ const SilentAuctionTable = ({ collections }: Props) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {sortedAuctions.map((item, index) => {
+              {sortedRows.map((item) => {
                 return (
                   <TableRow
-                    key={index}
+                    key={item.id}
                     className={`transition-colors cursor-default ${getTypeStyles(
                       item.type
                     )}`}
@@ -199,7 +230,6 @@ const SilentAuctionTable = ({ collections }: Props) => {
                         <span className="text-lightBlue/70">kr</span>
                       </div>
                     </TableCell>
-
                     <TableCell className="text-lg md:text-xl py-4">
                       <div className="flex items-center gap-2">
                         <span className="font-semibold text-white">
@@ -207,7 +237,6 @@ const SilentAuctionTable = ({ collections }: Props) => {
                         </span>
                       </div>
                     </TableCell>
-
                     <TableCell className="text-lg md:text-xl py-4">
                       {item.nameOfBidder ? (
                         <span
@@ -225,10 +254,10 @@ const SilentAuctionTable = ({ collections }: Props) => {
                   </TableRow>
                 );
               })}
-              {sortedAuctions.length === 0 && (
+              {sortedRows.length === 0 && (
                 <TableRow>
                   <TableCell
-                    colSpan={3}
+                    colSpan={4}
                     className="text-center py-8 text-lightBlue/50"
                   >
                     Ingen auksjoner tilgjengelig
@@ -239,13 +268,12 @@ const SilentAuctionTable = ({ collections }: Props) => {
           </Table>
         </div>
 
-        {/* Mobile View (hidden on tablet and up) */}
         <div className="md:hidden space-y-4">
-          {sortedAuctions.length > 0 ? (
-            sortedAuctions.map((item, index) => {
+          {sortedRows.length > 0 ? (
+            sortedRows.map((item) => {
               return (
                 <div
-                  key={index}
+                  key={item.id}
                   className={`rounded-lg overflow-hidden border border-lightBlue/50 bg-onlineBlue/80 backdrop-blur-sm ${getTypeStyles(
                     item.type
                   )}`}
