@@ -17,6 +17,11 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json({ error: "Amount is required" }, { status: 400 });
   }
 
+  if (amount > 1000000) {
+    console.error("Fuck off");
+    return NextResponse.json({ error: "Beløpet er for høyt" }, { status: 400 });
+  }
+
   const auction = await prisma.auction.findUnique({
     where: { id: auctionId },
     include: { bids: true },
