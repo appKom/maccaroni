@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowDown, ArrowUp, Award, Package } from "lucide-react";
+import { ArrowDown, ArrowUp, Award, CoinsIcon, Package } from "lucide-react";
 
 interface Props {
   collections: Collected[];
@@ -288,7 +288,9 @@ const SilentAuctionTable = ({ collections, auctions }: Props) => {
                     <div className="grid grid-cols-2 gap-4 mt-3">
                       <div>
                         <div className="flex items-center gap-2 text-lightBlue/70 text-sm mb-1">
-                          {sortField === "amount" && getSortIcon()}
+                          {sortField === "amount" && (
+                            <CoinsIcon className="h-4 w-4 text-lightBlue" />
+                          )}
                           Pris
                         </div>
                         <div className="flex items-center gap-1">
