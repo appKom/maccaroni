@@ -16,10 +16,12 @@ export default async function BigScreenPage() {
 
   return (
     <div className="flex flex-row items-center justify-center w-full h-full">
-      <StretchGoals prizeGoals={prizeGoals} collected={collected} 
-        className="mr-4 h-full"  
-      />
-      <Vipps items={data.vipps} topDonor={data.vipps[2]} />
+      <div className="mr-4 h-full w-full">
+      <StretchGoals prizeGoals={prizeGoals} collected={collected}/>
+      </div>
+      <div className="ml-4 h-full w-2/5">   
+        <Vipps items={data.vipps} topDonor={data.vipps[2]} />
+      </div>
     </div>
   );
 }
