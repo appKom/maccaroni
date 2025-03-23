@@ -29,20 +29,18 @@ export default function WrappedRootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-gray-950 text-white  antialiased flex flex-col min-h-screen`}
-      >
-        <SessionWrapper>
-          <Toaster />
-          <Navbar />
-          <RootLayout>
-            <main className="flex-grow mt-24 pb-24">{children}</main>
-          </RootLayout>
-          <Footer />
-        </SessionWrapper>
-        <Analytics />
-      </body>
-    </>
+    <body
+      className={`${geistSans.variable} ${geistMono.variable} bg-gray-950 text-white  antialiased flex flex-col min-h-screen`}
+    >
+      <SessionWrapper>
+        <Toaster />
+        <Navbar />
+        <RootLayout>
+          <main className="flex-grow mt-24 pb-24">{children}</main>
+        </RootLayout>
+        <Footer />
+      </SessionWrapper>
+      <Analytics />
+    </body>
   );
 }

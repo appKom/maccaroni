@@ -30,11 +30,7 @@ export default function WrappedRootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-gray-950 text-white  antialiased flex flex-col min-h-screen`}
-      >
-        <main className="flex-grow">{children}</main>
-      </body>
+      {children}
     </html>
   );
 }
