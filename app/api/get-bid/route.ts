@@ -24,7 +24,7 @@ export const GET = async () => {
       },
     });
 
-    NextResponse.json({
+    return NextResponse.json({
       numberOfDonations,
       highestGoal,
       totalCollected,
