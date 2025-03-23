@@ -56,7 +56,7 @@ const Table = <T,>({
               ))}
               {renderRowActions && (
                 <td className="px-6 py-4 text-right">
-                  <div className="max-h-24 overflow-y-auto">
+                  <div className="max-h-24 min-w-12 overflow-y-auto">
                     {renderRowActions(item)}
                   </div>
                 </td>
