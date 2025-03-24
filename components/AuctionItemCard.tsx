@@ -1,147 +1,241 @@
 "use client";
 
-import React, { useState } from "react";
-import Modal from "react-modal";
+import type React from "react";
+import { useState, useOptimistic } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "./Button";
+import toast from "react-hot-toast";
+import { startTransition } from "react";
+import type { Auction, Bid } from "@prisma/client";
+import { useSession } from "next-auth/react";
 
 interface AuctionItemCardProps {
-  title: string;
-  highestBid: number;
-  minIncrease: number;
-  description: string;
-  image: string; // Add image prop
+  auction: Auction;
+  highestBid: Bid | null;
+
+  onBidSubmitted: (
+    auctionId: string,
+    amount: number,
+    nameOfBidder: string,
+    owId: string,
+    emailOfBidder: string
+  ) => void;
 }
 
-const AuctionItemCard: React.FC<AuctionItemCardProps> = ({
-  title,
+export default function AuctionItemCard({
+  auction,
   highestBid,
-  minIncrease,
-  description,
-  image,
-}) => {
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  onBidSubmitted,
+}: AuctionItemCardProps) {
+  const [open, setOpen] = useState<boolean>(false);
   const [formData, setFormData] = useState({ amount: "", nameOfBidder: "" });
+  const [isPending, setIsPending] = useState(false);
 
-  const openModal = () => setModalOpen(true);
-  const closeModal = () => setModalOpen(false);
+  const session = useSession();
+
+  if (!highestBid) {
+    highestBid = {
+      id: "1",
+      amount: 0,
+      auctionId: auction.id,
+      nameOfBidder: "Ingen",
+      owId: "1",
+      emailOfBidder: "Ingen",
+    };
+  }
+
+  const [optimisticHighestBid, setOptimisticHighestBid] = useOptimistic(
+    highestBid.amount,
+    (state, newAmount: number) => newAmount
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const response = await fetch("/api/test", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: Math.random().toString(36).substr(2, 9), // Generate a random id
-        amount: parseFloat(formData.amount),
-        nameOfBidder: formData.nameOfBidder,
-      }),
+    setIsPending(true);
+
+    const bidAmount = Number(formData.amount);
+
+    if (bidAmount < highestBid.amount + auction.minimumIncrease) {
+      toast.error(
+        "Budet må være minst " +
+          (highestBid.amount + auction.minimumIncrease) +
+          "kr"
+      );
+      setIsPending(false);
+      return;
+    }
+
+    startTransition(() => {
+      setOptimisticHighestBid(bidAmount);
     });
 
-    if (response.ok) {
-      alert("Bid submitted successfully!");
-    } else {
-      alert("Failed to submit bid.");
+    try {
+      const response = await fetch("/api/add-bid", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: bidAmount,
+          auctionId: auction.id,
+        }),
+      });
+
+      if (response.ok) {
+        setOpen(false);
+        toast.success("Bud sendt inn!");
+        onBidSubmitted(
+          auction.id,
+          bidAmount,
+          formData.nameOfBidder,
+          session.data?.user.owId ?? "",
+          session.data?.user.email ?? ""
+        );
+        setFormData({ amount: "", nameOfBidder: "" });
+      } else {
+        startTransition(() => {
+          setOptimisticHighestBid(bidAmount);
+        });
+
+        toast.error("Kunne ikke sende inn bud" + "\n" + response.statusText);
+      }
+    } catch (error) {
+      startTransition(() => {
+        setOptimisticHighestBid(bidAmount);
+      });
+
+      toast.error("Feil ved innsending av bud: " + error);
+    } finally {
+      setIsPending(false);
     }
-    closeModal();
   };
 
-  const modalStyles: Modal.Styles = {
-    content: {
-      top: "50%",
-      left: "50%",
-      right: "auto",
-      bottom: "auto",
-      marginRight: "-50%",
-      transform: "translate(-50%, -50%)",
-      background: "#004f58",
-      border: "none",
-      padding: "20px",
-      borderRadius: "10px",
-    },
-    overlay: {
-      backgroundColor: "rgba(64, 77, 97, 0.5)",
-    },
-  };
+  const minBid =
+    optimisticHighestBid === 0
+      ? auction.startPrice
+      : optimisticHighestBid + auction.minimumIncrease;
+
+  const formContent = (
+    <form onSubmit={handleSubmit} className="space-y-4 flex flex-col h-full">
+      <div className="space-y-2">
+        <Label htmlFor="amount" className="text-slate-300">
+          Beløp: (minst {minBid}kr)
+        </Label>
+        <Input
+          id="amount"
+          placeholder="1000"
+          type="number"
+          inputMode="numeric"
+          value={formData.amount}
+          onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+          required
+          className="bg-slate-700 border-slate-600 text-white focus:border-teal-500 focus:ring-teal-500/20"
+          min={minBid}
+          disabled={isPending}
+        />
+      </div>
+      <div className="flex justify-between pt-4 gap-4 sm:gap-8 mt-auto">
+        <Button
+          type="button"
+          onClick={() => setOpen(false)}
+          color="red"
+          disabled={isPending}
+        >
+          Avbryt
+        </Button>
+        <Button type="submit" color="green" disabled={isPending}>
+          {isPending ? "Sender..." : "Send bud"}
+        </Button>
+      </div>
+    </form>
+  );
+
+  const yourBid = session.data?.user.owId === highestBid.owId;
 
   return (
-    <div className="flex">
+    <div className="h-full">
       <div
-        className="bg-containerBlue rounded-xl overflow-hidden shadow-lg m-8 text-left px-0 py-0 cursor-pointer hover:bg-regalblue"
-        onClick={openModal}
-        style={{
-          width: "24rem",
-        }}
+        className="bg-gradient-to-br border border-gray-700 from-slate-800 to-slate-900 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(0,200,200,0.15)] m-2 sm:m-4 text-left cursor-pointer transition-all duration-300 hover:shadow-[0_0_25px_rgba(0,200,200,0.3)] hover:translate-y-[-5px] h-full flex flex-col"
+        onClick={() => setOpen(true)}
       >
-        <img src={image} alt={title} className="w-full h-52 object-cover bg-transparent/40" />
-        <div className="px-6 py-4">
-          <div className="text-darkblue font-bold text-2xl mb-2">{title}</div>
-          <div className="flex flex-col justify-between w-128 rounded-md px-3 py-2 bg-transparent/20">
-            <div className="flex text-xl">
-              <span className="flex-1">Høyeste bud:</span>
-              <span className="flex-1">Minste økning:</span>
+        <div className="relative">
+          <img
+            src={auction.image || "/Online_hvit_o.svg"}
+            alt={auction.name}
+            className="w-full h-40 sm:h-52 object-cover brightness-90"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
+          <div className="absolute bottom-2 sm:bottom-3 left-3 sm:left-4 right-3 sm:right-4">
+            <div className="text-white font-bold text-xl sm:text-2xl drop-shadow-md line-clamp-2">
+              {auction.name}
             </div>
-            <div className="flex text-3xl">
-              <span className="flex-1 font-bold">{highestBid},-</span>
-              <span className="flex-1">{minIncrease},-</span>
+          </div>
+        </div>
+        <div className="px-3 sm:px-6 py-3 sm:py-4 flex flex-col flex-grow">
+          <div className="flex flex-col justify-between rounded-md px-3 sm:px-4 py-2 sm:py-3 bg-slate-700/50 backdrop-blur-sm border border-teal-500/20">
+            <div className="flex text-base sm:text-lg text-slate-300">
+              {optimisticHighestBid === 0 ? (
+                <span className="flex-1">Minimum bud:</span>
+              ) : (
+                <span className="flex-1">Høyeste bud:</span>
+              )}
+              <span className="flex-1">Minimum økning:</span>
+            </div>
+            <div className="flex text-xl sm:text-3xl text-white">
+              <span className="flex-1 font-bold text-teal-400">
+                {optimisticHighestBid === 0 ? minBid : optimisticHighestBid},-
+              </span>
+              <span className="flex-1">{auction.minimumIncrease},-</span>
             </div>
           </div>
 
-          <p className="text-black mt-4 mb-4 text-xl">{description}</p>
+          <p className="text-slate-300 mt-3 sm:mt-4 mb-3 sm:mb-4 text-base sm:text-lg leading-relaxed line-clamp-4 sm:line-clamp-6 flex-grow">
+            {auction.description}
+          </p>
+
+          <div className="mt-auto pt-2">
+            {optimisticHighestBid > 0 && (
+              <div
+                className={`mb-2 py-1 px-3 ${
+                  yourBid
+                    ? "bg-teal-500/20 border border-teal-500/30 text-teal-300"
+                    : "bg-amber-500/20 border border-amber-500/30 text-amber-300"
+                } rounded-md font-medium text-sm flex items-center`}
+              >
+                <span
+                  className={`inline-block w-2 h-2 ${
+                    yourBid ? "bg-teal-400" : "bg-amber-400"
+                  } rounded-full mr-2`}
+                ></span>
+                {yourBid
+                  ? "Dette er ditt bud"
+                  : `Høyeste budgiver: ${highestBid.nameOfBidder}`}
+              </div>
+            )}
+
+            <Button color="green">{yourBid ? "Øk ditt bud" : "Gi bud"}</Button>
+          </div>
         </div>
-        
       </div>
 
-      <Modal isOpen={modalOpen} onRequestClose={closeModal} style={modalStyles} ariaHideApp={false}>
-        <form onSubmit={handleSubmit}>
-          <div className="text-2xl text-white font-bold italic mb-4">
-            By på {title}
-          </div>
-          <div className="mb-4">
-            <label className="block text-white text-lg font-bold mb-2" htmlFor="amount">
-              Bid Amount:
-            </label>
-            <input
-              id="amount"
-              type="number"
-              value={formData.amount}
-              onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-              required
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-white text-lg font-bold mb-2" htmlFor="nameOfBidder">
-              Name of Bidder:
-            </label>
-            <input
-              id="nameOfBidder"
-              type="text"
-              value={formData.nameOfBidder}
-              onChange={(e) => setFormData({ ...formData, nameOfBidder: e.target.value })}
-              required
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <button
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="button"
-              onClick={closeModal}
-            >
-              Avbryt
-            </button>
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="submit"
-            >
-              Send bud
-            </button>
-          </div>
-        </form>
-      </Modal>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="bg-slate-800 border border-teal-500/30 text-white sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-xl sm:text-2xl font-bold text-teal-400">
+              {yourBid ? "Øk ditt bud på" : "By på"} {auction.name}
+            </DialogTitle>
+          </DialogHeader>
+          {formContent}
+        </DialogContent>
+      </Dialog>
     </div>
   );
-};
-
-export default AuctionItemCard;
+}

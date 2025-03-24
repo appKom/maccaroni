@@ -2,7 +2,13 @@
 
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { BookIcon, ShoppingCart } from "lucide-react";
+import {
+  BookIcon,
+  CircleDollarSign,
+  FlagIcon,
+  GoalIcon,
+  ShoppingCart,
+} from "lucide-react";
 
 interface IRoute {
   title: string;
@@ -26,6 +32,24 @@ const AdminPage = () => {
       href: "/admin/rules",
       icon: BookIcon,
       description: "Legg inn eller rediger regler",
+    },
+    {
+      title: "Prismål",
+      href: "/admin/prize-goals",
+      icon: GoalIcon,
+      description: "Se og rediger prismål",
+    },
+    {
+      title: "Innsamlet",
+      href: "/admin/collected",
+      icon: CircleDollarSign,
+      description: "Se og rediger innsamlet beløp",
+    },
+    {
+      title: "Konkurranser",
+      href: "/admin/competitions",
+      icon: FlagIcon,
+      description: "Se og rediger konkurranser",
     },
   ];
 

@@ -1,33 +1,29 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { UserPlus, XIcon, Edit } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { UserPlus, XIcon, Edit, Trash2Icon, Upload } from "lucide-react";
 import toast from "react-hot-toast";
 import Table from "@/components/form/Table";
 import TextInput from "@/components/form/TextInput";
 import NumberInput from "@/components/form/NumberInput";
 import TextAreaInput from "@/components/form/TextAreaInput";
-
-interface AuctionType {
-  id: string;
-  name: string;
-  description: string;
-  minimumIncrease: number;
-  startPrice: number;
-}
+import { Auction } from "@prisma/client";
+import Image from "next/image";
 
 const AdminAuctionPage = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [minimumIncrease, setMinimumIncrease] = useState(0);
   const [startPrice, setStartPrice] = useState(0);
-  const [editingAuction, setEditingAuction] = useState<AuctionType | null>(
-    null
-  );
+  const [image, setImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [editingAuction, setEditingAuction] = useState<Auction | null>(null);
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const [auctions, setAuctions] = useState<AuctionType[]>([]);
+  const [auctions, setAuctions] = useState<Auction[]>([]);
 
   const fetchAuctions = async () => {
     try {
@@ -49,6 +45,8 @@ const AdminAuctionPage = () => {
     setDescription("");
     setMinimumIncrease(0);
     setStartPrice(0);
+    setImage(null);
+    setImagePreview(null);
     setIsLoading(false);
   };
 
@@ -78,6 +76,7 @@ const AdminAuctionPage = () => {
           description,
           minimumIncrease,
           startPrice,
+          image: imagePreview,
         }),
       });
       if (response.ok) {
@@ -93,7 +92,14 @@ const AdminAuctionPage = () => {
   };
 
   const updateAuction = async () => {
+    if (!editingAuction) return;
+
     try {
+      let imageData = editingAuction.image;
+
+      if (image && imagePreview && imagePreview !== editingAuction.image) {
+        imageData = imagePreview;
+      }
       const response = await fetch(`/api/admin/auctions`, {
         method: "PUT",
         headers: {
@@ -105,6 +111,7 @@ const AdminAuctionPage = () => {
           description,
           minimumIncrease,
           startPrice,
+          image: imageData,
         }),
       });
       if (response.ok) {
@@ -119,12 +126,28 @@ const AdminAuctionPage = () => {
     }
   };
 
-  const handleEdit = (auction: AuctionType) => {
+  const handleEdit = (auction: Auction) => {
     setName(auction.name);
     setDescription(auction.description);
     setMinimumIncrease(auction.minimumIncrease);
     setStartPrice(auction.startPrice);
     setEditingAuction(auction);
+
+    if (auction.image) {
+      setImagePreview(auction.image);
+    }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleRemove = async (id: string) => {
@@ -155,19 +178,32 @@ const AdminAuctionPage = () => {
   const columns = [
     {
       header: "Navn",
-      accessor: "name" as keyof AuctionType,
+      accessor: "name" as keyof Auction,
     },
     {
       header: "Beskrivelse",
-      accessor: "description" as keyof AuctionType,
+      accessor: "description" as keyof Auction,
     },
     {
       header: "Minimum budøkning",
-      accessor: "minimumIncrease" as keyof AuctionType,
+      accessor: "minimumIncrease" as keyof Auction,
     },
     {
       header: "Startpris",
-      accessor: "startPrice" as keyof AuctionType,
+      accessor: "startPrice" as keyof Auction,
+    },
+    {
+      header: "Bilde",
+      accessor: "image" as keyof Auction,
+      renderCell: (auction: Auction) => (
+        <Image
+          height={50}
+          width={50}
+          src={auction.image ?? "/Online_hvit_o.svg"}
+          alt={auction.name}
+          className="w-10 h-10 rounded-full object-cover"
+        />
+      ),
     },
   ];
 
@@ -194,6 +230,59 @@ const AdminAuctionPage = () => {
           }
           required
         />
+
+        <div className="flex items-center gap-4 mt-4">
+          <input
+            id="image"
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            ref={fileInputRef}
+            className="hidden"
+          />
+
+          <button
+            type="button"
+            onClick={() => {
+              if (imagePreview) {
+                setImage(null);
+                setImagePreview(null);
+
+                if (editingAuction) {
+                  setEditingAuction({
+                    ...editingAuction,
+                    image: null,
+                  });
+                }
+              } else {
+                fileInputRef.current?.click();
+              }
+            }}
+            className={`px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white ${
+              imagePreview
+                ? "bg-red-600 hover:bg-red-700 focus:ring-red-500"
+                : "bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500"
+            }  focus:outline-none focus:ring-2 focus:ring-offset-2 `}
+          >
+            {imagePreview ? (
+              <Trash2Icon className="inline-block mr-2 h-4 w-4" />
+            ) : (
+              <Upload className="inline-block mr-2 h-4 w-4" />
+            )}
+
+            {imagePreview ? "Slett bilde" : "Last opp bilde"}
+          </button>
+
+          {imagePreview && (
+            <Image
+              src={imagePreview || "/placeholder.svg"}
+              alt="Preview"
+              height={40}
+              width={40}
+              className="w-16 h-16 rounded-full object-cover"
+            />
+          )}
+        </div>
 
         <NumberInput
           id="minimumIncrease"
@@ -244,7 +333,7 @@ const AdminAuctionPage = () => {
         <Table
           columns={columns}
           data={auctions}
-          renderRowActions={(auction: AuctionType) => (
+          renderRowActions={(auction: Auction) => (
             <>
               <button
                 onClick={() => handleEdit(auction)}
