@@ -11,8 +11,14 @@ interface CoverImageProps {
 
 const CoverImage: React.FC<CoverImageProps> = ({ image, alt = "Cover image" }) => {
   return (
-    <div className={styles.coverImageMain}>
-      <Image src={image} alt={alt} width={800} height={400} layout="responsive" />
+    <div className={`${styles.coverImageMain} w-screen relative left-1/2 right-1/2 -mx-[50vw] h-60 sm:h-80 md:h-96`}>
+      <Image
+        src={image}
+        alt={alt}
+        fill
+        style={{ objectFit: "cover" }}
+        priority
+      />
     </div>
   );
 };
