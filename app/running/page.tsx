@@ -5,7 +5,6 @@ import CoverImage from "@/components/CoverImage";
 
 const RunningPage = () => {
 
-
   return (
     <div className="mx-auto py-8">
       <CoverImage image="/temporary-cover1.jpg" alt="Temporary cover 1" />
