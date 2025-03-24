@@ -78,13 +78,6 @@ export default function Navbar() {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <Link
-              href="/running"
-              className="hover:text-onlineOrange flex flex-row gap-2 items-center text-xl transition-colors group"
-            >
-              <p>Løpeuke</p>
-              <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
-            </Link>
-            <Link
               href="/auksjon"
               className="hover:text-onlineOrange flex flex-row gap-2 items-center text-xl transition-colors group"
             >
@@ -96,6 +89,13 @@ export default function Navbar() {
               className="hover:text-onlineOrange flex flex-row gap-2 items-center text-xl transition-colors group"
             >
               <p>Regelark</p>
+              <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
+            </Link>
+            <Link
+              href="/running"
+              className="hover:text-onlineOrange flex flex-row gap-2 items-center text-xl transition-colors group"
+            >
+              <p>Løpeuke</p>
               <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
             </Link>
 
