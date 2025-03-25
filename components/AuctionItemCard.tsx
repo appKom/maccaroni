@@ -49,6 +49,7 @@ export default function AuctionItemCard({
       nameOfBidder: "Ingen",
       owId: "1",
       emailOfBidder: "Ingen",
+      createdAt: new Date(),
     };
   }
 
