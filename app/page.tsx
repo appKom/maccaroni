@@ -34,7 +34,7 @@ export default async function Index() {
       type: "VIPPS",
     },
     orderBy: {
-      order: "asc",
+      order: "desc",
     },
   });
 
