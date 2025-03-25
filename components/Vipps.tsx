@@ -1,6 +1,6 @@
 import React from "react";
 import animations from "./animations.module.css";
-import QRCode from "../components/QRCode";
+// import QRCode from "../components/QRCode";
 
 interface VippProps {
   name: string;
