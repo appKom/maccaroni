@@ -1,11 +1,8 @@
-import { randomUUID } from "crypto";
-import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../../auth/[...nextauth]/authOptions";
 
-// pages/api/vipps/capture.js
-export default async function POST(req: NextRequest, res: NextResponse) {
+export const POST = async (req: NextRequest) => {
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -31,11 +28,8 @@ export default async function POST(req: NextRequest, res: NextResponse) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.VIPPS_ACCESS_TOKEN}`,
-          "Ocp-Apim-Subscription-Key":
-            process.env.VIPPS_OCP_APIM_SUBSCRIPTION_KEY,
-          // Use an idempotency key; here we use the orderId as a simple example,
-          // but ideally generate a separate unique key per capture call.
+          Authorization: `Bearer ${process.env.VIPPS_ACCESS_TOKEN ?? ""}`,
+          "Merchant-Serial-Number": process.env.VIPPS_MERCHANT_SERIAL_NO ?? "",
           "X-Request-Id": orderId,
         },
         body: JSON.stringify(payload),
@@ -63,4 +57,4 @@ export default async function POST(req: NextRequest, res: NextResponse) {
       { status: 500 }
     );
   }
-}
+};
