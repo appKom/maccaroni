@@ -121,7 +121,7 @@ export default function StretchGoals({
                     className={`h-full w-1 ${
                       isReached
                         ? "bg-gradient-to-b from-yellow-300 to-green-500 border-white"
-                        : "bg-orange-100 border-orange-600"
+                        : "bg-gradient-to-r from-orange-800 to-amber-800"
                     } z-10 ${isReached ? "shadow-glow" : ""}`}
                   />
 

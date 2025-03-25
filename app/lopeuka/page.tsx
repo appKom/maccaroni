@@ -5,7 +5,7 @@ import { Button } from "@/components/Button";
 
 const RunningPage = () => {
   return (
-    <div className="mx-auto pb-8 max-w-3xl px-4">
+    <div className="mx-auto pb-8  max-w-3xl px-4">
       <CoverImage image="/temporary-cover1.jpg" alt="Running for Charity" />
 
       <section className="text-center my-8 mb-16">
