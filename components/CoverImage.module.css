@@ -1,0 +1,22 @@
+.coverImageMain {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.coverImageMain img {
+    overflow: hidden;
+    filter: blur(5px);
+    width: 100%;
+    transform: scale(1.2);
+}
+
+@media only screen and (max-width: 750px) {
+    .coverImageMain img {
+        filter: blur(3px);
+    }
+}

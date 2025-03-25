@@ -1,0 +1,43 @@
+.paragraphMain {
+    width: 100%;
+    padding: 2rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.paragraphSubmain {
+    /* ✨ Let it inherit parent width */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.paragraphHeader {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--onlineblue);
+}
+
+.paragraphText {
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: white;
+    line-height: 2rem;
+}
+
+@media only screen and (max-width: 900px) {
+    .paragraphSubmain {
+        gap: 1rem;
+    }
+
+    .paragraphHeader {
+        font-size: 2rem;
+    }
+
+    .paragraphText {
+        font-size: 1.15rem;
+    }
+}

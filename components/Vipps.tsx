@@ -1,6 +1,6 @@
 import React from "react";
 import animations from "./animations.module.css";
-import QRCode from "../components/QRCode";
+// import QRCode from "../components/QRCode";
 
 interface VippProps {
   name: string;
@@ -77,7 +77,7 @@ const Vipps: React.FC<VippsProps> = ({ items, topDonor }) => {
       <hr />
       <div className="m-1 text-4xl mb-2 text-center">Siste donasjoner</div>
       {vippsList}
-      <QRCode />
+      {/* <QRCode /> */}
     </div>
   );
 };

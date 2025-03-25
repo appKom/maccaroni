@@ -8,7 +8,7 @@ import { Button as UIButton } from "@/components/ui/button";
 interface Props {
   onClick?: () => void;
   href?: string;
-  color: "onlineOrange" | "green" | "red";
+  color: "onlineOrange" | "green" | "red" | "blue";
   children?: React.ReactNode;
   type?: "button" | "submit" | "reset";
   className?: string;
@@ -31,6 +31,8 @@ export const Button = ({
       ? "border-green-500/50 w-full border text-green-300 bg-green-900/30 hover:bg-green-900/60 hover:text-green-300"
       : color == "red"
       ? "border-red-500/50 w-full text-red-300 bg-red-900/30 hover:bg-red-900/60 hover:text-red-300"
+      : color == "blue"
+      ? "border-blue-500/50 w-full text-blue-300 bg-blue-900/30 hover:bg-blue-900/60 hover:text-blue-300"
       : "";
 
   if (href) {
