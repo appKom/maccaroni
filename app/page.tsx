@@ -27,7 +27,7 @@ export default async function Index() {
     orderBy: {
       createdAt: "desc",
     },
-    take: 30,
+    take: 15,
   });
 
   const vippsCollected = await prisma.collected.findMany({

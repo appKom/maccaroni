@@ -28,7 +28,7 @@ export default function Vipps({ collected, topDonor }: VippsProps) {
   const displayedDonations = isMobile ? collected.slice(0, 6) : collected;
 
   return (
-    <div className="flex flex-col space-y-8 max-w-md mx-auto w-full">
+    <div className="flex flex-col space-y-8 mx-auto w-full">
       {topDonor && (
         <section className="space-y-4">
           <h2 className="text-3xl font-semibold text-purple-100">
