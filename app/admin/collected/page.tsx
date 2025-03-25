@@ -174,12 +174,12 @@ const AdminCollectedPage = () => {
         const data = await response.json();
 
         if (!response.ok) {
-          throw new Error(data.error || "Failed to process PDF");
+          toast.error(data.error || "Oops det skjedde en feil");
+          throw new Error(data.error || "Oops det skjedde en feil");
         } else {
           toast.success("Vipps PDF lastet opp");
+          fetchPrizeGoals();
         }
-
-        console.log(data);
       } catch (err) {
         toast.error("Oops det skjedde en feil" + err);
       }
