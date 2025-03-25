@@ -48,6 +48,10 @@ export default function Navbar() {
       title: "Doner",
       href: "/doner",
     },
+    {
+      title: "Løpeuka",
+      href: "/lopeuka",
+    },
   ];
 
   return (
