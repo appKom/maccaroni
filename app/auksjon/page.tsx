@@ -45,6 +45,7 @@ export default function AuctionItemsPage() {
             auctionId,
             owId,
             emailOfBidder,
+            createdAt: new Date(),
           };
 
           return {
