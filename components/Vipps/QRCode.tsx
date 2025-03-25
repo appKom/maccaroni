@@ -14,9 +14,6 @@ const QRCode = () => {
         height={256}
         className="text-center hover:scale-105 transform transition-transform duration-300"
       />
-      <div className="font-bold mt-2 text-xl mb-2">
-        Scan eller klikk på QR-koden for Vipps
-      </div>
     </Link>
   );
 };

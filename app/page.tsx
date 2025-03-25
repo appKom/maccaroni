@@ -1,4 +1,4 @@
-import Vipps from "../components/Vipps";
+import Vipps from "../components/Vipps/Vipps";
 import { prisma } from "@/lib/prisma";
 import SilentAuctionTable from "@/components/SilentAuctionTable";
 import StretchGoals from "@/components/StretchGoals";
@@ -27,6 +27,7 @@ export default async function Index() {
     orderBy: {
       createdAt: "desc",
     },
+    take: 30,
   });
 
   const vippsCollected = await prisma.collected.findMany({
