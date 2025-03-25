@@ -87,7 +87,7 @@ export default function MentalHelseBanner() {
               variants={itemVariants}
               className="flex  flex-wrap gap-4"
             >
-              <Button href="" color="purple">
+              <Button href="https://mentalhelse.no/om-oss/" color="purple">
                 Mer om Mental Helse
                 <motion.span
                   animate={pulseAnimation}
