@@ -3,11 +3,7 @@ import { NextResponse } from "next/server";
 
 export const GET = async () => {
   try {
-    const numberOfDonations = await prisma.collected.count({
-      where: {
-        type: "VIPPS",
-      },
-    });
+    const numberOfDonations = await prisma.collected.count();
 
     const highestGoal = await prisma.prizeGoal.findFirst({
       orderBy: {
@@ -18,9 +14,6 @@ export const GET = async () => {
     const totalCollected = await prisma.collected.aggregate({
       _sum: {
         amount: true,
-      },
-      where: {
-        type: "VIPPS",
       },
     });
 
