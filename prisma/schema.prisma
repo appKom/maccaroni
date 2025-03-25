@@ -14,12 +14,13 @@ datasource db {
 }
 
 model Bid {
-  id            String  @id @default(cuid())
+  id            String   @id @default(cuid())
+  createdAt     DateTime @default(now())
   amount        Float
   nameOfBidder  String
   emailOfBidder String
   owId          String
-  Auction       Auction @relation(fields: [auctionId], references: [id])
+  Auction       Auction  @relation(fields: [auctionId], references: [id])
   auctionId     String
 }
 
@@ -53,6 +54,7 @@ enum CollectedType {
 model Collected {
   id            String        @id @default(cuid())
   amount        Int
+  createdAt     DateTime      @default(now())
   nameOfBidder  String
   emailOfBidder String?
   type          CollectedType

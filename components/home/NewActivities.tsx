@@ -1,7 +1,8 @@
 import type { Auction, Bid } from "@prisma/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatDistanceToNow } from "date-fns";
-import { GavelIcon, User2Icon } from "lucide-react";
+import { nb } from "date-fns/locale";
+import { FlameIcon, User2Icon } from "lucide-react";
 
 interface ExtendedBid extends Bid {
   Auction: Auction;
@@ -12,16 +13,9 @@ interface Props {
 }
 
 const NewActivities = ({ bids }: Props) => {
-  // Sort bids by most recent first (assuming there's a createdAt field)
-  // If there's no timestamp field, we'll just use the array order
   const sortedBids = [...bids].sort((a, b) => {
     if ("createdAt" in a && "createdAt" in b) {
-      return (
-        //eslint-disable-next-line
-        new Date(b.createdAt as any).getTime() -
-        //eslint-disable-next-line
-        new Date(a.createdAt as any).getTime()
-      );
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     }
     return 0;
   });
@@ -48,7 +42,7 @@ const NewActivities = ({ bids }: Props) => {
               <CardContent className="p-0">
                 <div className="flex items-start p-4 gap-4">
                   <div className="flex-shrink-0 bg-purple-800/50 p-3 rounded-full">
-                    <GavelIcon className="h-5 w-5 text-purple-300" />
+                    <FlameIcon className="h-5 w-5 text-red-300" />
                   </div>
 
                   <div className="flex-1 min-w-0">
@@ -69,15 +63,12 @@ const NewActivities = ({ bids }: Props) => {
                   <p className="font-bold text-lg text-purple-200">
                     {bid.amount.toLocaleString()} kr
                   </p>
-                  {"createdAt" in bid && (
-                    <p className="text-xs text-purple-400 mt-1">
-                      {formatDistanceToNow(
-                        //eslint-disable-next-line
-                        new Date(bid.createdAt as any),
-                        { addSuffix: true }
-                      )}
-                    </p>
-                  )}
+                  <p className="text-xs text-purple-400 mt-1">
+                    {formatDistanceToNow(new Date(bid.createdAt), {
+                      addSuffix: true,
+                      locale: nb,
+                    })}
+                  </p>
                 </div>
               </CardContent>
             </Card>
