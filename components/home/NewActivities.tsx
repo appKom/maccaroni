@@ -13,20 +13,13 @@ interface Props {
 }
 
 const NewActivities = ({ bids }: Props) => {
-  const sortedBids = [...bids].sort((a, b) => {
-    if ("createdAt" in a && "createdAt" in b) {
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-    }
-    return 0;
-  });
-
   return (
     <div className="w-full">
       <h3 className="text-3xl font-semibold mt-16 mb-6 text-purple-100">
         Nylig aktivitet
       </h3>
 
-      {sortedBids.length === 0 ? (
+      {bids.length === 0 ? (
         <Card className="bg-purple-950 border-purple-800">
           <CardContent className="p-6 text-center text-purple-300">
             Ingen nylige bud ennå.
@@ -34,7 +27,7 @@ const NewActivities = ({ bids }: Props) => {
         </Card>
       ) : (
         <div className="space-y-4">
-          {sortedBids.map((bid) => (
+          {bids.map((bid) => (
             <Card
               key={bid.id}
               className="overflow-hidden transition-all hover:shadow-purple-700/30 bg-purple-950 border-purple-800"

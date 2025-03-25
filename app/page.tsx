@@ -32,6 +32,9 @@ export default async function Index() {
     include: {
       Auction: true,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 
   return (
