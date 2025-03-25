@@ -49,6 +49,12 @@ export default async function Index() {
           <section className="col-span-1 lg:col-span-2 w-full order-1 lg:order-2">
             <Vipps items={data.vipps} topDonor={data.vipps[2]} />
 
+            <div className="lg:block hidden">
+              <NewActivities bids={bids} />
+            </div>
+          </section>
+
+          <section className="col-span-1 lg:col-span-7 w-full order-3 lg:hidden">
             <NewActivities bids={bids} />
           </section>
         </div>
