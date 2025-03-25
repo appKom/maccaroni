@@ -2,6 +2,8 @@ import Vipps from "../components/Vipps";
 import { prisma } from "@/lib/prisma";
 import SilentAuctionTable from "@/components/SilentAuctionTable";
 import StretchGoals from "@/components/StretchGoals";
+import MentalHelseBanner from "@/components/home/MentalHelseBanner";
+import NewActivities from "@/components/home/NewActivities";
 
 export default async function Index() {
   const data = {
@@ -26,11 +28,18 @@ export default async function Index() {
     },
   });
 
+  const bids = await prisma.bid.findMany({
+    include: {
+      Auction: true,
+    },
+  });
+
   return (
     <>
       <div className={"flex flex-col mx-auto container px-4"}>
         <div className="grid grid-cols-1 lg:grid-cols-7 gap-8 pt-8">
           <section className="col-span-1 lg:col-span-5 flex flex-col items-center order-2 lg:order-1">
+            <MentalHelseBanner />
             <StretchGoals prizeGoals={prizeGoals} collected={collected} />
             <SilentAuctionTable
               collections={collectedWithVippsAndSiltent}
@@ -39,6 +48,8 @@ export default async function Index() {
           </section>
           <section className="col-span-1 lg:col-span-2 w-full order-1 lg:order-2">
             <Vipps items={data.vipps} topDonor={data.vipps[2]} />
+
+            <NewActivities bids={bids} />
           </section>
         </div>
       </div>

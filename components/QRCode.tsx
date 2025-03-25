@@ -1,19 +1,23 @@
-import styles from "./QRCode.module.css";
+import Link from "next/link";
+import Image from "next/image";
 
 const QRCode = () => {
   return (
-    <div className={styles.qrWrapper}>
-      <img
-        src="https://i.imgur.com/7O4GpSm.jpg"
+    <Link
+      href={"https://qr.vipps.no/28/2/05/031/sbL1rCFrp"}
+      className="flex flex-col items-center py-16"
+    >
+      <Image
+        src="/Vipps.png"
         alt="VippsQRKode"
-        width="256"
-        height="256"
-        className={styles.qr}
+        width={256}
+        height={256}
+        className="text-center hover:scale-105 transform transition-transform duration-300"
       />
-      <div className="font-bold m-1 text-xl mb-2">
-        Scan QR for Vipps (Vippsnr. 605726)
+      <div className="font-bold mt-2 text-xl mb-2">
+        Scan eller klikk på QR-koden for Vipps
       </div>
-    </div>
+    </Link>
   );
 };
 

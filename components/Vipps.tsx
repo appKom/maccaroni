@@ -1,6 +1,6 @@
 import React from "react";
 import animations from "./animations.module.css";
-// import QRCode from "../components/QRCode";
+import QRCode from "../components/QRCode";
 
 interface VippProps {
   name: string;
@@ -40,7 +40,9 @@ interface TopVippProps {
 const TopVipp: React.FC<TopVippProps> = ({ vipp }) => {
   return (
     <div>
-      <div className="m-1 text-4xl mb-2 text-center">Største donasjon</div>
+      <h3 className="text-3xl font-semibold mb-6 text-purple-100">
+        Største donasjon
+      </h3>
       {vipp && (
         <div
           className={`flex items-center overflow-hidden m-3 rounded-tl-lg rounded-tr-lg rounded-br-lg shadow-md ${animations.wiggle}`}
@@ -72,12 +74,13 @@ const Vipps: React.FC<VippsProps> = ({ items, topDonor }) => {
   ));
 
   return (
-    <div className="flex flex-col justify-center">
+    <div className="flex flex-col ">
       <TopVipp vipp={topDonor} />
-      <hr />
-      <div className="m-1 text-4xl mb-2 text-center">Siste donasjoner</div>
+      <QRCode />
+      <h3 className="text-3xl font-semibold mb-6 text-purple-100">
+        Siste donasjoner
+      </h3>
       {vippsList}
-      {/* <QRCode /> */}
     </div>
   );
 };
