@@ -132,7 +132,7 @@ export default function AuctionItemCard({
         </Label>
         <Input
           id="amount"
-          placeholder="1000"
+          placeholder={minBid.toString()}
           type="number"
           inputMode="numeric"
           value={formData.amount}
