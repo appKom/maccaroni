@@ -7,6 +7,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, LogInIcon, LogOutIcon, Menu, X } from "lucide-react";
 import { useSession, signIn, signOut } from "next-auth/react";
 
+const navLinks = [
+  { title: "Stilleauksjon", href: "/auksjon" },
+  { title: "Regelark", href: "/regelark" },
+  { title: "Løpeuke", href: "/lopeuka" },
+];
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
@@ -77,27 +83,15 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <Link
-              href="/auksjon"
-              className="hover:text-onlineOrange flex flex-row gap-2 items-center text-xl transition-colors group"
-            >
-              <p>Stilleauksjon</p>
-              <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
-            </Link>
-            <Link
-              href="/regelark"
-              className="hover:text-onlineOrange flex flex-row gap-2 items-center text-xl transition-colors group"
-            >
-              <p>Regelark</p>
-              <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
-            </Link>
-            <Link
-              href="/lopeuka"
-              className="hover:text-onlineOrange flex flex-row gap-2 items-center text-xl transition-colors group"
-            >
-              <p>Løpeuke</p>
-              <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
-            </Link>
+            {navLinks.map((link) => (
+              <Link
+                key={link.title}
+                href={link.href}
+                className="hover:text-onlineOrange text-xl transition-colors"
+              >
+                {link.title}
+              </Link>
+            ))}
 
             {session?.user.isAdmin && (
               <Link
@@ -154,26 +148,19 @@ export default function Navbar() {
               className="lg:hidden mt-4"
             >
               <nav className="flex flex-col items-start gap-4">
-                <Link
-                  href="/auksjon"
-                  className="text-xl hover:text-onlineOrange w-full transition-colors group"
-                  onClick={toggleMenu}
-                >
-                  <span className="flex border-t border-gray-800 pt-2 flex-row justify-between items-center w-full">
-                    Stilleauksjon
-                    <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
-                  </span>
-                </Link>
-                <Link
-                  href="/regelark"
-                  className="text-xl hover:text-onlineOrange w-full transition-colors group"
-                  onClick={toggleMenu}
-                >
-                  <span className="flex border-t  border-gray-800 pt-2 flex-row justify-between items-center w-full">
-                    Regelark
-                    <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
-                  </span>
-                </Link>
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="text-xl hover:text-onlineOrange w-full transition-colors group"
+                    onClick={toggleMenu}
+                  >
+                    <span className="flex border-t  border-gray-800 pt-2 flex-row justify-between items-center w-full">
+                      {link.title}
+                      <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
+                    </span>
+                  </Link>
+                ))}
 
                 {session?.user.isAdmin && (
                   <Link
