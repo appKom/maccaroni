@@ -100,9 +100,33 @@ export const DELETE = async (req: NextRequest) => {
     }
 
     if (collected.type === "SILENT_AUCTION") {
-      if (collected.bidId) {
-        await prisma.bid.deleteMany({
-          where: { id: collected.bidId },
+      await prisma.bid.delete({
+        where: { id: collected.bidId as string },
+      });
+
+      const secondHighestBid = await prisma.bid.findFirst({
+        include: {
+          Auction: true,
+        },
+        where: {
+          auctionId: collected.auctionId as string,
+        },
+        orderBy: {
+          amount: "desc",
+        },
+      });
+
+      if (secondHighestBid) {
+        await prisma.collected.create({
+          data: {
+            amount: secondHighestBid.amount,
+            type: "SILENT_AUCTION",
+            auctionId: collected.auctionId,
+            bidId: secondHighestBid.id,
+            nameOfBidder: secondHighestBid.nameOfBidder,
+            emailOfBidder: secondHighestBid.emailOfBidder,
+            description: collected.description,
+          },
         });
       }
     }
