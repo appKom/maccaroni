@@ -5,10 +5,17 @@ import PDFParser from "pdf2json";
 import { prisma } from "@/lib/prisma";
 import { CollectedType } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../auth/[...nextauth]/authOptions";
 
 export async function POST(request: NextRequest) {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?.isAdmin) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
-    // Get the PDF file from the request
     const formData = await request.formData();
     const uploadedFile = formData.get("pdf") as File;
 
@@ -58,8 +65,6 @@ export async function POST(request: NextRequest) {
     }
 
     const transactions = parseVippsTransactions(parsedText);
-
-    console.log(transactions);
 
     const savedTransactions = [];
     for (const transaction of transactions) {
@@ -184,7 +189,6 @@ function parseVippsTransactions(text: string) {
         }
       }
 
-      // Push the transaction
       transactions.push({
         date,
         name,
