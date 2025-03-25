@@ -87,9 +87,10 @@ export default function Navbar() {
               <Link
                 key={link.title}
                 href={link.href}
-                className="hover:text-onlineOrange text-xl transition-colors"
+                className="hover:text-onlineOrange flex flex-row gap-2 items-center text-xl transition-colors group"
               >
-                {link.title}
+                <p> {link.title}</p>
+                <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
               </Link>
             ))}
 
@@ -155,9 +156,9 @@ export default function Navbar() {
                     className="text-xl hover:text-onlineOrange w-full transition-colors group"
                     onClick={toggleMenu}
                   >
-                    <span className="flex border-t  border-gray-800 pt-2 flex-row justify-between items-center w-full">
+                    <span className="flex border-t border-gray-800 pt-2 flex-row justify-between items-center w-full">
                       {link.title}
-                      <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
+                      <ChevronRight className="h-6 w-6 mr-2 transition-transform group-hover:translate-x-1" />
                     </span>
                   </Link>
                 ))}
@@ -170,7 +171,7 @@ export default function Navbar() {
                   >
                     <span className="flex border-t border-gray-800 pt-2 flex-row justify-between items-center w-full">
                       Admin
-                      <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
+                      <ChevronRight className="h-6 w-6  mr-2 transition-transform group-hover:translate-x-1" />
                     </span>
                   </Link>
                 )}
@@ -181,7 +182,7 @@ export default function Navbar() {
                   >
                     <span className="flex border-t border-gray-800 pt-2 flex-row justify-between items-center w-full">
                       Logg ut
-                      <LogOutIcon className="h-6 w-6 transition-transform group-hover:translate-x-1" />
+                      <LogOutIcon className="h-6 w-6 mr-2 transition-transform group-hover:translate-x-1" />
                     </span>
                   </button>
                 ) : (
@@ -191,7 +192,7 @@ export default function Navbar() {
                   >
                     <span className="flex border-t border-gray-800 pt-2 flex-row justify-between items-center w-full">
                       Logg inn
-                      <LogInIcon className="h-6 w-6 transition-transform group-hover:translate-x-1" />
+                      <LogInIcon className="h-6 w-6 mr-2 transition-transform group-hover:translate-x-1" />
                     </span>
                   </button>
                 )}
