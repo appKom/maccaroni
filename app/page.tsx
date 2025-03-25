@@ -6,14 +6,6 @@ import MentalHelseBanner from "@/components/home/MentalHelseBanner";
 import NewActivities from "@/components/home/NewActivities";
 
 export default async function Index() {
-  const data = {
-    vipps: [
-      { id: 1, name: "Donor 1", amount: 100 },
-      { id: 2, name: "Donor 2", amount: 200 },
-      { id: 3, name: "Donor 3", amount: 300 },
-    ],
-  };
-
   const prizeGoals = await prisma.prizeGoal.findMany();
 
   const collected = await prisma.collected.findMany();
@@ -37,6 +29,22 @@ export default async function Index() {
     },
   });
 
+  const vippsCollected = await prisma.collected.findMany({
+    where: {
+      type: "VIPPS",
+    },
+    orderBy: {
+      order: "asc",
+    },
+  });
+
+  const highestDonation =
+    vippsCollected.length > 0
+      ? vippsCollected.reduce((prev, current) =>
+          prev.amount > current.amount ? prev : current
+        )
+      : null;
+
   return (
     <>
       <div className={"flex flex-col mx-auto container px-4"}>
@@ -50,7 +58,7 @@ export default async function Index() {
             />
           </section>
           <section className="col-span-1 lg:col-span-2 w-full order-1 lg:order-2">
-            <Vipps items={data.vipps} topDonor={data.vipps[2]} />
+            <Vipps collected={vippsCollected} topDonor={highestDonation} />
 
             <div className="lg:block hidden">
               <NewActivities bids={bids} />

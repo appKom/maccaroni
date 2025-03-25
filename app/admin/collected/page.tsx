@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { UserPlus, XIcon, Edit } from "lucide-react";
 import toast from "react-hot-toast";
 import Table from "@/components/form/Table";
@@ -9,8 +9,9 @@ import TextAreaInput from "@/components/form/TextAreaInput";
 import { Collected, CollectedType } from "@prisma/client";
 import SelectInput from "@/components/form/SelectedInput";
 import TextInput from "@/components/form/TextInput";
+import Image from "next/image";
 
-const AdminPrizeGoalsPage = () => {
+const AdminCollectedPage = () => {
   const [amount, setAmount] = useState(0);
   const [nameOfBidder, setNameOfBidder] = useState("");
   const [emailOfBidder, setEmailOfBidder] = useState<string | null>(null);
@@ -24,6 +25,7 @@ const AdminPrizeGoalsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [collected, setCollected] = useState<Collected[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchPrizeGoals = async () => {
     try {
@@ -156,6 +158,34 @@ const AdminPrizeGoalsPage = () => {
     }
   };
 
+  const handleVippsUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+
+      const formData = new FormData();
+      formData.append("pdf", file);
+
+      try {
+        const response = await fetch("/api/admin/vipps", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to process PDF");
+        } else {
+          toast.success("Vipps PDF lastet opp");
+        }
+
+        console.log(data);
+      } catch (err) {
+        toast.error("Oops det skjedde en feil" + err);
+      }
+    }
+  };
+
   const columns = [
     {
       header: "Mengde",
@@ -252,23 +282,45 @@ const AdminPrizeGoalsPage = () => {
             { label: "Vipps", value: CollectedType.VIPPS },
           ]}
         />
+        <div className="flex flex-col md:flex-row gap-4 justify-between">
+          <button
+            type="submit"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            {editingPrizeGoal ? (
+              <>
+                <Edit className="mr-2 h-4 w-4" />
+                Oppdater Innsamling
+              </>
+            ) : (
+              <>
+                <UserPlus className="mr-2 h-4 w-4" />
+                Legg til Innsamling
+              </>
+            )}
+          </button>
 
-        <button
-          type="submit"
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          {editingPrizeGoal ? (
-            <>
-              <Edit className="mr-2 h-4 w-4" />
-              Oppdater Innsamling
-            </>
-          ) : (
-            <>
-              <UserPlus className="mr-2 h-4 w-4" />
-              Legg til Innsamling
-            </>
-          )}
-        </button>
+          <input
+            type="file"
+            onChange={handleVippsUpload}
+            ref={fileInputRef}
+            className="hidden"
+          />
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+          >
+            <Image
+              className="mr-2 h-8 w-8"
+              src="/vipps.svg"
+              alt="Vipps"
+              width={20}
+              height={20}
+            />
+            Last opp Vipps PDF
+          </button>
+        </div>
       </form>
 
       <h2 className="text-xl font-semibold mb-2">Innsamling</h2>
@@ -307,4 +359,4 @@ const AdminPrizeGoalsPage = () => {
   );
 };
 
-export default AdminPrizeGoalsPage;
+export default AdminCollectedPage;
