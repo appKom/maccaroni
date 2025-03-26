@@ -37,6 +37,7 @@ export default async function Index() {
     orderBy: {
       order: "desc",
     },
+    take: 10,
   });
 
   const highestDonation =
