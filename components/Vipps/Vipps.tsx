@@ -23,12 +23,7 @@ export default function Vipps({ collected, topDonor }: VippsProps) {
         </section>
       )}
 
-      <section className="bg-white/5 p-6 rounded-lg shadow-md">
-        <h2 className="text-2xl font-semibold mb-4 text-purple-100">
-          Scan QR-koden for Vipps
-        </h2>
-        <QRCode />
-      </section>
+      <QRCode />
 
       <section className="space-y-4">
         <h2 className="text-3xl font-semibold text-purple-100">

@@ -51,11 +51,11 @@ export default function StretchGoals({
       className={`rounded-lg w-full shadow-lg bg-gradient-to-r from-orange-800 to-amber-800 ${className}`}
     >
       <div className="p-2 sm:p-6 space-y-4">
-        <div className="flex flex-col w-full sm:flex-row justify-between items-start sm:items-center">
+        <div className="flex flex-col w-full md:flex-row justify-between items-start md:items-center">
           <h2 className="text-4xl font-bold text-white flex items-center gap-2">
             <Trophy className="h-8 w-8 text-yellow-300" />
             Stretchgoals
-            <Trophy className="h-8 w-8 text-yellow-300" />
+            <Trophy className="h-8 w-8 text-yellow-300 hidden sm:block" />
           </h2>
           <div className="text-2xl sm:text-4xl font-bold text-orange-100 bg-orange-950/50 px-4 py-1 rounded-full">
             {collectedAmount.toLocaleString("nb-NO")} /{" "}

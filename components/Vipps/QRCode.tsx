@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const QRCode = () => {
   return (
-    <div className="flex flex-col items-center py-0 lg:py-16">
+    <section className="flex flex-col items-center py-4 lg:py-8 bg-white/5 p-6 rounded-[3rem] shadow-md">
       <Image
         src="/Vipps.png"
         alt="VippsQRKode"
@@ -10,7 +10,10 @@ const QRCode = () => {
         height={1000}
         className="text-center hover:scale-105 transform transition-transform duration-300 size-52 lg:size-auto"
       />
-    </div>
+      <h2 className="text-2xl font-semibold text-center mt-4 text-purple-100">
+        Scan QR-koden for Vipps
+      </h2>
+    </section>
   );
 };
 
