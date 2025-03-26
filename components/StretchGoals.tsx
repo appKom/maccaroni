@@ -183,7 +183,7 @@ export default function StretchGoals({
 
         {!nextGoal && reachedGoals.length === sortedGoals.length && (
           <div className="text-center text-yellow-300 font-bold text-xl animate-bounce">
-            🎉 Alle mål er nådd! Bazinga! 🎉
+            🎉 Alle mål er nådd! Eyooooo! 🎉
           </div>
         )}
 
