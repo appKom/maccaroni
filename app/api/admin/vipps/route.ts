@@ -72,7 +72,8 @@ export async function POST(request: NextRequest) {
         transaction.name +
         transaction.date +
         transaction.amount +
-        transaction.melding;
+        transaction.melding +
+        transaction.order;
       const existing = await prisma.collected.findUnique({
         where: { id: transactionId },
       });
@@ -112,8 +113,16 @@ export async function POST(request: NextRequest) {
   }
 }
 
+interface Transaction {
+  date: string;
+  name: string;
+  melding: string;
+  amount: number;
+  order?: number;
+}
+
 function parseVippsTransactions(text: string) {
-  const transactions = [];
+  const transactions: Transaction[] = [];
 
   const lines = text
     .split(/\r?\n/)
@@ -205,6 +214,10 @@ function parseVippsTransactions(text: string) {
 
       i--;
     }
+  }
+
+  for (let i = transactions.length - 1, order = 1; i >= 0; i--, order++) {
+    transactions[i].order = order;
   }
 
   return transactions;
