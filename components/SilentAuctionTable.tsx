@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowDown, ArrowUp, Award, CoinsIcon, Package } from "lucide-react";
+import { ArrowDown, Award, CoinsIcon, Package } from "lucide-react";
 
 interface Props {
   collections: Collected[];
@@ -93,10 +93,8 @@ const SilentAuctionTable = ({ collections, auctions }: Props) => {
   };
 
   const getSortIcon = () => {
-    return sortDirection === "asc" ? (
-      <ArrowUp className="h-4 w-4 md:h-5 md:w-5 text-lightBlue animate-pulse" />
-    ) : (
-      <ArrowDown className="h-4 w-4 md:h-5 md:w-5 text-lightBlue animate-pulse" />
+    return (
+      <ArrowDown className={`"h-4 w-4 md:h-5 md:w-5 text-lightBlue  transition-transform duration-300 ${sortDirection === "asc" ? "" : "rotate-180"}`} />
     );
   };
 
@@ -163,7 +161,7 @@ const SilentAuctionTable = ({ collections, auctions }: Props) => {
                   </div>
                 </TableHead>
                 <TableHead
-                  className="text-base md:text-xl font-semibold text-white w-1/3 cursor-pointer hover:bg-tealBlue/20 transition-colors"
+                  className="text-base md:text-xl font-semibold text-white w-1/3 cursor-pointer hover:bg-tealBlue/10 transition-colors"
                   onClick={() => toggleSort("amount")}
                 >
                   <div className="flex items-center gap-2">
