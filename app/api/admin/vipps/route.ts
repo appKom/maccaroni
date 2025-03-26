@@ -129,7 +129,7 @@ function parseVippsTransactions(text: string) {
     .map((line) => line.trim())
     .filter((line) => line !== "");
 
-  const processedLines = [];
+  const processedLines: string[] = [];
   for (let i = 0; i < lines.length; i++) {
     let line = lines[i];
     if (line.endsWith(",")) {
@@ -141,7 +141,7 @@ function parseVippsTransactions(text: string) {
     processedLines.push(line);
   }
 
-  function isPhoneNumber(str: string) {
+  function isPhoneNumber(str: string): boolean {
     return str.startsWith("+47");
   }
 
@@ -152,18 +152,19 @@ function parseVippsTransactions(text: string) {
     if (dateTimeMatch) {
       const date = dateTimeMatch[1];
       i++;
-      const nameParts = [];
+
+      const nameParts: string[] = [];
       while (i < processedLines.length && !isPhoneNumber(processedLines[i])) {
         nameParts.push(processedLines[i]);
         i++;
       }
-      const name = nameParts.join(" ");
+      const name = nameParts.join(" ").trim();
 
       if (i < processedLines.length && isPhoneNumber(processedLines[i])) {
         i++;
       }
 
-      const meldingParts = [];
+      const meldingParts: string[] = [];
       while (
         i < processedLines.length &&
         !processedLines[i].startsWith("Belastet") &&
@@ -172,9 +173,8 @@ function parseVippsTransactions(text: string) {
         meldingParts.push(processedLines[i]);
         i++;
       }
-      let melding = meldingParts.join(" ");
+      let melding = meldingParts.join(" ").trim();
 
-      // Default amount to 0
       let amount = 0;
 
       if (
@@ -190,12 +190,22 @@ function parseVippsTransactions(text: string) {
         if (belInMeldingMatch) {
           amount = parseInt(belInMeldingMatch[1], 10);
           melding = melding.replace(/Belastet\s*\d+/, "").trim();
-
-          const loddMatch = melding.match(/Lodd\s*(\d+)/);
-          if (loddMatch) {
-            melding = "Lodd";
-          }
         }
+      }
+
+      let loddMatch = melding.match(/\bLodd\s*\d+\b/i);
+
+      if (!loddMatch) {
+        loddMatch = melding.match(/\bLodd\b/i);
+      }
+
+      if (loddMatch) {
+        let digits = "1";
+        const digitsFound = loddMatch[0].match(/\d+$/);
+        if (digitsFound) {
+          digits = digitsFound[0];
+        }
+        melding = `Lodd${digits}`;
       }
 
       transactions.push({
