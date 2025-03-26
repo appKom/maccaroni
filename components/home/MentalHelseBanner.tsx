@@ -17,35 +17,33 @@ export default function MentalHelseBanner() {
     }
   }, [controls, isInView]);
 
-  // Simplified variants with optimized transitions
   const containerVariants = {
     hidden: {},
     visible: {
       transition: {
-        staggerChildren: 0.15, // Reduced stagger time
+        staggerChildren: 0.15,
         delayChildren: 0.1,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 15 }, // Reduced movement distance
+    hidden: { opacity: 0, y: 15 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.4, // Shorter duration
+        duration: 0.4,
         ease: "easeOut",
       },
     },
   };
 
-  // More efficient pulse animation with fewer keyframes and longer duration
   const pulseAnimation = {
-    scale: [1, 1.03, 1], // Reduced scale change
+    scale: [1, 1.03, 1],
     transition: {
-      duration: 3, // Longer duration means fewer animation frames
-      repeat: Number.POSITIVE_INFINITY, // Using Infinity instead of Number.POSITIVE_INFINITY
+      duration: 3,
+      repeat: Number.POSITIVE_INFINITY,
       repeatType: "reverse" as const,
     },
   };
@@ -55,7 +53,6 @@ export default function MentalHelseBanner() {
       ref={bannerRef}
       className="w-full bg-gradient-to-br mb-16 rounded-lg from-[#4a1d6a] to-[#2d1145] text-white overflow-hidden relative py-12 md:py-16"
     >
-      {/* Reduced number of decorative elements and using opacity instead of blur for better performance */}
       <div className="absolute -top-24 -right-24 w-48 h-48 rounded-full bg-purple-400/20 opacity-50" />
       <div className="absolute -bottom-32 -left-32 w-64 h-64 rounded-full bg-purple-500/20 opacity-50" />
 
@@ -108,7 +105,6 @@ export default function MentalHelseBanner() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="relative z-10 bg-purple-900/40 rounded-2xl p-6 border border-purple-700/30"
             >
-              {/* Logo placeholder */}
               <div className="flex justify-center mb-6">
                 <Image
                   src="/mental_helse.svg"
@@ -131,7 +127,6 @@ export default function MentalHelseBanner() {
               </motion.p>
             </motion.div>
 
-            {/* Simplified decorative elements - fewer layers, no blur */}
             <div className="absolute top-6 right-6 w-full h-full bg-purple-800/20 rounded-2xl -z-10" />
           </div>
         </motion.div>
