@@ -30,6 +30,15 @@ export default async function Index() {
     take: 15,
   });
 
+  const highestDonation = await prisma.collected.findFirst({
+    where: {
+      type: "VIPPS",
+    },
+    orderBy: {
+      amount: "desc",
+    },
+  });
+
   const vippsCollected = await prisma.collected.findMany({
     where: {
       type: "VIPPS",
@@ -39,13 +48,6 @@ export default async function Index() {
     },
     take: 10,
   });
-
-  const highestDonation =
-    vippsCollected.length > 0
-      ? vippsCollected.reduce((prev, current) =>
-          prev.amount > current.amount ? prev : current
-        )
-      : null;
 
   return (
     <>
