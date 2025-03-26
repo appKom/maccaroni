@@ -1,6 +1,3 @@
-"use client";
-
-import { useState, useEffect } from "react";
 import type { Collected } from "@prisma/client";
 import { DonationCard } from "./DonationCard";
 import QRCode from "./QRCode";
@@ -11,22 +8,6 @@ interface VippsProps {
 }
 
 export default function Vipps({ collected, topDonor }: VippsProps) {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkIfMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    checkIfMobile();
-
-    window.addEventListener("resize", checkIfMobile);
-
-    return () => window.removeEventListener("resize", checkIfMobile);
-  }, []);
-
-  const displayedDonations = isMobile ? collected.slice(0, 6) : collected;
-
   return (
     <div className="flex flex-col space-y-8 mx-auto w-full">
       {topDonor && (
@@ -52,16 +33,11 @@ export default function Vipps({ collected, topDonor }: VippsProps) {
       <section className="space-y-4">
         <h2 className="text-3xl font-semibold text-purple-100">
           Siste donasjoner
-          {isMobile && collected.length > 6 && (
-            <span className="text-sm font-normal ml-2">
-              ({displayedDonations.length} av {collected.length})
-            </span>
-          )}
         </h2>
 
         <div className="space-y-3">
-          {displayedDonations && displayedDonations.length > 0 ? (
-            displayedDonations.map((item) => (
+          {collected && collected.length > 0 ? (
+            collected.map((item) => (
               <DonationCard
                 key={item.id}
                 name={item.nameOfBidder}
