@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 interface DonationCardProps {
   name: string;
-  amount: number;
+  amount: number | null;
   variant?: "default" | "top";
   className?: string;
 }

@@ -30,24 +30,40 @@ export default async function Index() {
     take: 15,
   });
 
-  const highestDonation = await prisma.collected.findFirst({
-    where: {
-      type: "VIPPS",
-    },
-    orderBy: {
-      amount: "desc",
-    },
-  });
 
-  const vippsCollected = await prisma.collected.findMany({
-    where: {
-      type: "VIPPS",
+  const biggestSpenderGroup = await prisma.collected.groupBy({
+    by: ["nameOfBidder"],
+    _sum: {
+      amount: true,
     },
     orderBy: {
-      order: "desc",
+      _sum: {
+        amount: "desc",
+      },
     },
-    take: 10,
+    take: 1,
   });
+  
+  const biggestSpenderData = biggestSpenderGroup[0] || null;
+  
+  const biggestSpender = biggestSpenderData
+    ? {
+        nameOfBidder: biggestSpenderData.nameOfBidder,
+        totalAmount: biggestSpenderData._sum.amount,
+      }
+    : null;
+
+
+    const vippsCollected = await prisma.collected.findMany({
+      where: {
+        type: "VIPPS",
+      },
+      orderBy: {
+        order: "desc",
+      },
+      take: 10,
+    });
+
 
   return (
     <>
@@ -62,7 +78,7 @@ export default async function Index() {
             />
           </section>
           <section className="col-span-1 lg:col-span-2 w-full order-1 lg:order-2">
-            <Vipps collected={vippsCollected} topDonor={highestDonation} />
+            <Vipps collected={vippsCollected} topDonor={biggestSpender} />
 
             <div className="lg:block hidden">
               <NewActivities bids={bids} />
