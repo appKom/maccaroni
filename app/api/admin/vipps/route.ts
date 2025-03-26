@@ -230,5 +230,5 @@ function parseVippsTransactions(text: string) {
     transactions[i].order = order;
   }
 
-  return transactions;
+  return transactions.reverse();
 }
