@@ -2,6 +2,7 @@
 
 import type React from "react";
 import { useState, useOptimistic } from "react";
+import Image from "next/image";
 import {
   Dialog,
   DialogContent,
@@ -168,14 +169,16 @@ export default function AuctionItemCard({
         onClick={() => setOpen(true)}
       >
         <div className="relative">
-          <img
+          <Image
             src={auction.image || "/Online_hvit_o.svg"}
             alt={auction.name}
+            width={500}
+            height={500}
             className="w-full h-40 sm:h-52 object-cover brightness-90"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
           <div className="absolute bottom-2 sm:bottom-3 left-3 sm:left-4 right-3 sm:right-4">
-            <div className="text-white font-bold text-xl sm:text-2xl drop-shadow-md line-clamp-2">
+            <div className="text-white font-bold text-xl sm:text-2xl drop-shadow-md line-clamp-4">
               {auction.name}
             </div>
           </div>
