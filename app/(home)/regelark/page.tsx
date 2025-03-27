@@ -1,5 +1,5 @@
 import ReactMarkdown from "react-markdown";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import rehypeRaw from "rehype-raw";
 import MarkdownComponents from "@/components/markdown/MarkdownComponents";
 
