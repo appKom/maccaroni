@@ -10,12 +10,17 @@ interface ExtendedBid extends Bid {
 
 interface Props {
   bids: ExtendedBid[];
+  lessMt?: boolean;
 }
 
-const NewActivities = ({ bids }: Props) => {
+const NewActivities = ({ bids, lessMt }: Props) => {
   return (
     <div className="w-full">
-      <h3 className="text-3xl font-semibold mt-16 mb-6 text-purple-100">
+      <h3
+        className={`text-3xl font-semibold ${
+          lessMt ? "mt-4" : "mt-16"
+        }  mb-6 text-purple-100`}
+      >
         Nylig aktivitet
       </h3>
 
