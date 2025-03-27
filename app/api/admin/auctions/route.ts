@@ -244,6 +244,14 @@ export const DELETE = async (req: NextRequest) => {
       where: { id: id as string },
     });
 
+    await prisma.bid.deleteMany({
+      where: { auctionId: id as string },
+    });
+
+    await prisma.collected.deleteMany({
+      where: { auctionId: id as string },
+    });
+
     revalidatePath("/");
     revalidatePath("/auksjon");
 

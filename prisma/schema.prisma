@@ -20,7 +20,7 @@ model Bid {
   nameOfBidder  String
   emailOfBidder String
   owId          String
-  Auction       Auction  @relation(fields: [auctionId], references: [id])
+  Auction       Auction  @relation(fields: [auctionId], references: [id], onDelete: Cascade)
   auctionId     String
 }
 
