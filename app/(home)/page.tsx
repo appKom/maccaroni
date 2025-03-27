@@ -1,4 +1,4 @@
-import Vipps from "../components/Vipps/Vipps";
+import Vipps from "../../components/Vipps/Vipps";
 import { prisma } from "@/lib/prisma";
 import SilentAuctionTable from "@/components/SilentAuctionTable";
 import StretchGoals from "@/components/StretchGoals";
