@@ -1,5 +1,5 @@
 import Vipps from "../../components/Vipps/Vipps";
-import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 import SilentAuctionTable from "@/components/SilentAuctionTable";
 import StretchGoals from "@/components/StretchGoals";
 import MentalHelseBanner from "@/components/home/MentalHelseBanner";
@@ -30,7 +30,6 @@ export default async function Index() {
     take: 15,
   });
 
-
   const biggestSpenderGroup = await prisma.collected.groupBy({
     by: ["nameOfBidder"],
     _sum: {
@@ -43,9 +42,9 @@ export default async function Index() {
     },
     take: 1,
   });
-  
+
   const biggestSpenderData = biggestSpenderGroup[0] || null;
-  
+
   const biggestSpender = biggestSpenderData
     ? {
         nameOfBidder: biggestSpenderData.nameOfBidder,
@@ -53,17 +52,15 @@ export default async function Index() {
       }
     : null;
 
-
-    const vippsCollected = await prisma.collected.findMany({
-      where: {
-        type: "VIPPS",
-      },
-      orderBy: {
-        order: "desc",
-      },
-      take: 10,
-    });
-
+  const vippsCollected = await prisma.collected.findMany({
+    where: {
+      type: "VIPPS",
+    },
+    orderBy: {
+      order: "desc",
+    },
+    take: 10,
+  });
 
   return (
     <>

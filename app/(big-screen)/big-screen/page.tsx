@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 import StretchGoals from "@/components/StretchGoals";
 import Vipps from "@/components/Vipps/Vipps";
 import NewActivities from "@/components/home/NewActivities";
