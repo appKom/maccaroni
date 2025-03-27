@@ -308,7 +308,7 @@ const SilentAuctionTable = ({ collections, auctions }: Props) => {
                           Høyeste budgiver
                         </div>
                         {item.nameOfBidder ? (
-                          <span className="font-medium text-gold bg-tealBlue/30 px-2 py-1 rounded inline-block">
+                          <span className="font-medium text-amber-300 bg-tealBlue/30 px-2 py-1 rounded inline-block">
                             {item.nameOfBidder}
                           </span>
                         ) : (
