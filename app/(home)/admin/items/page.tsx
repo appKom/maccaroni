@@ -275,7 +275,7 @@ const AdminAuctionPage = () => {
 
           {imagePreview && (
             <Image
-              src={imagePreview || "/placeholder.svg"}
+              src={imagePreview || "/Online_hvit_o.svg"}
               alt="Preview"
               height={40}
               width={40}

@@ -46,8 +46,6 @@ export function BiggestSpenderCard({ name, amount }: Props) {
       className="relative overflow-hidden rounded-xl border-[3px] border-amber-400 shadow-lg bg-gradient-to-r from-purple-900 via-indigo-800 to-blue-900"
       whileHover={{ scale: 1.02 }}
     >
-      <div className="absolute inset-0 bg-[url('/placeholder.svg?height=100&width=100')] opacity-5"></div>
-
       <div className="absolute -inset-1 bg-gradient-to-r from-amber-400 to-purple-600 opacity-20 blur-xl"></div>
 
       <div className="relative flex justify-between w-full items-center py-6 px-4">
