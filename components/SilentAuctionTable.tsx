@@ -94,7 +94,11 @@ const SilentAuctionTable = ({ collections, auctions }: Props) => {
 
   const getSortIcon = () => {
     return (
-      <ArrowDown className={`"h-4 w-4 md:h-5 md:w-5 text-lightBlue  transition-transform duration-300 ${sortDirection === "asc" ? "" : "rotate-180"}`} />
+      <ArrowDown
+        className={`"h-4 w-4 md:h-5 md:w-5 text-lightBlue  transition-transform duration-300 ${
+          sortDirection === "asc" ? "" : "rotate-180"
+        }`}
+      />
     );
   };
 
@@ -112,7 +116,7 @@ const SilentAuctionTable = ({ collections, auctions }: Props) => {
   };
 
   return (
-    <Card className="w-full mx-auto mt-16 bg-gradient-to-br from-tealBlue/10 to-lightBlue/30 border border-lightBlue shadow-lg">
+    <Card className="w-full mx-auto mt-16 bg-gradient-to-br from-tealBlue/20 to-lightBlue/30 border-none shadow-lg">
       <CardHeader className="pb-0">
         <CardTitle className="text-2xl md:text-4xl font-bold text-start bg-clip-text text-transparent text-white py-4">
           Enkel oversikt auksjoner

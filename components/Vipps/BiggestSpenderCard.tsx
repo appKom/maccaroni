@@ -1,33 +1,33 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Crown, Sparkles, TrendingUp } from "lucide-react"
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Crown, Sparkles, TrendingUp } from "lucide-react";
 
 interface Props {
-  name: string
-  amount: number | null
-  className?: string
+  name: string;
+  amount: number | null;
+  className?: string;
 }
 
 export function BiggestSpenderCard({ name, amount }: Props) {
-  const [animate, setAnimate] = useState(false)
-  const [showSparkle, setShowSparkle] = useState(false)
+  const [animate, setAnimate] = useState(false);
+  const [showSparkle, setShowSparkle] = useState(false);
 
   useEffect(() => {
-    setAnimate(true)
-    const animationTimer = setTimeout(() => setAnimate(false), 1000)
+    setAnimate(true);
+    const animationTimer = setTimeout(() => setAnimate(false), 1000);
 
     const sparkleInterval = setInterval(() => {
-      setShowSparkle(true)
-      setTimeout(() => setShowSparkle(false), 700)
-    }, 3000)
+      setShowSparkle(true);
+      setTimeout(() => setShowSparkle(false), 700);
+    }, 3000);
 
     return () => {
-      clearTimeout(animationTimer)
-      clearInterval(sparkleInterval)
-    }
-  }, [])
+      clearTimeout(animationTimer);
+      clearInterval(sparkleInterval);
+    };
+  }, []);
 
   return (
     <motion.div
@@ -81,7 +81,9 @@ export function BiggestSpenderCard({ name, amount }: Props) {
           <motion.span
             className="text-white font-bold text-2xl"
             animate={{
-              textShadow: animate ? "0 0 8px rgba(255,255,255,0.8)" : "0 0 0px rgba(255,255,255,0)",
+              textShadow: animate
+                ? "0 0 8px rgba(255,255,255,0.8)"
+                : "0 0 0px rgba(255,255,255,0)",
             }}
           >
             {name}
@@ -99,7 +101,7 @@ export function BiggestSpenderCard({ name, amount }: Props) {
           >
             <TrendingUp className="h-5 w-5 text-amber-300" />
             <span className="font-extrabold text-transparent text-2xl bg-clip-text bg-gradient-to-r from-amber-200 to-amber-400">
-              {amount} kr
+              {amount}kr
             </span>
           </motion.div>
         </div>
@@ -118,6 +120,5 @@ export function BiggestSpenderCard({ name, amount }: Props) {
         style={{ backgroundSize: "200% 200%" }}
       />
     </motion.div>
-  )
+  );
 }
-
