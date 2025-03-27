@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import "./globals.css";
+import "../globals.css";
 import { Geist, Geist_Mono } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -29,8 +29,10 @@ export default function WrappedRootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      {children}
-    </html>
+    <body
+    className={`${geistSans.variable} ${geistMono.variable} bg-gray-950 text-white  antialiased flex flex-col min-h-screen`}
+    >
+      <main className="flex-grow m-4">{children}</main>
+    </body>
   );
 }

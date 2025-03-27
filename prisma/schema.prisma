@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -15,13 +9,13 @@ datasource db {
 
 model Bid {
   id            String   @id @default(cuid())
-  createdAt     DateTime @default(now())
   amount        Float
   nameOfBidder  String
-  emailOfBidder String
-  owId          String
-  Auction       Auction  @relation(fields: [auctionId], references: [id])
   auctionId     String
+  owId          String
+  emailOfBidder String
+  createdAt     DateTime @default(now())
+  Auction       Auction  @relation(fields: [auctionId], references: [id])
 }
 
 model Auction {
@@ -45,23 +39,17 @@ model PrizeGoal {
   description String
 }
 
-enum CollectedType {
-  SILENT_AUCTION
-  LIVE_AUCTION
-  VIPPS
-}
-
 model Collected {
   id            String        @id @default(cuid())
   amount        Int
-  createdAt     DateTime      @default(now())
-  nameOfBidder  String
-  emailOfBidder String?
+  description   String?
   type          CollectedType
   auctionId     String?
+  nameOfBidder  String
   bidId         String?
-  description   String?
-  order         Int?          @unique @default(autoincrement())
+  emailOfBidder String?
+  createdAt     DateTime      @default(now())
+  order         Int           @unique @default(autoincrement())
 }
 
 model Competition {
@@ -70,4 +58,10 @@ model Competition {
   description String
   image       String?
   time        DateTime
+}
+
+enum CollectedType {
+  SILENT_AUCTION
+  LIVE_AUCTION
+  VIPPS
 }
