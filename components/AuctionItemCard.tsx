@@ -17,6 +17,7 @@ import toast from "react-hot-toast";
 import { startTransition } from "react";
 import type { Auction, Bid } from "@prisma/client";
 import { useSession } from "next-auth/react";
+import { targetDate } from "@/lib/constants";
 
 interface AuctionItemCardProps {
   auction: Auction;
@@ -166,7 +167,13 @@ export default function AuctionItemCard({
     <div className="h-full">
       <div
         className="bg-gradient-to-br border border-gray-700 from-slate-800 to-slate-900 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(0,200,200,0.15)]  text-left cursor-pointer transition-all duration-300 hover:shadow-[0_0_25px_rgba(0,200,200,0.3)] hover:translate-y-[-5px] h-full flex flex-col"
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          if (Date.now() < targetDate.getTime()) {
+            return;
+          }
+
+          setOpen(true);
+        }}
       >
         <div className="relative">
           <Image
@@ -225,7 +232,11 @@ export default function AuctionItemCard({
               </div>
             )}
 
-            <Button color="green">{yourBid ? "Øk ditt bud" : "Gi bud"}</Button>
+            {Date.now() > targetDate.getTime() && (
+              <Button color="green">
+                {yourBid ? "Øk ditt bud" : "Gi bud"}
+              </Button>
+            )}
           </div>
         </div>
       </div>
