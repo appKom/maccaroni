@@ -9,13 +9,18 @@ interface VippsProps {
     nameOfBidder: string;
     totalAmount: number | null;
   }[];
+  myTotal: number;
 }
 
-export default function Vipps({ collected, topSpenders }: VippsProps) {
+export default function Vipps({
+  collected,
+  topSpenders,
+  myTotal = 0,
+}: VippsProps) {
   return (
     <div className="flex flex-col space-y-8 mx-auto w-full">
       {topSpenders && topSpenders.length > 0 && (
-        <TopSpendersSection topSpenders={topSpenders} />
+        <TopSpendersSection topSpenders={topSpenders} myTotal={myTotal} />
       )}
 
       <QRCode />

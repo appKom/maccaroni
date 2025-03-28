@@ -4,8 +4,12 @@ import SilentAuctionTable from "@/components/SilentAuctionTable";
 import StretchGoals from "@/components/StretchGoals";
 import MentalHelseBanner from "@/components/home/MentalHelseBanner";
 import NewActivities from "@/components/home/NewActivities";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/authOptions";
 
 export default async function Index() {
+  const session = await getServerSession(authOptions);
+
   const prizeGoals = await prisma.prizeGoal.findMany();
 
   const collected = await prisma.collected.findMany();
@@ -29,6 +33,17 @@ export default async function Index() {
     },
     take: 15,
   });
+
+  const myTotalAggregate = await prisma.collected.aggregate({
+    _sum: {
+      amount: true,
+    },
+    where: {
+      nameOfBidder: session?.user?.name,
+    },
+  });
+
+  const myTotal = myTotalAggregate._sum.amount || 0;
 
   const topSpendersGroup = await prisma.collected.groupBy({
     by: ["nameOfBidder"],
@@ -71,7 +86,11 @@ export default async function Index() {
             />
           </section>
           <section className="col-span-1 lg:col-span-2 w-full order-1 lg:order-2">
-            <Vipps collected={vippsCollected} topSpenders={topSpenders} />
+            <Vipps
+              collected={vippsCollected}
+              topSpenders={topSpenders}
+              myTotal={myTotal}
+            />
 
             <div className="lg:block hidden">
               <NewActivities bids={bids} />

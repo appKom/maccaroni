@@ -1,3 +1,4 @@
+import { CoinsIcon } from "lucide-react";
 import { BiggestSpenderCard } from "./BiggestSpenderCard";
 import { RunnerUpSpenderCard } from "./RunnerUpSpenderCard";
 
@@ -6,9 +7,10 @@ interface TopSpendersProps {
     nameOfBidder: string;
     totalAmount: number | null;
   }[];
+  myTotal: number;
 }
 
-export function TopSpendersSection({ topSpenders }: TopSpendersProps) {
+export function TopSpendersSection({ topSpenders, myTotal }: TopSpendersProps) {
   if (!topSpenders || topSpenders.length === 0) return null;
 
   return (
@@ -40,6 +42,31 @@ export function TopSpendersSection({ topSpenders }: TopSpendersProps) {
             position={3}
           />
         )}
+
+        {myTotal > 0 ? (
+          <div className="relative overflow-hidden bg-gradient-to-r from-purple-700 to-purple-600 p-5 rounded-lg shadow-lg border border-purple-500">
+            <div className="absolute top-0 right-0 w-24 h-24 -mr-6 -mt-6 bg-purple-500 rounded-full opacity-20"></div>
+            <div className="absolute bottom-0 left-0 w-16 h-16 -ml-4 -mb-4 bg-purple-800 rounded-full opacity-20"></div>
+
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-xl font-semibold text-white mb-1">
+                  Ditt totale bidrag
+                </h3>
+                <p className="text-3xl font-bold text-white">
+                  {myTotal.toLocaleString("no-NO")} kr
+                </p>
+              </div>
+              <div className="bg-purple-800 p-3 rounded-full">
+                <CoinsIcon className="h-8 w-8 text-yellow-300" />
+              </div>
+            </div>
+
+            <div className="mt-3 pt-3 border-t border-purple-500/30">
+              <p className="text-sm text-purple-200">Takk for ditt bidrag!</p>
+            </div>
+          </div>
+        ) : null}
       </div>
     </section>
   );
