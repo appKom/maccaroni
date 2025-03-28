@@ -8,12 +8,14 @@ interface Props {
   prizeGoals: PrizeGoal[];
   collected: Collected[];
   className?: string;
+  biggerText?: boolean;
 }
 
 export default function StretchGoals({
   prizeGoals,
   collected,
   className = "",
+  biggerText,
 }: Props) {
   const [animate, setAnimate] = useState(false);
   const sortedGoals = [...prizeGoals].sort((a, b) => a.goal - b.goal);
@@ -52,12 +54,20 @@ export default function StretchGoals({
     >
       <div className="p-2 sm:p-6 space-y-4">
         <div className="flex flex-col w-full md:flex-row justify-between items-start md:items-center">
-          <h2 className="text-4xl font-bold text-white flex items-center gap-2">
+          <h2
+            className={`${
+              biggerText ? "text-6xl" : "text-4xl"
+            }  font-bold text-white flex items-center gap-2`}
+          >
             <Trophy className="h-8 w-8 text-yellow-300" />
             Stretchgoals
             <Trophy className="h-8 w-8 text-yellow-300 hidden sm:block" />
           </h2>
-          <div className="text-2xl sm:text-4xl font-bold text-orange-100 bg-orange-950/50 px-4 py-1 rounded-full">
+          <div
+            className={`${
+              biggerText ? "text-6xl" : "text-2xl sm:text-4xl"
+            }  font-bold text-orange-100 bg-orange-950/50 px-4 py-1 rounded-full`}
+          >
             {collectedAmount.toLocaleString("nb-NO")} /{" "}
             {maxAmount.toLocaleString("nb-NO")}kr
           </div>
@@ -175,7 +185,11 @@ export default function StretchGoals({
         </div>
 
         {nextGoal && (
-          <div className="text-center text-white animate-pulse">
+          <div
+            className={`text-center text-white animate-pulse ${
+              biggerText && "text-2xl"
+            }`}
+          >
             <span className="font-bold">Neste mål: </span>
             {(nextGoal.goal - collectedAmount).toLocaleString("nb-NO")}kr igjen!
           </div>
@@ -215,11 +229,19 @@ export default function StretchGoals({
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="font-medium text-sm sm:text-base break-words break-all overflow-wrap whitespace-normal overflow-hidden">
+                  <div
+                    className={`font-medium ${
+                      biggerText ? "text-2xl" : "text-sm sm:text-base"
+                    }  break-words break-all overflow-wrap whitespace-normal overflow-hidden`}
+                  >
                     {goal.description}
                   </div>
                 </div>
-                <div className="font-bold text-right ml-2 flex-shrink-0">
+                <div
+                  className={`font-bold ${
+                    biggerText ? "text-2xl" : "text-sm"
+                  } text-right ml-2 flex-shrink-0`}
+                >
                   {goal.goal.toLocaleString()}kr
                 </div>
               </div>

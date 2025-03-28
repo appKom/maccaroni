@@ -1,9 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import StretchGoals from "@/components/StretchGoals";
 import Vipps from "@/components/Vipps/Vipps";
-import NewActivities from "@/components/home/NewActivities";
 import AutoRefresh from "./AutoRefresh";
 import OnloveBanner from "./OnloveBanner";
+import "./big-screen.css";
+import BigScreenNewActivites from "./BigScreenNewActivities";
 
 export const dynamic = "force-dynamic";
 
@@ -51,15 +52,23 @@ export default async function BigScreenPage() {
 
   return (
     <AutoRefresh intervalInMinutes={1}>
-      <div className="flex flex-row justify-center w-full h-full">
+      <div className="flex flex-row justify-center w-full h-full overflow-hidden overflow-y-hidden">
         <div className="mr-4 h-full w-full flex flex-col justify-start">
           <OnloveBanner />
-          <StretchGoals prizeGoals={prizeGoals} collected={collected} />
+          <StretchGoals
+            prizeGoals={prizeGoals}
+            collected={collected}
+            biggerText
+          />
 
-          <NewActivities bids={bids} lessMt />
+          <BigScreenNewActivites bids={bids} lessMt />
         </div>
-        <div className="ml-4 h-full w-2/5">
-          <Vipps collected={vippsCollected} topSpenders={topSpenders} />
+        <div className="ml-4 h-full w-3/7">
+          <Vipps
+            collected={vippsCollected}
+            topSpenders={topSpenders}
+            myTotal={0}
+          />
         </div>
       </div>
     </AutoRefresh>
