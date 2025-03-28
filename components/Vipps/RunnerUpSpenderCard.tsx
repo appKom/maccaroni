@@ -44,22 +44,8 @@ export function RunnerUpSpenderCard({ name, amount, position }: Props) {
   };
 
   return (
-    <motion.div
-      initial={{ y: -20, opacity: 0 }}
-      animate={{
-        y: 0,
-        opacity: 1,
-        scale: animate ? 1.03 : 1,
-      }}
-      transition={{
-        type: "spring",
-        stiffness: 300,
-        damping: 15,
-        scale: { duration: 0.3 },
-        delay: position * 0.1,
-      }}
+    <div
       className={`relative overflow-hidden rounded-xl border-[2px] ${colors.borderColor} shadow-lg bg-gradient-to-r from-purple-900 via-indigo-800 to-blue-900`}
-      whileHover={{ scale: 1.02 }}
     >
       <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 opacity-20 blur-xl"></div>
 
@@ -143,6 +129,6 @@ export function RunnerUpSpenderCard({ name, amount, position }: Props) {
         }}
         style={{ backgroundSize: "200% 200%" }}
       />
-    </motion.div>
+    </div>
   );
 }
