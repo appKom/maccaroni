@@ -78,34 +78,46 @@ export const POST = async (req: NextRequest) => {
   }
 
   try {
-    const newBid = await prisma.bid.create({
-      data: {
-        amount: amount,
-        nameOfBidder: session.user.name || "N/A",
-        emailOfBidder: session.user.email,
-        owId: session.user.owId,
-        Auction: { connect: { id: auctionId } },
-      },
-    });
+    const newBid = await prisma.$transaction(async (tx) => {
+      const current = await tx.bid.findFirst({
+        where: { auctionId },
+        orderBy: { amount: "desc" },
+      });
 
-    // Sletter tidligere bud fra collected
-    await prisma.collected.deleteMany({
-      where: {
-        auctionId: auctionId,
-      },
-    });
+      const currentHighest = current?.amount || 0;
+      if (amount <= currentHighest) {
+        throw new Error("Bid too low or not higher than current bid");
+      }
 
-    // Legger til nytt bud i collected
-    await prisma.collected.create({
-      data: {
-        amount: amount,
-        type: "SILENT_AUCTION",
-        description: auction.name,
-        nameOfBidder: session.user.name || "N/A",
-        emailOfBidder: session.user.email,
-        auctionId: auctionId,
-        bidId: newBid.id,
-      },
+      const createdBid = await tx.bid.create({
+        data: {
+          amount: amount,
+          nameOfBidder: session.user.name || "N/A",
+          emailOfBidder: session.user.email,
+          owId: session.user.owId,
+          Auction: { connect: { id: auctionId } },
+        },
+      });
+
+      await tx.collected.deleteMany({
+        where: {
+          auctionId: auctionId,
+        },
+      });
+
+      await tx.collected.create({
+        data: {
+          amount: amount,
+          type: "SILENT_AUCTION",
+          description: auction.name,
+          nameOfBidder: session.user.name || "N/A",
+          emailOfBidder: session.user.email,
+          auctionId: auctionId,
+          bidId: createdBid.id,
+        },
+      });
+
+      return createdBid;
     });
 
     revalidatePath("/");
@@ -114,7 +126,11 @@ export const POST = async (req: NextRequest) => {
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Error creating bid" + error },
+      {
+        error:
+          "Error creating bid: " +
+          (error instanceof Error ? error.message : "Unknown error"),
+      },
       { status: 500 }
     );
   }
