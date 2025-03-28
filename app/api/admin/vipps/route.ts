@@ -77,7 +77,10 @@ export async function POST(request: NextRequest) {
       const existing = await prisma.collected.findUnique({
         where: { id: transactionId },
       });
-      if (!existing) {
+
+      const isSilentAuction = transaction.melding === "Stilleauksjon";
+
+      if (!existing && !isSilentAuction) {
         savedTransactions.push(
           await prisma.collected.create({
             data: {
@@ -208,6 +211,7 @@ function parseVippsTransactions(text: string) {
         melding = `Lodd${digits}`;
       }
 
+      melding = melding.replace(/^Online - Veldedighetsfest\s*/, "");
       transactions.push({
         date,
         name,
