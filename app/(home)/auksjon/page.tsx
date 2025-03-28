@@ -90,8 +90,9 @@ export default function AuctionItemsPage() {
 
   const now = Date.now();
   const beforeAuction = now < targetDate.getTime();
-  const afterAuction = now > endDate.getTime();
-  const showCountdown = beforeAuction || afterAuction;
+  const msUntilEnd = endDate.getTime() - now;
+  const withinOneHourOfEnd = msUntilEnd <= 60 * 60 * 1000 && msUntilEnd > 0;
+  const showCountdown = beforeAuction || withinOneHourOfEnd;
 
   return (
     <main className="mx-auto flex flex-col items-center container px-4 md:px-8">
