@@ -3,6 +3,7 @@ import StretchGoals from "@/components/StretchGoals";
 import Vipps from "@/components/Vipps/Vipps";
 import NewActivities from "@/components/home/NewActivities";
 import AutoRefresh from "./AutoRefresh";
+import OnloveBanner from "./OnloveBanner";
 
 export const dynamic = "force-dynamic";
 
@@ -56,6 +57,7 @@ export default async function BigScreenPage() {
     <AutoRefresh intervalInMinutes={2.5}>
       <div className="flex flex-row justify-center w-full h-full">
         <div className="mr-4 h-full w-full flex flex-col justify-start">
+          <OnloveBanner />
           <StretchGoals prizeGoals={prizeGoals} collected={collected} />
 
           <NewActivities bids={bids} lessMt />
