@@ -165,7 +165,7 @@ export default function AuctionItemCard({
   return (
     <div className="h-full">
       <div
-        className="bg-gradient-to-br border border-gray-700 from-slate-800 to-slate-900 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(0,200,200,0.15)] m-2 sm:m-4 text-left cursor-pointer transition-all duration-300 hover:shadow-[0_0_25px_rgba(0,200,200,0.3)] hover:translate-y-[-5px] h-full flex flex-col"
+        className="bg-gradient-to-br border border-gray-700 from-slate-800 to-slate-900 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(0,200,200,0.15)]  text-left cursor-pointer transition-all duration-300 hover:shadow-[0_0_25px_rgba(0,200,200,0.3)] hover:translate-y-[-5px] h-full flex flex-col"
         onClick={() => setOpen(true)}
       >
         <div className="relative">
