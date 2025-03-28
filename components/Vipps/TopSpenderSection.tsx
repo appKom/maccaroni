@@ -15,7 +15,7 @@ export function TopSpendersSection({ topSpenders, myTotal }: TopSpendersProps) {
 
   return (
     <section className="space-y-4">
-      {myTotal === 0 ? (
+      {myTotal > 0 ? (
         <div className="flex flex-col ">
           <h2 className="text-3xl pb-2 font-semibold text-purple-100">
             Ditt totale bidrag
