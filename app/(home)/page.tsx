@@ -30,7 +30,7 @@ export default async function Index() {
     take: 15,
   });
 
-  const biggestSpenderGroup = await prisma.collected.groupBy({
+  const topSpendersGroup = await prisma.collected.groupBy({
     by: ["nameOfBidder"],
     _sum: {
       amount: true,
@@ -40,17 +40,13 @@ export default async function Index() {
         amount: "desc",
       },
     },
-    take: 1,
+    take: 3,
   });
 
-  const biggestSpenderData = biggestSpenderGroup[0] || null;
-
-  const biggestSpender = biggestSpenderData
-    ? {
-        nameOfBidder: biggestSpenderData.nameOfBidder,
-        totalAmount: biggestSpenderData._sum.amount,
-      }
-    : null;
+  const topSpenders = topSpendersGroup.map((spender) => ({
+    nameOfBidder: spender.nameOfBidder,
+    totalAmount: spender._sum.amount,
+  }));
 
   const vippsCollected = await prisma.collected.findMany({
     where: {
@@ -75,7 +71,7 @@ export default async function Index() {
             />
           </section>
           <section className="col-span-1 lg:col-span-2 w-full order-1 lg:order-2">
-            <Vipps collected={vippsCollected} topDonor={biggestSpender} />
+            <Vipps collected={vippsCollected} topSpenders={topSpenders} />
 
             <div className="lg:block hidden">
               <NewActivities bids={bids} />
