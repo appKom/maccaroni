@@ -59,7 +59,7 @@ export function BiggestSpenderCard({ name, amount }: Props) {
               transition={{ duration: 0.5 }}
               className="bg-amber-400 p-2 rounded-full text-purple-900"
             >
-              <Crown className="h-6 w-6" />
+              <Crown className="size-4 xl:size-6" />
             </motion.div>
 
             <AnimatePresence>
@@ -77,7 +77,7 @@ export function BiggestSpenderCard({ name, amount }: Props) {
           </div>
 
           <motion.span
-            className="text-white font-bold text-2xl"
+            className="text-white  font-bold text-lg xl:text-2xl"
             animate={{
               textShadow: animate
                 ? "0 0 8px rgba(255,255,255,0.8)"
@@ -98,7 +98,7 @@ export function BiggestSpenderCard({ name, amount }: Props) {
             className="flex items-center gap-1"
           >
             <TrendingUp className="h-5 w-5 text-amber-300" />
-            <span className="font-extrabold text-transparent text-2xl bg-clip-text bg-gradient-to-r from-amber-200 to-amber-400">
+            <span className="font-extrabold text-transparent text-lg xl:text-2xl bg-clip-text bg-gradient-to-r from-amber-200 to-amber-400">
               {amount}kr
             </span>
           </motion.div>

@@ -61,9 +61,9 @@ export function RunnerUpSpenderCard({ name, amount, position }: Props) {
               className={`${colors.iconBg} p-2 rounded-full text-purple-900`}
             >
               {position === 2 ? (
-                <Medal className="h-5 w-5" />
+                <Medal className="size-3 md:size-5" />
               ) : (
-                <Award className="h-5 w-5" />
+                <Award className="size-3 md:size-5" />
               )}
             </motion.div>
 
@@ -84,7 +84,7 @@ export function RunnerUpSpenderCard({ name, amount, position }: Props) {
           </div>
 
           <motion.span
-            className="text-white font-bold text-xl"
+            className="text-white font-bold text-base md:text-xl"
             animate={{
               textShadow: animate
                 ? "0 0 6px rgba(255,255,255,0.6)"
@@ -109,7 +109,7 @@ export function RunnerUpSpenderCard({ name, amount, position }: Props) {
               }`}
             />
             <span
-              className={`font-extrabold text-transparent text-xl bg-clip-text bg-gradient-to-r ${colors.textGradient}`}
+              className={`font-extrabold text-transparent text-base md:text-lg bg-clip-text bg-gradient-to-r ${colors.textGradient}`}
             >
               {amount}kr
             </span>
