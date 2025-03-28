@@ -10,7 +10,7 @@ interface CountdownBannerProps {
 }
 
 export function CountdownBanner({
-  title = "Stilleauksjonen åpner opp igjen om:",
+  title = "Stilleauksjonen åpner igjen om:",
 }: CountdownBannerProps) {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -39,6 +39,8 @@ export function CountdownBanner({
     const timer = setInterval(calculateTimeLeft, 1000);
 
     return () => clearInterval(timer);
+
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [targetDate]);
 
   return (
