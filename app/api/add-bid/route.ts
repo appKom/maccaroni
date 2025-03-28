@@ -3,12 +3,20 @@ import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../auth/[...nextauth]/authOptions";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { targetDate } from "@/lib/constants";
 
 export const POST = async (req: NextRequest) => {
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+  }
+
+  if (Date.now() < targetDate.getTime()) {
+    return NextResponse.json(
+      { error: "Bidding is not allowed yet" },
+      { status: 403 }
+    );
   }
 
   const { amount, auctionId } = await req.json();
