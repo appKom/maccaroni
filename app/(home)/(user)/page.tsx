@@ -1,9 +1,9 @@
-import Vipps from "../../components/Vipps/Vipps";
 import { prisma } from "@/lib/prisma";
 import SilentAuctionTable from "@/components/SilentAuctionTable";
 import StretchGoals from "@/components/StretchGoals";
 import MentalHelseBanner from "@/components/home/MentalHelseBanner";
 import NewActivities from "@/components/home/NewActivities";
+import Vipps from "@/components/Vipps/Vipps";
 
 export default async function Index() {
   const prizeGoals = await prisma.prizeGoal.findMany();
