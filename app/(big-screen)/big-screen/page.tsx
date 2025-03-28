@@ -51,7 +51,7 @@ export default async function BigScreenPage() {
   });
 
   return (
-    <AutoRefresh intervalInMinutes={1}>
+    <AutoRefresh intervalInMinutes={2.5}>
       <div className="flex flex-row justify-center w-full h-full overflow-hidden overflow-y-hidden">
         <div className="mr-4 h-full w-full flex flex-col justify-start">
           <OnloveBanner />
