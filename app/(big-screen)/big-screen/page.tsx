@@ -5,6 +5,8 @@ import AutoRefresh from "./AutoRefresh";
 import OnloveBanner from "./OnloveBanner";
 import "./big-screen.css";
 import BigScreenNewActivites from "./BigScreenNewActivities";
+import { endDate } from "@/lib/constants";
+import { CountdownBanner } from "@/components/CountdownBanner";
 
 export const dynamic = "force-dynamic";
 
@@ -50,11 +52,21 @@ export default async function BigScreenPage() {
     take: 15,
   });
 
+  const now = Date.now();
+  const msUntilEnd = endDate.getTime() - now;
+  const withinOneHourOfEnd = msUntilEnd <= 60 * 60 * 1000 && msUntilEnd > 0;
+  const showCountdown = withinOneHourOfEnd;
+
   return (
     <AutoRefresh intervalInMinutes={2.5}>
       <div className="flex flex-row justify-center w-full h-full overflow-hidden overflow-y-hidden">
         <div className="mr-4 h-full w-full flex flex-col justify-start">
           <OnloveBanner />
+
+          {showCountdown && (
+            <CountdownBanner title={"Stilleauksjonen er ferdig om:"} />
+          )}
+
           <StretchGoals
             prizeGoals={prizeGoals}
             collected={collected}
