@@ -1,29 +1,21 @@
 import type { Collected } from "@prisma/client";
 import { DonationCard } from "./DonationCard";
 import QRCode from "./QRCode";
-import { BiggestSpenderCard } from "./BiggestSpenderCard";
+import { TopSpendersSection } from "./TopSpenderSection";
 
 interface VippsProps {
   collected: Collected[];
-  topDonor: {
+  topSpenders: {
     nameOfBidder: string;
-    totalAmount: number | null
-  } | null;
+    totalAmount: number | null;
+  }[];
 }
 
-export default function Vipps({ collected, topDonor }: VippsProps) {
+export default function Vipps({ collected, topSpenders }: VippsProps) {
   return (
     <div className="flex flex-col space-y-8 mx-auto w-full">
-      {topDonor && (
-        <section className="space-y-4">
-          <h2 className="text-3xl font-semibold text-purple-100">
-            Største bidragsyter
-          </h2>
-          <BiggestSpenderCard
-            name={topDonor.nameOfBidder}
-            amount={topDonor.totalAmount}
-          />
-        </section>
+      {topSpenders && topSpenders.length > 0 && (
+        <TopSpendersSection topSpenders={topSpenders} />
       )}
 
       <QRCode />
@@ -40,6 +32,7 @@ export default function Vipps({ collected, topDonor }: VippsProps) {
                 key={item.id}
                 name={item.nameOfBidder}
                 amount={item.amount}
+                description={item.description}
               />
             ))
           ) : (
