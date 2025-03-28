@@ -11,7 +11,7 @@ export default async function BigScreenPage() {
   const prizeGoals = await prisma.prizeGoal.findMany();
   const collected = await prisma.collected.findMany();
 
-  const biggestSpenderGroup = await prisma.collected.groupBy({
+  const topSpendersGroup = await prisma.collected.groupBy({
     by: ["nameOfBidder"],
     _sum: {
       amount: true,
@@ -21,17 +21,13 @@ export default async function BigScreenPage() {
         amount: "desc",
       },
     },
-    take: 1,
+    take: 3,
   });
 
-  const biggestSpenderData = biggestSpenderGroup[0] || null;
-
-  const biggestSpender = biggestSpenderData
-    ? {
-        nameOfBidder: biggestSpenderData.nameOfBidder,
-        totalAmount: biggestSpenderData._sum.amount,
-      }
-    : null;
+  const topSpenders = topSpendersGroup.map((spender) => ({
+    nameOfBidder: spender.nameOfBidder,
+    totalAmount: spender._sum.amount,
+  }));
 
   const vippsCollected = await prisma.collected.findMany({
     where: {
@@ -63,7 +59,7 @@ export default async function BigScreenPage() {
           <NewActivities bids={bids} lessMt />
         </div>
         <div className="ml-4 h-full w-2/5">
-          <Vipps collected={vippsCollected} topDonor={biggestSpender} />
+          <Vipps collected={vippsCollected} topSpenders={topSpenders} />
         </div>
       </div>
     </AutoRefresh>
