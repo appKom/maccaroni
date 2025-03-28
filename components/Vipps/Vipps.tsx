@@ -7,7 +7,7 @@ interface VippsProps {
   collected: Collected[];
   topDonor: {
     nameOfBidder: string;
-    totalAmount: number | null
+    totalAmount: number | null;
   } | null;
 }
 
@@ -40,6 +40,7 @@ export default function Vipps({ collected, topDonor }: VippsProps) {
                 key={item.id}
                 name={item.nameOfBidder}
                 amount={item.amount}
+                description={item.description}
               />
             ))
           ) : (

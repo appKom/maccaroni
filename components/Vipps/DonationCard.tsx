@@ -2,11 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface DonationCardProps {
   name: string;
   amount: number | null;
+  description: string | null;
   variant?: "default" | "top";
   className?: string;
 }
@@ -14,6 +16,7 @@ interface DonationCardProps {
 export function DonationCard({
   name,
   amount,
+  description,
   variant = "default",
   className,
 }: DonationCardProps) {
@@ -39,25 +42,33 @@ export function DonationCard({
         scale: { duration: 0.2 },
       }}
       className={cn(
-        "flex items-center overflow-hidden rounded-tl-lg rounded-tr-lg rounded-br-lg shadow-md",
+        "flex items-stretch overflow-hidden rounded-tl-lg rounded-tr-lg rounded-br-lg shadow-md",
         variant === "default"
           ? "bg-gradient-to-r from-orange-700 to-orange-800"
           : "bg-gradient-to-r from-emerald-700 to-emerald-800",
         className
       )}
     >
-      <div className="p-2 bg-white/10 flex items-center justify-center">
-        <img
-          src="https://i.imgur.com/RVgB3E6.png"
-          width="40"
-          height="40"
-          alt="Donation"
-          className="object-contain"
-        />
+      <div className="relative bg-white/10 w-14 flex-shrink-0">
+        <div className="relative h-full w-full">
+          <Image
+            src="/vipps.svg"
+            alt="Donation"
+            fill={true}
+            sizes="56px"
+            style={{ objectFit: "contain" }}
+            className="p-2"
+          />
+        </div>
       </div>
-      <div className="flex justify-between w-full items-center">
-        <span className="p-3 text-white font-medium">{name}</span>
-        <span className="p-3 font-bold text-white">{amount} kr</span>
+      <div className="flex flex-col flex-grow py-2 px-3">
+        <div className="flex justify-between w-full items-center">
+          <span className="text-white font-medium">{name}</span>
+          <span className="font-bold text-white">{amount} kr</span>
+        </div>
+        {description && (
+          <p className="text-white/80 text-sm mt-1">{description}</p>
+        )}
       </div>
     </motion.div>
   );
