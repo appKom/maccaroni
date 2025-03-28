@@ -17,7 +17,7 @@ import toast from "react-hot-toast";
 import { startTransition } from "react";
 import type { Auction, Bid } from "@prisma/client";
 import { useSession } from "next-auth/react";
-import { targetDate } from "@/lib/constants";
+import { endDate, targetDate } from "@/lib/constants";
 
 interface AuctionItemCardProps {
   auction: Auction;
@@ -42,6 +42,12 @@ export default function AuctionItemCard({
   const [isPending, setIsPending] = useState(false);
 
   const session = useSession();
+
+  const now = Date.now();
+  const beforeAuction = now < targetDate.getTime();
+  const afterAuction = now > endDate.getTime();
+
+  const disallowBidding = beforeAuction || afterAuction;
 
   if (!highestBid) {
     highestBid = {
@@ -167,12 +173,12 @@ export default function AuctionItemCard({
     <div className="h-full">
       <div
         className={`bg-gradient-to-br border border-gray-700 from-slate-800 to-slate-900 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(0,200,200,0.15)]  text-left ${
-          Date.now() < targetDate.getTime()
+          disallowBidding
             ? "cursor-default"
             : "cursor-pointer hover:shadow-[0_0_25px_rgba(0,200,200,0.3)] hover:translate-y-[-5px]"
         } transition-all duration-300  h-full flex flex-col`}
         onClick={() => {
-          if (Date.now() < targetDate.getTime()) {
+          if (disallowBidding) {
             return;
           }
 
@@ -236,7 +242,7 @@ export default function AuctionItemCard({
               </div>
             )}
 
-            {Date.now() > targetDate.getTime() && (
+            {!disallowBidding && (
               <Button color="green">
                 {yourBid ? "Øk ditt bud" : "Gi bud"}
               </Button>

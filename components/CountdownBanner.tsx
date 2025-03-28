@@ -5,13 +5,11 @@ import { Clock } from "lucide-react";
 import { targetDate } from "@/lib/constants";
 
 interface CountdownBannerProps {
-  title?: string;
+  title: string;
   subtitle?: string;
 }
 
-export function CountdownBanner({
-  title = "Stilleauksjonen åpner igjen om:",
-}: CountdownBannerProps) {
+export function CountdownBanner({ title }: CountdownBannerProps) {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -53,8 +51,14 @@ export function CountdownBanner({
           </h2>
         </div>
 
-        <div className="grid grid-cols-4 gap-2 md:gap-4 font-mono">
-          <TimeUnit value={timeLeft.days} label="Dager" />
+        <div
+          className={`grid ${
+            timeLeft.days > 0 ? "grid-cols-4" : "grid-cols-3"
+          }  gap-2 md:gap-4 font-mono`}
+        >
+          {timeLeft.days > 0 && (
+            <TimeUnit value={timeLeft.days} label="Dager" />
+          )}
           <TimeUnit value={timeLeft.hours} label="Timer" />
           <TimeUnit value={timeLeft.minutes} label="Minutter" />
           <TimeUnit value={timeLeft.seconds} label="Sekunder" />
@@ -71,7 +75,7 @@ interface TimeUnitProps {
 
 function TimeUnit({ value, label }: TimeUnitProps) {
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col w-full items-center">
       <div className="bg-purple-950 rounded-md w-full py-3 px-2 flex items-center justify-center mb-2">
         <span className="text-2xl md:text-4xl font-mono font-bold text-white transition-all duration-300">
           {value.toString().padStart(2, "0")}

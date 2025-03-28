@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import AuctionItemCard from "@/components/AuctionItemCard";
 import { Auction, Bid } from "@prisma/client";
 import { CountdownBanner } from "@/components/CountdownBanner";
-import { targetDate } from "@/lib/constants";
+import { endDate, targetDate } from "@/lib/constants";
 
 export default function AuctionItemsPage() {
   const [items, setItems] = useState<(Auction & { bids: Bid[] })[]>([]);
@@ -88,9 +88,22 @@ export default function AuctionItemsPage() {
     );
   };
 
+  const now = Date.now();
+  const beforeAuction = now < targetDate.getTime();
+  const afterAuction = now > endDate.getTime();
+  const showCountdown = beforeAuction || afterAuction;
+
   return (
     <main className="mx-auto flex flex-col items-center container px-4 md:px-8">
-      {Date.now() < targetDate.getTime() && <CountdownBanner />}
+      {showCountdown && (
+        <CountdownBanner
+          title={
+            beforeAuction
+              ? "Stilleauksjonen åpner igjen om:"
+              : "Stilleauksjonen er ferdig om:"
+          }
+        />
+      )}
 
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 w-full">
         {items.map((item) => (
