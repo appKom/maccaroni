@@ -74,7 +74,7 @@ export default async function BigScreenPage() {
 
           <BigScreenNewActivites bids={bids} lessMt />
         </div>
-        <div className="ml-4 h-full spacy-y-4 w-3/7">
+        <div className="ml-4 h-full flex flex-col gap-4 spacy-y-4 w-3/7">
           <TopSpendersSection topSpenders={topSpenders} />
           <Vipps collected={vippsCollected} />
         </div>
