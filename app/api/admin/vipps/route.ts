@@ -70,21 +70,22 @@ export async function POST(request: NextRequest) {
 
     const savedTransactions = [];
     for (const transaction of transactions) {
-      const transactionId =
+      const transactionId = encodeURIComponent(
         transaction.name +
-        transaction.date +
-        transaction.amount +
-        transaction.melding +
-        transaction.order;
-      const existing = await prisma.collected.findUnique({
-        where: { id: transactionId },
-      });
+          transaction.date +
+          transaction.amount +
+          transaction.melding +
+          transaction.order
+      );
 
-      const isSilentAuction = transaction.melding === "Stilleauksjon";
+      try {
+        const existing = await prisma.collected.findUnique({
+          where: { id: transactionId },
+        });
+        const isSilentAuction = transaction.melding === "Stilleauksjon";
 
-      if (!existing && !isSilentAuction) {
-        savedTransactions.push(
-          await prisma.collected.create({
+        if (!existing && !isSilentAuction) {
+          const created = await prisma.collected.create({
             data: {
               amount: transaction.amount,
               nameOfBidder: transaction.name,
@@ -93,7 +94,13 @@ export async function POST(request: NextRequest) {
               id: transactionId,
               description: transaction.melding,
             },
-          })
+          });
+          savedTransactions.push(created);
+        }
+      } catch (error) {
+        console.error(
+          `Failed to save transaction ${transactionId}. Skipping.`,
+          error
         );
       }
     }
