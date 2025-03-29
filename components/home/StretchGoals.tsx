@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { Check, Gift, Star, Trophy } from "lucide-react";
-import { Collected, PrizeGoal } from "@prisma/client";
+import type { Collected, PrizeGoal } from "@prisma/client";
+import Celebration from "./Celebration";
 
 interface Props {
   prizeGoals: PrizeGoal[];
@@ -18,6 +19,7 @@ export default function StretchGoals({
   biggerText,
 }: Props) {
   const [animate, setAnimate] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
   const sortedGoals = [...prizeGoals].sort((a, b) => a.goal - b.goal);
   const maxAmount = sortedGoals.reduce(
     (acc, goal) => Math.max(acc, goal.goal),
@@ -35,6 +37,7 @@ export default function StretchGoals({
     (goal) => collectedAmount >= goal.goal
   );
   const nextGoal = sortedGoals.find((goal) => collectedAmount < goal.goal);
+  const allGoalsReached = reachedGoals.length === sortedGoals.length;
 
   useEffect(() => {
     if (reachedGoals.length > 0) {
@@ -44,15 +47,49 @@ export default function StretchGoals({
     }
   }, [reachedGoals.length]);
 
+  useEffect(() => {
+    if (allGoalsReached) {
+      setShowCelebration(true);
+    }
+  }, [allGoalsReached]);
+
   const isHighestGoal = (goal: PrizeGoal) => {
     return goal === sortedGoals[sortedGoals.length - 1];
   };
 
   return (
     <article
-      className={`rounded-lg w-full shadow-lg bg-gradient-to-r from-orange-800 to-amber-800 ${className}`}
+      className={`rounded-lg w-full shadow-lg bg-gradient-to-r from-orange-800 to-amber-800 ${className} relative overflow-hidden`}
     >
-      <div className="p-2 sm:p-6 space-y-4">
+      {/* Spiller i 5 minutter */}
+      <Celebration
+        isTriggered={showCelebration}
+        duration={5000 * 60}
+        intensity="low"
+      />
+      {allGoalsReached && (
+        <div className="absolute inset-0 pointer-events-none z-10 overflow-hidden">
+          {[...Array(10)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute animate-float"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${8 + Math.random() * 7}s`,
+              }}
+            >
+              <Trophy
+                className="h-8 w-8 text-yellow-300 opacity-70"
+                style={{ transform: `rotate(${Math.random() * 360}deg)` }}
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="p-2 sm:p-6 space-y-4 relative z-0">
         <div className="flex flex-col w-full md:flex-row justify-between items-start md:items-center">
           <h2
             className={`${
@@ -251,7 +288,7 @@ export default function StretchGoals({
       </div>
 
       {reachedGoals.length === sortedGoals.length && (
-        <div className="bg-gradient-to-r from-amber-500 to-orange-500 p-4 flex items-center justify-center text-white">
+        <div className="bg-gradient-to-r from-amber-500 to-orange-500 p-4 flex items-center justify-center text-white relative z-0">
           <Trophy className="h-6 w-6 mr-2" />
           <span className="font-bold">Alle mål er nådd! Tusen takk!</span>
         </div>

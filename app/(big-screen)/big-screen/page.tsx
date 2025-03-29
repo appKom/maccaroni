@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import StretchGoals from "@/components/StretchGoals";
+import StretchGoals from "@/components/home/StretchGoals";
 import Vipps from "@/components/Vipps/Vipps";
 import AutoRefresh from "./AutoRefresh";
 import OnloveBanner from "./OnloveBanner";
