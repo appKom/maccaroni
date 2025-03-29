@@ -7,8 +7,7 @@ import "./big-screen.css";
 import BigScreenNewActivites from "./BigScreenNewActivities";
 import { endDate } from "@/lib/constants";
 import { CountdownBanner } from "@/components/CountdownBanner";
-
-export const dynamic = "force-dynamic";
+import { TopSpendersSection } from "@/components/home/TopSpenderSection";
 
 export default async function BigScreenPage() {
   const prizeGoals = await prisma.prizeGoal.findMany();
@@ -75,12 +74,9 @@ export default async function BigScreenPage() {
 
           <BigScreenNewActivites bids={bids} lessMt />
         </div>
-        <div className="ml-4 h-full w-3/7">
-          <Vipps
-            collected={vippsCollected}
-            topSpenders={topSpenders}
-            myTotal={0}
-          />
+        <div className="ml-4 h-full spacy-y-4 w-3/7">
+          <TopSpendersSection topSpenders={topSpenders} />
+          <Vipps collected={vippsCollected} />
         </div>
       </div>
     </AutoRefresh>

@@ -30,6 +30,7 @@ export const POST = async (req: NextRequest) => {
     });
 
     revalidatePath("/");
+    revalidatePath("/big-screen");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error(error);
@@ -63,7 +64,7 @@ export const PUT = async (req: NextRequest) => {
     });
 
     revalidatePath("/");
-
+    revalidatePath("/big-screen");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error(error);
@@ -96,6 +97,7 @@ export const DELETE = async (req: NextRequest) => {
     });
 
     revalidatePath("/");
+    revalidatePath("/big-screen");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error(error);

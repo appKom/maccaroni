@@ -97,6 +97,7 @@ export async function POST(request: NextRequest) {
     }
 
     revalidatePath("/");
+    revalidatePath("/big-screen");
 
     return NextResponse.json({
       success: true,

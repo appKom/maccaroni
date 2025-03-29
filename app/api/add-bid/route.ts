@@ -134,6 +134,7 @@ export const POST = async (req: NextRequest) => {
     });
 
     revalidatePath("/");
+    revalidatePath("/big-screen");
     revalidatePath("/auksjon");
     return NextResponse.json(newBid, { status: 201 });
   } catch (error) {
