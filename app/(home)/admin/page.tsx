@@ -54,8 +54,8 @@ const AdminPage = () => {
   ];
 
   return (
-    <div className="flex flex-col items-center py-8">
-      <main className="mx-auto container px-4 sm:px-6 md:px-8 pt-10 pb-24 lg:pt-16">
+    <div className="flex flex-col items-center">
+      <main className="mx-auto container px-4 sm:px-6 md:px-8 pt-10 lg:pt-16">
         <div className="mb-10">
           <h1 className="text-3xl font-extrabold text-white tracking-tight mb-2">
             Velkommen {session?.user!.name}

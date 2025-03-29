@@ -20,7 +20,7 @@ export default function LoginScreen() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] w-full bg-gradient-to-br from-emerald-950 to-slate-900 relative overflow-hidden">
+    <div className="flex flex-1 flex-col items-center justify-center mt-24 w-full bg-gradient-to-br from-emerald-950 to-slate-900 relative overflow-hidden">
       {mounted && (
         <>
           <div className="absolute inset-0 overflow-hidden">
