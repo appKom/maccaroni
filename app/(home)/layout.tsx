@@ -3,7 +3,6 @@ import "../globals.css";
 import { Geist, Geist_Mono } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import SessionWrapper from "@/components/auth/SessionWrapper";
 import RootLayout from "@/components/auth/RootLayout";
 import { Toaster } from "react-hot-toast";
 import { Analytics } from "@vercel/analytics/react";
@@ -32,14 +31,13 @@ export default function WrappedRootLayout({
     <body
       className={`${geistSans.variable} ${geistMono.variable} bg-gray-950 text-white  antialiased flex flex-col min-h-screen`}
     >
-      <SessionWrapper>
-        <Toaster />
-        <Navbar />
-        <RootLayout>
-          <main className="flex-grow mt-24 pb-24">{children}</main>
-        </RootLayout>
-        <Footer />
-      </SessionWrapper>
+      <Toaster />
+      <Navbar />
+      <RootLayout>
+        <main className="flex-grow mt-24 pb-24">{children}</main>
+      </RootLayout>
+      <Footer />
+
       <Analytics />
     </body>
   );

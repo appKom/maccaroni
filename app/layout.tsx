@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import "./globals.css";
+import SessionWrapper from "@/components/auth/SessionWrapper";
 
 export const metadata: Metadata = {
   title: "Onlove",
@@ -11,5 +12,9 @@ export default function WrappedRootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <html lang="en">{children}</html>;
+  return (
+    <html lang="en">
+      <SessionWrapper>{children}</SessionWrapper>
+    </html>
+  );
 }
