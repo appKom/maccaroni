@@ -9,6 +9,8 @@ import { endDate } from "@/lib/constants";
 import { CountdownBanner } from "@/components/CountdownBanner";
 import { TopSpendersSection } from "@/components/home/TopSpenderSection";
 
+export const dynamic = "force-dynamic";
+
 export default async function BigScreenPage() {
   const prizeGoals = await prisma.prizeGoal.findMany();
   const collected = await prisma.collected.findMany();
