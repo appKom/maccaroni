@@ -71,7 +71,7 @@ export default function Navbar() {
                 height={40}
                 className="block lg:hidden"
               />
-              <span className="text-md lg:text-2xl font-bold">
+              <span className="text-md lg:text-lg xl:text-2xl font-bold">
                 Veldedighetsfest {new Date().getFullYear()}
               </span>
             </Link>
@@ -87,40 +87,40 @@ export default function Navbar() {
               <Link
                 key={link.title}
                 href={link.href}
-                className="hover:text-onlineOrange flex flex-row gap-2 items-center text-xl transition-colors group"
+                className="hover:text-onlineOrange flex flex-row gap-2 items-center text-lg xl:text-xl transition-colors group"
               >
                 <p> {link.title}</p>
-                <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
+                <ChevronRight className="size-5 xl:size-6 transition-transform group-hover:translate-x-1" />
               </Link>
             ))}
 
             {session?.user.isAdmin && (
               <Link
                 href="/admin"
-                className="hover:text-onlineOrange flex flex-row gap-2 items-center text-xl transition-colors group"
+                className="hover:text-onlineOrange flex flex-row gap-2 items-center text-lg xl:text-xl transition-colors group"
               >
                 <p>Admin</p>
-                <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
+                <ChevronRight className="size-5 xl:size-6 transition-transform group-hover:translate-x-1" />
               </Link>
             )}
             {session ? (
               <button
                 onClick={handleLogout}
-                className="hover:text-onlineOrange transition-colors text-xl group"
+                className="hover:text-onlineOrange transition-colors text-lg xl:text-xl group"
               >
                 <span className="flex flex-row gap-2 items-center">
                   <p>Logg ut</p>
-                  <LogOutIcon className="h-6 w-6 transition-transform group-hover:translate-x-1" />
+                  <LogOutIcon className="size-5 xl:size-6 transition-transform group-hover:translate-x-1" />
                 </span>
               </button>
             ) : (
               <button
                 onClick={handleLogin}
-                className="hover:text-onlineOrange transition-colors text-xl group"
+                className="hover:text-onlineOrange transition-colors text-lg xl:text-xl group"
               >
                 <span className="flex flex-row gap-2 items-center">
                   <p>Logg inn</p>
-                  <LogInIcon className="h-6 w-6 transition-transform group-hover:translate-x-1" />
+                  <LogInIcon className="size-5 xl:size-6 transition-transform group-hover:translate-x-1" />
                 </span>
               </button>
             )}
