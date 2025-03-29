@@ -6,7 +6,7 @@ Nettsiden for Onlines veldedighetsfest, er utviklet med **Next.js 15**, **App Ro
 
 - **Admin-panel** (begrenset tilgang):
 
-  - [/admin](https://onlove/admin) Panel for admin dashboardet
+  - [/admin](https://onlove/admin) Hovedpanelet for admin dashboardet
     ![image](https://github.com/user-attachments/assets/c6cb9c70-ff07-4b1f-b6d6-e3adb36c4353)
   - [/admin/items](https://onlove.no/admin/items) Oversikt over alle auksjonsvarer, kan legge inn eller redigere auksjonsvarer. Bestående av: navn, beskrivelse, bilde, minimum budøkning og startpris.
     ![image](https://github.com/user-attachments/assets/60f92395-7e71-43b9-b089-c987f9fc7721)
@@ -29,7 +29,6 @@ Nettsiden for Onlines veldedighetsfest, er utviklet med **Next.js 15**, **App Ro
   - [/lopeuka](https://onlove.no/lopeuka) Viser info om løpeuka, og hvordan man kan bli med
     ![image](https://github.com/user-attachments/assets/932f974d-c499-4bcd-a2c2-24a519f49df9)
 
-
 ---
 
 ## Teknisk oversikt
@@ -41,51 +40,50 @@ Nettsiden for Onlines veldedighetsfest, er utviklet med **Next.js 15**, **App Ro
 
 ---
 
-## Getting Started
+## Kom igang
 
-### 1. Clone the repository
+### 1. Klon repoet
 
 ```bash
 git clone https://github.com/appKom/maccaroni.git
 cd maccaroni
 ```
 
-### 2. Install dependencies
+### 2. Last ned avhengigheter
 
 ```bash
 pnpm install
 ```
 
-### 3. Set up environment variables
+### 3. Sett opp miljøvariabler
 
-#### Create `.env` file:
+#### Lag en `.env` fil:
 
 ```bash
 cp .env.example .env
 ```
 
-#### Fill inn environment variables:
+#### Fyll ut miljøvariabler:
 
-NODE_ENV="development"
+- **NODE_ENV**: "development"
+- **POSTGRES_URL**: Postgres URL
+- **POSTGRES_PRISMA_URL**: Postgres Prisma URL
+- **SUPABASE_URL**: Supabase URL
+- **NEXT_PUBLIC_SUPABASE_URL**: Next Public Supabase URL
+- **POSTGRES_URL_NON_POOLING**: Postgres URL Non Pooling
+- **SUPABASE_JWT_SECRET**: Supabase JWT Secret
+- **POSTGRES_USER**: Postgres User
+- **NEXT_PUBLIC_SUPABASE_ANON_KEY**: Next Public Supabase Anon Key
+- **POSTGRES_PASSWORD**: Postgres Password
+- **POSTGRES_DATABASE**: Postgres Database
+- **SUPABASE_SERVICE_ROLE_KEY**: Supabase
+- **POSTGRES_HOST**: Postgres Host
+- **NEXT_PUBLIC_SUPABASE_ANON_KEY**: Next Public Supabase Anon Key
 
-POSTGRES_URL= # Postgres URL
-POSTGRES_PRISMA_URL= # Postgres Prisma URL
-SUPABASE_URL= # Supabase URL
-NEXT_PUBLIC_SUPABASE_URL= # Next Public Supabase URL
-POSTGRES_URL_NON_POOLING= # Postgres URL Non Pooling
-SUPABASE_JWT_SECRET= # Supabase JWT Secret
-POSTGRES_USER= # Postgres User
-NEXT_PUBLIC_SUPABASE_ANON_KEY= # Next Public Supabase Anon Key
-POSTGRES_PASSWORD= # Postgres Password
-POSTGRES_DATABASE= # Postgres Database
-SUPABASE_SERVICE_ROLE_KEY= # Supabase
-POSTGRES_HOST= # Postgres Host
-NEXT_PUBLIC_SUPABASE_ANON_KEY= # Next Public Supabase Anon Key
+- **AUTH0_CLIENT_ID**: Auth0 Client ID
+- **AUTH0_CLIENT_SECRET**: Auth0 Client Secret
+- **AUTH0_ISSUER**: Auth0 Issuer
+- **NEXTAUTH_SECRET**: Use [openssl rand -hex 32] to generate a 32 bytes value
 
-AUTH0_CLIENT_ID= # Auth0 Client ID
-AUTH0_CLIENT_SECRET= # Auth0 Client Secret
-AUTH0_ISSUER= # Auth0 Issuer
-NEXTAUTH_SECRET= # Use [openssl rand -hex 32] to generate a 32 bytes value
-
-NEXTAUTH_URL= # NextAuth URL e.g "http://localhost:3000"
-ADMIN_EMAILS= # Admin Emails e.g "fredrik@appkom.no"
+- **NEXTAUTH_URL**: NextAuth URL e.g "http://localhost:3000"
+- **ADMIN_EMAILS**: Admin Emails e.g "fredrik@appkom.no"
