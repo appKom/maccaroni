@@ -30,22 +30,7 @@ export function BiggestSpenderCard({ name, amount }: Props) {
   }, []);
 
   return (
-    <motion.div
-      initial={{ y: -20, opacity: 0 }}
-      animate={{
-        y: 0,
-        opacity: 1,
-        scale: animate ? 1.05 : 1,
-      }}
-      transition={{
-        type: "spring",
-        stiffness: 300,
-        damping: 15,
-        scale: { duration: 0.3 },
-      }}
-      className="relative overflow-hidden rounded-xl border-[3px] border-amber-400 shadow-lg bg-gradient-to-r from-purple-900 via-indigo-800 to-blue-900"
-      whileHover={{ scale: 1.02 }}
-    >
+    <div className="relative hover:scale-105 transition-transform duration-500 overflow-hidden rounded-xl border-[3px] border-amber-400 shadow-lg bg-gradient-to-r from-purple-900 via-indigo-800 to-blue-900">
       <div className="absolute -inset-1 bg-gradient-to-r from-amber-400 to-purple-600 opacity-20 blur-xl"></div>
 
       <div className="relative flex justify-between w-full items-center py-6 px-4">
@@ -117,6 +102,6 @@ export function BiggestSpenderCard({ name, amount }: Props) {
         }}
         style={{ backgroundSize: "200% 200%" }}
       />
-    </motion.div>
+    </div>
   );
 }

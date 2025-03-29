@@ -167,6 +167,7 @@ export default function Celebration({
     return () => {
       stopCelebration();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isTriggered]);
 
   return null;
