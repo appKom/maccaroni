@@ -24,7 +24,7 @@ interface AuctionRow {
   id: string;
   description: string;
   amount: number;
-  type: "SILENT_AUCTION" | "LIVE_AUCTION";
+  type: "SILENT_AUCTION" | "LIVE_AUCTION" | "VIPPS";
   nameOfBidder?: string;
 }
 
@@ -36,7 +36,7 @@ const SilentAuctionTable = ({ collections, auctions }: Props) => {
     id: item.id,
     description: item.description || "",
     amount: item.amount,
-    type: "SILENT_AUCTION",
+    type: item.type,
     nameOfBidder: item.nameOfBidder,
   }));
 
