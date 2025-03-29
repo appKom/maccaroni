@@ -66,6 +66,8 @@ export async function POST(request: NextRequest) {
 
     const transactions = parseVippsTransactions(parsedText);
 
+    console.log(transactions);
+
     const savedTransactions = [];
     for (const transaction of transactions) {
       const transactionId =
