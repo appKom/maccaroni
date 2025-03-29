@@ -65,12 +65,13 @@ export function DonationCard({
         <div className="flex justify-between w-full items-center">
           <span className="text-white font-medium">{name}</span>
         </div>
-        {description && (
-          <div className="flex justify-between w-full items-center">
+
+        <div className="flex justify-between w-full items-center">
+          {description && (
             <span className="text-white/80 text-sm mt-1">{description}</span>
-            <span className="font-bold text-white">{amount} kr</span>
-          </div>
-        )}
+          )}
+          <span className="font-bold text-white">{amount} kr</span>
+        </div>
       </div>
     </motion.div>
   );
