@@ -68,12 +68,13 @@ export async function POST(request: NextRequest) {
 
     const savedTransactions = [];
     for (const transaction of transactions) {
-      const transactionId =
+      const transactionId = encodeURIComponent(
         transaction.name +
-        transaction.date +
-        transaction.amount +
-        transaction.melding +
-        transaction.order;
+          transaction.date +
+          transaction.amount +
+          transaction.melding +
+          transaction.order
+      ).replace(/\0/g, "");
 
       try {
         const existing = await prisma.collected.findUnique({
